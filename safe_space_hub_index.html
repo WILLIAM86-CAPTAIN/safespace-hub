@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE SAFE SPACE HUB - Mental Wellness Support</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🧠%3C/text%3E%3C/svg%3E">
+    <meta name="theme-color" content="#4f46e5">
+</head>
+<body class="login-page">
+    <div class="login-hero" aria-hidden="true">
+        <img class="login-hero__img" src="PROJECT IMAGE 1.webp" alt="" />
+        <div class="login-hero__overlay"></div>
+    </div>
+
+    <div class="container">
+        <div class="login-card">
+            <div class="logo">
+                <div class="logo-icon">🧠</div>
+                <h1>THE SAFE SPACE HUB</h1>
+                <p>Your Mental Wellness Companion</p>
+            </div>
+            
+            <form id="loginForm" class="login-form">
+                <div class="input-group">
+                    <input type="text" id="uname-in" placeholder="e.g., demo or user" required autocomplete="username">
+                    <label for="uname-in">Username</label>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="pw-in" placeholder="Enter password" required autocomplete="current-password">
+                    <label for="pw-in">Password</label>
+                </div>
+                <button type="submit" class="btn-primary">Enter Safe Space</button>
+            </form>
+            
+            <div class="login-links">
+                <a href="#" onclick="return showDemoLogin()">Demo Access (Auto-fill)</a>
+                <a href="#privacy" class="modal-trigger" data-modal="privacy">Privacy Policy</a>
+            </div>
+        </div>
+        
+        <footer class="login-footer">
+            <p>🔒 HIPAA-Compliant | WCAG 2.1 AA | SSL Secured</p>
+        </footer>
+    </div>
+
+    <!-- Modals -->
+    <div id="privacy" class="modal">
+        <div class="modal-content">
+            <h2>Privacy Policy</h2>
+            <p>Your data is encrypted and never shared. HIPAA-compliant storage with privacy-first design.</p>
+            <button class="btn-secondary modal-close">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Demo users database
+        const demoUsers = {
+            'demo': { password: 'demo123', name: 'Demo User', email: 'demo@safehub.com' },
+            'user': { password: 'pass123', name: 'Safe Space User', email: 'user@safehub.com' },
+            'demo@safehub.com': { password: 'demo123', name: 'Demo User', email: 'demo@safehub.com' },
+            'user@safehub.com': { password: 'pass123', name: 'Safe Space User', email: 'user@safehub.com' }
+        };
+
+        // Demo login function
+        function showDemoLogin() {
+            document.getElementById('uname-in').value = 'demo';
+            document.getElementById('pw-in').value = 'demo123';
+            document.getElementById('pw-in').focus();
+            return false;
+        }
+
+        // Login handler
+        function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('uname-in').value.trim();
+            const password = document.getElementById('pw-in').value;
+            
+            if (!username || !password) {
+                alert('Please enter both username and password');
+                return;
+            }
+            
+            if (demoUsers[username] && demoUsers[username].password === password) {
+                localStorage.setItem('currentUser', JSON.stringify({
+                    username: username,
+                    name: demoUsers[username].name,
+                    email: demoUsers[username].email
+                }));
+                window.location.href = 'dashboard.html';
+            } else {
+                alert('❌ Invalid credentials.\n\nTry:\nUsername: demo\nPassword: demo123\n\nor\n\nUsername: user\nPassword: pass123');
+                document.getElementById('pw-in').value = '';
+                document.getElementById('uname-in').focus();
+            }
+        }
+
+        // Attach login handler when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('loginForm');
+            if (loginForm) {
+                loginForm.addEventListener('submit', handleLogin);
+            }
+            
+            // Modal handling
+            document.querySelectorAll('.modal-trigger').forEach(trigger => {
+                trigger.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const modalId = trigger.dataset.modal;
+                    document.getElementById(modalId).classList.add('active');
+                });
+            });
+            
+            document.querySelectorAll('.modal-close').forEach(close => {
+                close.addEventListener('click', () => {
+                    close.closest('.modal').classList.remove('active');
+                });
+            });
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>

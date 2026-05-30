@@ -26,7 +26,7 @@ if (!MONGODB_URI) {
 
 app.use(cors({
   origin: [
-    'http://localhost:3000',
+    'https://safespace-hub.onrender.com',
     'https://safespace-hub.vercel.app'
   ],
   credentials: true
