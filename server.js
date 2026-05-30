@@ -24,7 +24,13 @@ if (!MONGODB_URI) {
   process.exit(1);
 }
 
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'https://safespace-hub.vercel.app'
+  ],
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 
