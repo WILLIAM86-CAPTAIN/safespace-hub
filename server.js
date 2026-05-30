@@ -1,272 +1,325 @@
 const express = require('express');
-const sqlite3 = require('sqlite3').verbose();
+const mongoose = require('mongoose');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const path = require('path');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const app = express();
-const PORT = 3000;
-const DB_FILE = 'db.sqlite';
-const JWT_SECRET = process.env.JWT_SECRET || 'safe-space-hub-secret-2025';
+const PORT = process.env.PORT || 3000;
+const JWT_SECRET = process.env.JWT_SECRET;
+const MONGODB_URI = process.env.MONGODB_URI;
+
+if (!JWT_SECRET) {
+  console.error('FATAL: JWT_SECRET environment variable is not set.');
+  process.exit(1);
+}
+
+if (!MONGODB_URI) {
+  console.error('FATAL: MONGODB_URI environment variable is not set.');
+  process.exit(1);
+}
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname))); // serve frontend files
+app.use(express.static(path.join(__dirname)));
 
-/* ───────────── DATABASE ───────────── */
-const db = new sqlite3.Database(DB_FILE, (err) => {
-  if (err) console.error('DB open error:', err.message);
-  else console.log('Connected to SQLite:', DB_FILE);
+/* ─────────────────────────────────────────────
+   MONGODB CONNECTION
+───────────────────────────────────────────── */
+mongoose.connect(MONGODB_URI)
+  .then(() => console.log('Connected to MongoDB Atlas'))
+  .catch(err => {
+    console.error('MongoDB connection error:', err.message);
+    process.exit(1);
+  });
+
+/* ─────────────────────────────────────────────
+   SCHEMAS AND MODELS
+   (Each schema mirrors your original SQLite table)
+───────────────────────────────────────────── */
+
+// ── Users ──────────────────────────────────────
+const userSchema = new mongoose.Schema({
+  user_id:          { type: String, required: true, unique: true },
+  username:         { type: String, required: true, unique: true },
+  password:         { type: String, required: true },
+  role:             String,
+  first_name:       String,
+  last_name:        String,
+  email:            { type: String, unique: true, sparse: true },
+  phone:            String,
+  avatar_initials:  String,
+  avatar_color:     String,
+  date_joined:      String,
+  last_login:       String,
+  status:           { type: String, default: 'active' },
+  institution:      String
 });
+const User = mongoose.model('User', userSchema);
 
-function run(sql, params = []) {
-  return new Promise((resolve, reject) => {
-    db.run(sql, params, function (err) {
-      if (err) reject(err);
-      else resolve({ lastID: this.lastID, changes: this.changes });
-    });
-  });
-}
+// ── Assessments (meta) ─────────────────────────
+const assessmentSchema = new mongoose.Schema({
+  assessment_id:      { type: String, required: true, unique: true },
+  tool_code:          { type: String, required: true, unique: true },
+  tool_name:          String,
+  protocol:           String,
+  condition_target:   String,
+  question_count:     Number,
+  max_score:          Number,
+  estimated_minutes:  Number,
+  validated_by:       String,
+  dsm_version:        String,
+  is_active:          { type: Boolean, default: true }
+});
+const Assessment = mongoose.model('Assessment', assessmentSchema);
 
-function get(sql, params = []) {
-  return new Promise((resolve, reject) => {
-    db.get(sql, params, (err, row) => {
-      if (err) reject(err);
-      else resolve(row);
-    });
-  });
-}
+// ── Assessment Results ─────────────────────────
+const assessmentResultSchema = new mongoose.Schema({
+  result_id:              { type: String, required: true, unique: true },
+  user_id:                { type: String, required: true },
+  assessment_id:          String,
+  tool_code:              String,
+  score:                  Number,
+  max_score:              Number,
+  severity_label:         String,
+  severity_level:         Number,
+  crisis_flag:            { type: Boolean, default: false },
+  date_taken:             String,
+  time_taken:             String,
+  recommendations_given:  { type: Boolean, default: false }
+});
+const AssessmentResult = mongoose.model('AssessmentResult', assessmentResultSchema);
 
-function all(sql, params = []) {
-  return new Promise((resolve, reject) => {
-    db.all(sql, params, (err, rows) => {
-      if (err) reject(err);
-      else resolve(rows);
-    });
-  });
-}
+// ── Crisis Contacts ────────────────────────────
+const crisisContactSchema = new mongoose.Schema({
+  contact_id:   { type: String, required: true, unique: true },
+  name:         String,
+  number:       String,
+  type:         String,
+  keyword:      String,
+  region:       String,
+  available:    String,
+  description:  String,
+  url:          String
+});
+const CrisisContact = mongoose.model('CrisisContact', crisisContactSchema);
 
-async function initDatabase() {
-  // Users
-  await run(`CREATE TABLE IF NOT EXISTS users (
-    user_id TEXT PRIMARY KEY,
-    username TEXT UNIQUE NOT NULL,
-    password TEXT NOT NULL,
-    role TEXT,
-    first_name TEXT,
-    last_name TEXT,
-    email TEXT UNIQUE,
-    phone TEXT,
-    avatar_initials TEXT,
-    avatar_color TEXT,
-    date_joined TEXT,
-    last_login TEXT,
-    status TEXT DEFAULT 'active',
-    institution TEXT
-  )`);
+// ── LMS Courses ────────────────────────────────
+const lmsCourseSchema = new mongoose.Schema({
+  course_id:        { type: String, required: true, unique: true },
+  title:            String,
+  category:         String,
+  description:      String,
+  module_count:     Number,
+  duration_minutes: Number,
+  level:            String,
+  icon:             String,
+  color_start:      String,
+  color_end:        String,
+  tags:             [String],
+  enrolled_count:   Number,
+  rating:           Number,
+  is_active:        { type: Boolean, default: true }
+});
+const LmsCourse = mongoose.model('LmsCourse', lmsCourseSchema);
 
-  // Assessments meta
-  await run(`CREATE TABLE IF NOT EXISTS assessments (
-    assessment_id TEXT PRIMARY KEY,
-    tool_code TEXT UNIQUE NOT NULL,
-    tool_name TEXT,
-    protocol TEXT,
-    condition_target TEXT,
-    question_count INTEGER,
-    max_score INTEGER,
-    estimated_minutes INTEGER,
-    validated_by TEXT,
-    dsm_version TEXT,
-    is_active INTEGER DEFAULT 1
-  )`);
+// ── Resources ──────────────────────────────────
+const resourceSchema = new mongoose.Schema({
+  resource_id:    { type: String, required: true, unique: true },
+  title:          String,
+  category:       String,
+  type:           String,
+  read_time_min:  Number,
+  tags:           [String],
+  is_active:      { type: Boolean, default: true }
+});
+const Resource = mongoose.model('Resource', resourceSchema);
 
-  // Assessment results
-  await run(`CREATE TABLE IF NOT EXISTS assessment_results (
-    result_id TEXT PRIMARY KEY,
-    user_id TEXT NOT NULL,
-    assessment_id TEXT,
-    tool_code TEXT,
-    score INTEGER,
-    max_score INTEGER,
-    severity_label TEXT,
-    severity_level INTEGER,
-    crisis_flag INTEGER DEFAULT 0,
-    date_taken TEXT,
-    time_taken TEXT,
-    recommendations_given INTEGER DEFAULT 0
-  )`);
+// ── Wellness Tips ──────────────────────────────
+const wellnessTipSchema = new mongoose.Schema({
+  tip_id:     { type: String, required: true, unique: true },
+  tip:        String,
+  category:   String,
+  is_active:  { type: Boolean, default: true }
+});
+const WellnessTip = mongoose.model('WellnessTip', wellnessTipSchema);
 
-  // Crisis contacts
-  await run(`CREATE TABLE IF NOT EXISTS crisis_contacts (
-    contact_id TEXT PRIMARY KEY,
-    name TEXT,
-    number TEXT,
-    type TEXT,
-    keyword TEXT,
-    region TEXT,
-    available TEXT,
-    description TEXT,
-    url TEXT
-  )`);
+// ── Platform Stats ─────────────────────────────
+const platformStatsSchema = new mongoose.Schema({
+  stats_id:                 { type: String, default: 'main' },
+  total_users:              Number,
+  assessments_completed:    Number,
+  satisfaction_rate_pct:    Number,
+  last_updated:             String
+});
+const PlatformStats = mongoose.model('PlatformStats', platformStatsSchema);
 
-  // LMS courses
-  await run(`CREATE TABLE IF NOT EXISTS lms_courses (
-    course_id TEXT PRIMARY KEY,
-    title TEXT,
-    category TEXT,
-    description TEXT,
-    module_count INTEGER,
-    duration_minutes INTEGER,
-    level TEXT,
-    icon TEXT,
-    color_start TEXT,
-    color_end TEXT,
-    tags TEXT,
-    enrolled_count INTEGER,
-    rating REAL,
-    is_active INTEGER DEFAULT 1
-  )`);
-
-  // Resources
-  await run(`CREATE TABLE IF NOT EXISTS resources (
-    resource_id TEXT PRIMARY KEY,
-    title TEXT,
-    category TEXT,
-    type TEXT,
-    read_time_min INTEGER,
-    tags TEXT,
-    is_active INTEGER DEFAULT 1
-  )`);
-
-  // Wellness tips
-  await run(`CREATE TABLE IF NOT EXISTS wellness_tips (
-    tip_id TEXT PRIMARY KEY,
-    tip TEXT,
-    category TEXT,
-    is_active INTEGER DEFAULT 1
-  )`);
-
-  // Platform stats (single row)
-  await run(`CREATE TABLE IF NOT EXISTS platform_stats (
-    id INTEGER PRIMARY KEY CHECK (id = 1),
-    total_users INTEGER,
-    assessments_completed INTEGER,
-    satisfaction_rate_pct INTEGER,
-    last_updated TEXT
-  )`);
-
-  console.log('Tables ensured.');
-}
-
-async function migrateFromJSON() {
+/* ─────────────────────────────────────────────
+   SEED FROM data.json
+   (Same logic as your original migrateFromJSON)
+───────────────────────────────────────────── */
+async function seedFromJSON() {
   const dataPath = path.join(__dirname, 'data.json');
   if (!fs.existsSync(dataPath)) {
-    console.log('data.json not found — skipping migration');
+    console.log('data.json not found — skipping seed');
     return;
   }
-  const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 
-  const count = await get('SELECT COUNT(*) AS c FROM users');
-  if (count && count.c > 0) {
+  // Only seed if database is empty
+  const existingUsers = await User.countDocuments();
+  if (existingUsers > 0) {
     console.log('Database already seeded.');
     return;
   }
 
   console.log('Seeding from data.json ...');
+  const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 
   // Users
   if (data.tbl_users) {
-    for (const u of data.tbl_users) {
-      await run(
-        `INSERT INTO users (user_id, username, password, role, first_name, last_name, email, phone, avatar_initials, avatar_color, date_joined, last_login, status, institution)
-         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
-        [u.user_id, u.username, u.password, u.role, u.first_name, u.last_name, u.email, u.phone, u.avatar_initials, u.avatar_color, u.date_joined, u.last_login, u.status, u.institution]
-      );
-    }
+    await User.insertMany(data.tbl_users.map(u => ({
+      user_id:         u.user_id,
+      username:        u.username,
+      password:        u.password,
+      role:            u.role,
+      first_name:      u.first_name,
+      last_name:       u.last_name,
+      email:           u.email,
+      phone:           u.phone,
+      avatar_initials: u.avatar_initials,
+      avatar_color:    u.avatar_color,
+      date_joined:     u.date_joined,
+      last_login:      u.last_login,
+      status:          u.status || 'active',
+      institution:     u.institution
+    })));
+    console.log(`Seeded ${data.tbl_users.length} users.`);
   }
 
   // Assessments
   if (data.tbl_assessments) {
-    for (const a of data.tbl_assessments) {
-      await run(
-        `INSERT INTO assessments (assessment_id, tool_code, tool_name, protocol, condition_target, question_count, max_score, estimated_minutes, validated_by, dsm_version, is_active)
-         VALUES (?,?,?,?,?,?,?,?,?,?,?)`,
-        [a.assessment_id, a.tool_code, a.tool_name, a.protocol, a.condition_target, a.question_count, a.max_score, a.estimated_minutes, a.validated_by, a.dsm_version, a.is_active ? 1 : 0]
-      );
-    }
+    await Assessment.insertMany(data.tbl_assessments.map(a => ({
+      assessment_id:     a.assessment_id,
+      tool_code:         a.tool_code,
+      tool_name:         a.tool_name,
+      protocol:          a.protocol,
+      condition_target:  a.condition_target,
+      question_count:    a.question_count,
+      max_score:         a.max_score,
+      estimated_minutes: a.estimated_minutes,
+      validated_by:      a.validated_by,
+      dsm_version:       a.dsm_version,
+      is_active:         a.is_active !== false
+    })));
+    console.log(`Seeded ${data.tbl_assessments.length} assessments.`);
   }
 
-  // Results
+  // Assessment Results
   if (data.tbl_assessment_results) {
-    for (const r of data.tbl_assessment_results) {
-      await run(
-        `INSERT INTO assessment_results (result_id, user_id, assessment_id, tool_code, score, max_score, severity_label, severity_level, crisis_flag, date_taken, time_taken, recommendations_given)
-         VALUES (?,?,?,?,?,?,?,?,?,?,?,?)`,
-        [r.result_id, r.user_id, r.assessment_id, r.tool_code, r.score, r.max_score, r.severity_label, r.severity_level, r.crisis_flag ? 1 : 0, r.date_taken, r.time_taken, r.recommendations_given ? 1 : 0]
-      );
-    }
+    await AssessmentResult.insertMany(data.tbl_assessment_results.map(r => ({
+      result_id:             r.result_id,
+      user_id:               r.user_id,
+      assessment_id:         r.assessment_id,
+      tool_code:             r.tool_code,
+      score:                 r.score,
+      max_score:             r.max_score,
+      severity_label:        r.severity_label,
+      severity_level:        r.severity_level,
+      crisis_flag:           !!r.crisis_flag,
+      date_taken:            r.date_taken,
+      time_taken:            r.time_taken,
+      recommendations_given: !!r.recommendations_given
+    })));
+    console.log(`Seeded ${data.tbl_assessment_results.length} results.`);
   }
 
-  // Crisis contacts
+  // Crisis Contacts
   if (data.tbl_crisis_contacts) {
-    for (const c of data.tbl_crisis_contacts) {
-      await run(
-        `INSERT INTO crisis_contacts (contact_id, name, number, type, keyword, region, available, description, url)
-         VALUES (?,?,?,?,?,?,?,?,?)`,
-        [c.contact_id, c.name, c.number, c.type, c.keyword, c.region, c.available, c.description, c.url]
-      );
-    }
+    await CrisisContact.insertMany(data.tbl_crisis_contacts.map(c => ({
+      contact_id:  c.contact_id,
+      name:        c.name,
+      number:      c.number,
+      type:        c.type,
+      keyword:     c.keyword,
+      region:      c.region,
+      available:   c.available,
+      description: c.description,
+      url:         c.url
+    })));
+    console.log(`Seeded ${data.tbl_crisis_contacts.length} crisis contacts.`);
   }
 
-  // Courses
+  // LMS Courses
   if (data.tbl_lms_courses) {
-    for (const c of data.tbl_lms_courses) {
-      await run(
-        `INSERT INTO lms_courses (course_id, title, category, description, module_count, duration_minutes, level, icon, color_start, color_end, tags, enrolled_count, rating, is_active)
-         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
-        [c.course_id, c.title, c.category, c.description, c.module_count, c.duration_minutes, c.level, c.icon, c.color_start, c.color_end, JSON.stringify(c.tags || []), c.enrolled_count, c.rating, c.is_active ? 1 : 0]
-      );
-    }
+    await LmsCourse.insertMany(data.tbl_lms_courses.map(c => ({
+      course_id:        c.course_id,
+      title:            c.title,
+      category:         c.category,
+      description:      c.description,
+      module_count:     c.module_count,
+      duration_minutes: c.duration_minutes,
+      level:            c.level,
+      icon:             c.icon,
+      color_start:      c.color_start,
+      color_end:        c.color_end,
+      tags:             Array.isArray(c.tags) ? c.tags : [],
+      enrolled_count:   c.enrolled_count,
+      rating:           c.rating,
+      is_active:        c.is_active !== false
+    })));
+    console.log(`Seeded ${data.tbl_lms_courses.length} courses.`);
   }
 
   // Resources
   if (data.tbl_resources) {
-    for (const r of data.tbl_resources) {
-      await run(
-        `INSERT INTO resources (resource_id, title, category, type, read_time_min, tags, is_active)
-         VALUES (?,?,?,?,?,?,?)`,
-        [r.resource_id, r.title, r.category, r.type, r.read_time_min, JSON.stringify(r.tags || []), r.is_active ? 1 : 0]
-      );
-    }
+    await Resource.insertMany(data.tbl_resources.map(r => ({
+      resource_id:   r.resource_id,
+      title:         r.title,
+      category:      r.category,
+      type:          r.type,
+      read_time_min: r.read_time_min,
+      tags:          Array.isArray(r.tags) ? r.tags : [],
+      is_active:     r.is_active !== false
+    })));
+    console.log(`Seeded ${data.tbl_resources.length} resources.`);
   }
 
-  // Tips
+  // Wellness Tips
   if (data.tbl_wellness_tips) {
-    for (const t of data.tbl_wellness_tips) {
-      await run(
-        `INSERT INTO wellness_tips (tip_id, tip, category, is_active)
-         VALUES (?,?,?,?)`,
-        [t.tip_id, t.tip, t.category, t.is_active ? 1 : 0]
-      );
-    }
+    await WellnessTip.insertMany(data.tbl_wellness_tips.map(t => ({
+      tip_id:    t.tip_id,
+      tip:       t.tip,
+      category:  t.category,
+      is_active: t.is_active !== false
+    })));
+    console.log(`Seeded ${data.tbl_wellness_tips.length} tips.`);
   }
 
-  // Stats
+  // Platform Stats
   if (data.tbl_platform_stats) {
     const s = data.tbl_platform_stats;
-    await run(
-      `INSERT INTO platform_stats (id, total_users, assessments_completed, satisfaction_rate_pct, last_updated)
-       VALUES (1,?,?,?,?)`,
-      [s.total_users, s.assessments_completed, s.satisfaction_rate_pct, s.last_updated]
-    );
+    await PlatformStats.create({
+      stats_id:              'main',
+      total_users:           s.total_users,
+      assessments_completed: s.assessments_completed,
+      satisfaction_rate_pct: s.satisfaction_rate_pct,
+      last_updated:          s.last_updated
+    });
+    console.log('Seeded platform stats.');
   }
 
-  console.log('Migration complete.');
+  console.log('Seed complete.');
 }
 
-/* ───────────── AUTH MIDDLEWARE ───────────── */
+/* ─────────────────────────────────────────────
+   AUTH MIDDLEWARE
+   (Identical to your original)
+───────────────────────────────────────────── */
 function auth(req, res, next) {
   const token = req.headers['x-auth-token'];
   if (!token) return res.status(401).json({ error: 'No token' });
@@ -278,22 +331,34 @@ function auth(req, res, next) {
   }
 }
 
-/* ───────────── ROUTES ───────────── */
+/* ─────────────────────────────────────────────
+   ROUTES
+   (All endpoints are identical to your original —
+    only the database calls have changed)
+───────────────────────────────────────────── */
 
-// Health
-app.get('/api/health', (req, res) => res.json({ status: 'ok', db: DB_FILE }));
+// Health check
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', db: 'MongoDB Atlas' });
+});
 
-// Login
+// ── Login ───────────────────────────────────────
 app.post('/api/login', async (req, res) => {
   try {
     const { username, password } = req.body;
-    const user = await get('SELECT * FROM users WHERE username = ? OR email = ?', [username, username]);
+
+    // Find by username OR email — same as before
+    const user = await User.findOne({
+      $or: [{ username }, { email: username }]
+    });
     if (!user) return res.status(401).json({ error: 'Invalid credentials' });
 
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
-      // fallback: plain text compare for demo data before hashing
-      if (user.password !== password) return res.status(401).json({ error: 'Invalid credentials' });
+      // Fallback plain text compare for demo data (same as your original)
+      if (user.password !== password) {
+        return res.status(401).json({ error: 'Invalid credentials' });
+      }
     }
 
     const token = jwt.sign(
@@ -305,15 +370,15 @@ app.post('/api/login', async (req, res) => {
     res.json({
       token,
       user: {
-        user_id: user.user_id,
-        username: user.username,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        role: user.role,
-        email: user.email,
+        user_id:         user.user_id,
+        username:        user.username,
+        first_name:      user.first_name,
+        last_name:       user.last_name,
+        role:            user.role,
+        email:           user.email,
         avatar_initials: user.avatar_initials,
-        avatar_color: user.avatar_color,
-        institution: user.institution
+        avatar_color:    user.avatar_color,
+        institution:     user.institution
       }
     });
   } catch (err) {
@@ -322,120 +387,199 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// Register (hash password)
+// ── Register ────────────────────────────────────
 app.post('/api/register', async (req, res) => {
   try {
     const { username, password, first_name, last_name, email, role } = req.body;
-    const existing = await get('SELECT * FROM users WHERE username = ? OR email = ?', [username, email]);
+
+    const existing = await User.findOne({
+      $or: [{ username }, { email }]
+    });
     if (existing) return res.status(409).json({ error: 'Username or email taken' });
 
     const hash = await bcrypt.hash(password, 10);
     const user_id = 'USR' + String(Date.now()).slice(-5);
-    await run(
-      `INSERT INTO users (user_id, username, password, first_name, last_name, email, role, status, date_joined)
-       VALUES (?,?,?,?,?,?,?,?,date('now'))`,
-      [user_id, username, hash, first_name, last_name, email, role || 'Patient', 'active']
-    );
+    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+
+    await User.create({
+      user_id,
+      username,
+      password:   hash,
+      first_name,
+      last_name,
+      email,
+      role:       role || 'Patient',
+      status:     'active',
+      date_joined: today
+    });
+
     res.json({ user_id });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// Users list (admin/therapist)
+// ── Users list (admin/therapist) ────────────────
 app.get('/api/users', auth, async (req, res) => {
   try {
-    const rows = await all('SELECT user_id, username, first_name, last_name, email, role, status, institution, last_login FROM users');
-    res.json(rows);
-  } catch (err) { res.status(500).json({ error: err.message }); }
+    const users = await User.find(
+      {},
+      'user_id username first_name last_name email role status institution last_login'
+    );
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-// Current user
+// ── Current user ────────────────────────────────
 app.get('/api/me', auth, async (req, res) => {
   try {
-    const user = await get('SELECT user_id, username, first_name, last_name, email, role, avatar_initials, avatar_color, institution FROM users WHERE user_id = ?', [req.user.user_id]);
+    const user = await User.findOne(
+      { user_id: req.user.user_id },
+      'user_id username first_name last_name email role avatar_initials avatar_color institution'
+    );
     res.json(user);
-  } catch (err) { res.status(500).json({ error: err.message }); }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-// Assessments meta
+// ── Assessments meta ────────────────────────────
 app.get('/api/assessments', async (req, res) => {
   try {
-    const rows = await all('SELECT * FROM assessments WHERE is_active = 1');
-    res.json(rows);
-  } catch (err) { res.status(500).json({ error: err.message }); }
+    const assessments = await Assessment.find({ is_active: true });
+    res.json(assessments);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-// Submit result
+// ── Submit assessment result ────────────────────
 app.post('/api/assessments/:tool_code/results', auth, async (req, res) => {
   try {
-    const { score, max_score, severity_label, severity_level, crisis_flag, date_taken, time_taken, recommendations_given } = req.body;
+    const {
+      score, max_score, severity_label, severity_level,
+      crisis_flag, date_taken, time_taken, recommendations_given
+    } = req.body;
+
     const tool_code = req.params.tool_code.toUpperCase();
-    const assessment = await get('SELECT assessment_id FROM assessments WHERE tool_code = ?', [tool_code]);
+    const assessment = await Assessment.findOne({ tool_code });
     const assessment_id = assessment ? assessment.assessment_id : null;
     const result_id = 'RES' + String(Date.now());
 
-    await run(
-      `INSERT INTO assessment_results (result_id, user_id, assessment_id, tool_code, score, max_score, severity_label, severity_level, crisis_flag, date_taken, time_taken, recommendations_given)
-       VALUES (?,?,?,?,?,?,?,?,?,?,?,?)`,
-      [result_id, req.user.user_id, assessment_id, tool_code, score, max_score, severity_label, severity_level, crisis_flag ? 1 : 0, date_taken, time_taken, recommendations_given ? 1 : 0]
-    );
+    await AssessmentResult.create({
+      result_id,
+      user_id:               req.user.user_id,
+      assessment_id,
+      tool_code,
+      score,
+      max_score,
+      severity_label,
+      severity_level,
+      crisis_flag:            !!crisis_flag,
+      date_taken,
+      time_taken,
+      recommendations_given:  !!recommendations_given
+    });
+
     res.json({ result_id });
-  } catch (err) { res.status(500).json({ error: err.message }); }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-// Get results for user
+// ── Get results for current user ────────────────
 app.get('/api/my-results', auth, async (req, res) => {
   try {
-    const rows = await all(
-      `SELECT r.*, a.tool_name FROM assessment_results r LEFT JOIN assessments a ON r.assessment_id = a.assessment_id WHERE r.user_id = ? ORDER BY r.date_taken DESC`,
-      [req.user.user_id]
-    );
-    res.json(rows);
-  } catch (err) { res.status(500).json({ error: err.message }); }
+    // Get results and manually join tool_name from assessments
+    const results = await AssessmentResult.find(
+      { user_id: req.user.user_id }
+    ).sort({ date_taken: -1 });
+
+    // Enrich each result with tool_name
+    const enriched = await Promise.all(results.map(async r => {
+      const assessment = await Assessment.findOne(
+        { assessment_id: r.assessment_id },
+        'tool_name'
+      );
+      return {
+        ...r.toObject(),
+        tool_name: assessment ? assessment.tool_name : null
+      };
+    }));
+
+    res.json(enriched);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-// Crisis contacts
+// ── Crisis contacts ─────────────────────────────
 app.get('/api/crisis-contacts', async (req, res) => {
-  try { res.json(await all('SELECT * FROM crisis_contacts')); }
-  catch (err) { res.status(500).json({ error: err.message }); }
-});
-
-// Courses
-app.get('/api/courses', async (req, res) => {
-  try { res.json(await all('SELECT * FROM lms_courses WHERE is_active = 1')); }
-  catch (err) { res.status(500).json({ error: err.message }); }
-});
-
-// Resources
-app.get('/api/resources', async (req, res) => {
-  try { res.json(await all('SELECT * FROM resources WHERE is_active = 1')); }
-  catch (err) { res.status(500).json({ error: err.message }); }
-});
-
-// Tips
-app.get('/api/tips', async (req, res) => {
-  try { res.json(await all('SELECT * FROM wellness_tips WHERE is_active = 1 ORDER BY RANDOM() LIMIT 1')); }
-  catch (err) { res.status(500).json({ error: err.message }); }
-});
-
-// Stats
-app.get('/api/stats', async (req, res) => {
-  try { res.json(await get('SELECT * FROM platform_stats WHERE id = 1')); }
-  catch (err) { res.status(500).json({ error: err.message }); }
-});
-
-/* ───────────── START ───────────── */
-(async () => {
   try {
-    await initDatabase();
-    await migrateFromJSON();
+    const contacts = await CrisisContact.find();
+    res.json(contacts);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── Courses ─────────────────────────────────────
+app.get('/api/courses', async (req, res) => {
+  try {
+    const courses = await LmsCourse.find({ is_active: true });
+    res.json(courses);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── Resources ───────────────────────────────────
+app.get('/api/resources', async (req, res) => {
+  try {
+    const resources = await Resource.find({ is_active: true });
+    res.json(resources);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── Random wellness tip ──────────────────────────
+app.get('/api/tips', async (req, res) => {
+  try {
+    // MongoDB random document fetch
+    const count = await WellnessTip.countDocuments({ is_active: true });
+    const random = Math.floor(Math.random() * count);
+    const tip = await WellnessTip.findOne({ is_active: true }).skip(random);
+    res.json(tip ? [tip] : []);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── Platform stats ──────────────────────────────
+app.get('/api/stats', async (req, res) => {
+  try {
+    const stats = await PlatformStats.findOne({ stats_id: 'main' });
+    res.json(stats);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/* ─────────────────────────────────────────────
+   START SERVER
+───────────────────────────────────────────── */
+
+mongoose.connection.once('connected', async () => {
+  try {
+    await seedFromJSON();
     app.listen(PORT, () => {
-      console.log('Safe Space Hub API running on http://localhost:' + PORT);
+      console.log('Safe Space Hub API running on port ' + PORT);
     });
   } catch (err) {
     console.error('Startup error:', err);
     process.exit(1);
   }
-})();
-
+});
