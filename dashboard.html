@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - THE SAFE SPACE HUB</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body class="dashboard-page">
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span class="logo-icon">🧠</span>
+            <span>SAFE SPACE HUB</span>
+        </div>
+        <div class="nav-actions">
+            <span id="welcomeUser">Welcome, User</span>
+            <button class="btn-icon" onclick="logout()">🚪</button>
+        </div>
+    </nav>
+
+    <script>
+        // Check if user is logged in
+        const currentUser = localStorage.getItem('currentUser');
+        if (!currentUser) {
+            window.location.href = 'index.html';
+        } else {
+            const user = JSON.parse(currentUser);
+            document.getElementById('welcomeUser').textContent = `Welcome, ${user.name}`;
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        }
+
+        // Mood tracking
+        function setMood(mood) {
+            alert(`Mood logged: ${mood.toUpperCase()} 📊`);
+        }
+
+        // Emergency support
+        function emergencySupport() {
+            const hotlines = [
+                'National Suicide Prevention: 988',
+                'Crisis Text Line: Text HOME to 741741',
+                'NIMH: 1-866-615-6464'
+            ];
+            alert('🚨 EMERGENCY RESOURCES:\n' + hotlines.join('\n'));
+        }
+
+        // Show resources
+        function showResources() {
+            alert('📚 EDUCATIONAL RESOURCES:\n• NIMH Mental Health Info\n• Psychology Today\n• Mental Health America');
+        }
+
+        // Show AI Companion
+        function showCompanion() {
+            alert('🤖 AI Companion: "Remember, you are not alone. Take a deep breath."');
+        }
+
+        // Show LMS
+        function showLMS() {
+            alert('🎓 LEARNING MODULES:\n• Mindfulness Basics\n• CBT Introduction\n• Stress Management');
+        }
+
+        // Show results
+        function showResults() {
+            alert('📊 VIEW RESULTS:\nComplete assessments to see your results here!');
+        }
+    </script>
+
+    <main class="dashboard">
+        <div class="hero-section">
+            <h1>How are you feeling today?</h1>
+            <div class="mood-buttons">
+                <button class="mood-btn great" onclick="setMood('great')">Great 😊</button>
+                <button class="mood-btn good" onclick="setMood('good')">Good 🙂</button>
+                <button class="mood-btn neutral" onclick="setMood('neutral')">Okay 😐</button>
+                <button class="mood-btn bad" onclick="setMood('bad')">Rough 😔</button>
+                <button class="mood-btn crisis" onclick="emergencySupport()">CRISIS 🚨</button>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="card assessment-card">
+                <h3>🩺 Screening Tools</h3>
+                <div class="tool-buttons">
+                    <a href="assessments.html#phq9" class="btn-card">PHQ-9 Depression</a>
+                    <a href="assessments.html#gad7" class="btn-card">GAD-7 Anxiety</a>
+                </div>
+            </div>
+
+            <div class="card resources-card">
+                <h3>📚 Resources</h3>
+                <div class="resource-links">
+                    <button class="btn-card" onclick="showResources()">Educational Hub</button>
+                    <a href="#" class="btn-card" onclick="showCompanion()">AI Companion</a>
+                    <button class="btn-card" onclick="showLMS()">Learning Modules</button>
+                </div>
+            </div>
+
+            <div class="card progress-card">
+                <h3>📊 My Progress</h3>
+                <div class="progress-metrics">
+                    <div class="metric">
+                        <span class="metric-value" id="sessionsCount">0</span>
+                        <span>Sessions</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value" id="moodAvg">Neutral</span>
+                        <span>Avg Mood</span>
+                    </div>
+                </div>
+                <button class="btn-card full-width" onclick="showResults()">View Results</button>
+            </div>
+
+            <div class="card crisis-card">
+                <h3>🚨 Crisis Support</h3>
+                <p>24/7 Emergency Resources</p>
+                <button class="btn-danger full-width" onclick="emergencySupport()">Get Help Now</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

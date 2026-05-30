@@ -1,0 +1,306 @@
+{
+  "tbl_users": [
+    {
+      "user_id": "USR001",
+      "username": "admin",
+      "password": "Admin@2025",
+      "role": "Administrator",
+      "first_name": "Dr. Amara",
+      "last_name": "Osei",
+      "email": "admin@safespacehub.org",
+      "phone": "+256-700-000001",
+      "avatar_initials": "AO",
+      "avatar_color": "#2e7d9e",
+      "date_joined": "2024-01-10",
+      "last_login": "2025-01-01",
+      "status": "active",
+      "institution": "Safe Space Hub HQ"
+    },
+    {
+      "user_id": "USR002",
+      "username": "therapist1",
+      "password": "Therapy@2025",
+      "role": "Therapist",
+      "first_name": "Dr. James",
+      "last_name": "Mwangi",
+      "email": "james.mwangi@safespacehub.org",
+      "phone": "+256-700-000002",
+      "avatar_initials": "JM",
+      "avatar_color": "#6fa882",
+      "date_joined": "2024-02-15",
+      "last_login": "2024-12-30",
+      "status": "active",
+      "institution": "Makerere University"
+    },
+    {
+      "user_id": "USR003",
+      "username": "student1",
+      "password": "Student@2025",
+      "role": "Student",
+      "first_name": "Amara",
+      "last_name": "Diallo",
+      "email": "amara.diallo@student.mak.ac.ug",
+      "phone": "+256-700-000003",
+      "avatar_initials": "AD",
+      "avatar_color": "#d4924a",
+      "date_joined": "2024-03-01",
+      "last_login": "2024-12-28",
+      "status": "active",
+      "institution": "Makerere University"
+    },
+    {
+      "user_id": "USR004",
+      "username": "patient1",
+      "password": "Patient@2025",
+      "role": "Patient",
+      "first_name": "Kofi",
+      "last_name": "Asante",
+      "email": "kofi.asante@gmail.com",
+      "phone": "+256-700-000004",
+      "avatar_initials": "KA",
+      "avatar_color": "#c97070",
+      "date_joined": "2024-06-15",
+      "last_login": "2024-12-25",
+      "status": "active",
+      "institution": "General Public"
+    },
+    {
+      "user_id": "USR005",
+      "username": "counselor1",
+      "password": "Counsel@2025",
+      "role": "Counselor",
+      "first_name": "Fatima",
+      "last_name": "Nkosi",
+      "email": "fatima.nkosi@safespacehub.org",
+      "phone": "+256-700-000005",
+      "avatar_initials": "FN",
+      "avatar_color": "#7b4f9e",
+      "date_joined": "2024-04-20",
+      "last_login": "2024-12-29",
+      "status": "active",
+      "institution": "Safe Space Hub HQ"
+    }
+  ],
+  "tbl_assessments": [
+    {
+      "assessment_id": "ASS001",
+      "tool_code": "PHQ9",
+      "tool_name": "PHQ-9 Depression Screening",
+      "protocol": "Patient Health Questionnaire — 9 Item",
+      "condition_target": "Depression",
+      "question_count": 9,
+      "max_score": 27,
+      "estimated_minutes": 3,
+      "validated_by": "Kroenke & Spitzer, 2002",
+      "dsm_version": "DSM-5 Compatible",
+      "is_active": true
+    },
+    {
+      "assessment_id": "ASS002",
+      "tool_code": "GAD7",
+      "tool_name": "GAD-7 Anxiety Assessment",
+      "protocol": "Generalized Anxiety Disorder Scale — 7 Item",
+      "condition_target": "Anxiety",
+      "question_count": 7,
+      "max_score": 21,
+      "estimated_minutes": 2,
+      "validated_by": "Spitzer et al., 2006",
+      "dsm_version": "DSM-5 Compatible",
+      "is_active": true
+    },
+    {
+      "assessment_id": "ASS003",
+      "tool_code": "PCL5",
+      "tool_name": "PCL-5 PTSD Evaluation",
+      "protocol": "PTSD Checklist for DSM-5",
+      "condition_target": "PTSD",
+      "question_count": 20,
+      "max_score": 80,
+      "estimated_minutes": 5,
+      "validated_by": "Weathers et al., 2013 — National Center for PTSD",
+      "dsm_version": "DSM-5",
+      "is_active": true
+    },
+    {
+      "assessment_id": "ASS004",
+      "tool_code": "MDQ",
+      "tool_name": "MDQ Bipolar Disorder Screening",
+      "protocol": "Mood Disorder Questionnaire",
+      "condition_target": "Bipolar Disorder",
+      "question_count": 13,
+      "max_score": 13,
+      "estimated_minutes": 3,
+      "validated_by": "Hirschfeld et al., 2000",
+      "dsm_version": "DSM-5 Compatible",
+      "is_active": true
+    }
+  ],
+  "tbl_assessment_results": [
+    {
+      "result_id": "RES001",
+      "user_id": "USR003",
+      "assessment_id": "ASS001",
+      "tool_code": "PHQ9",
+      "score": 8,
+      "max_score": 27,
+      "severity_label": "Mild Depression",
+      "severity_level": 2,
+      "crisis_flag": false,
+      "date_taken": "2024-12-10",
+      "time_taken": "14:32:00",
+      "recommendations_given": true
+    },
+    {
+      "result_id": "RES002",
+      "user_id": "USR003",
+      "assessment_id": "ASS002",
+      "tool_code": "GAD7",
+      "score": 11,
+      "max_score": 21,
+      "severity_label": "Moderate Anxiety",
+      "severity_level": 3,
+      "crisis_flag": false,
+      "date_taken": "2024-12-10",
+      "time_taken": "14:45:00",
+      "recommendations_given": true
+    },
+    {
+      "result_id": "RES003",
+      "user_id": "USR004",
+      "assessment_id": "ASS003",
+      "tool_code": "PCL5",
+      "score": 38,
+      "max_score": 80,
+      "severity_label": "Probable PTSD",
+      "severity_level": 3,
+      "crisis_flag": false,
+      "date_taken": "2024-11-22",
+      "time_taken": "10:15:00",
+      "recommendations_given": true
+    },
+    {
+      "result_id": "RES004",
+      "user_id": "USR004",
+      "assessment_id": "ASS004",
+      "tool_code": "MDQ",
+      "score": 9,
+      "max_score": 13,
+      "severity_label": "Possible Bipolar Indicators",
+      "severity_level": 3,
+      "crisis_flag": false,
+      "date_taken": "2024-11-22",
+      "time_taken": "10:35:00",
+      "recommendations_given": true
+    }
+  ],
+  "tbl_crisis_contacts": [
+    {
+      "contact_id": "CRI001",
+      "name": "988 Suicide & Crisis Lifeline",
+      "number": "988",
+      "type": "call",
+      "keyword": null,
+      "region": "USA / International",
+      "available": "24/7",
+      "description": "Free, confidential crisis support for anyone in distress.",
+      "url": "tel:988"
+    },
+    {
+      "contact_id": "CRI002",
+      "name": "Crisis Text Line",
+      "number": "741741",
+      "type": "text",
+      "keyword": "HOME",
+      "region": "USA",
+      "available": "24/7",
+      "description": "Text with a trained crisis counselor. Text HOME to 741741.",
+      "url": "sms:741741"
+    },
+    {
+      "contact_id": "CRI003",
+      "name": "SAMHSA National Helpline",
+      "number": "1-800-662-4357",
+      "type": "call",
+      "keyword": null,
+      "region": "USA",
+      "available": "24/7, 365 days",
+      "description": "Mental health and substance use treatment referrals.",
+      "url": "tel:18006624357"
+    }
+  ],
+  "tbl_lms_courses": [
+    {
+      "course_id": "CRS001",
+      "title": "Understanding Your Mental Health",
+      "category": "Foundations",
+      "description": "An evidence-based introduction to mental wellness — what it is, why it matters, and how to build a personal wellness framework.",
+      "module_count": 5,
+      "duration_minutes": 45,
+      "level": "Beginner",
+      "icon": "🧠",
+      "color_start": "#2e7d9e",
+      "color_end": "#4fa3c5",
+      "tags": ["mental health", "foundations", "self-awareness"],
+      "enrolled_count": 1240,
+      "rating": 4.8,
+      "is_active": true
+    },
+    {
+      "course_id": "CRS002",
+      "title": "Autism & Sensory Processing",
+      "category": "Autism Support",
+      "description": "Practical strategies for sensory sensitivities, communication challenges, routine-building, and self-advocacy for autistic individuals.",
+      "module_count": 8,
+      "duration_minutes": 80,
+      "level": "Intermediate",
+      "icon": "🧩",
+      "color_start": "#6fa882",
+      "color_end": "#a8d4b5",
+      "tags": ["autism", "sensory", "ASD", "neurodiversity"],
+      "enrolled_count": 890,
+      "rating": 4.9,
+      "is_active": true
+    },
+    {
+      "course_id": "CRS003",
+      "title": "Trauma & PTSD Recovery",
+      "category": "PTSD Support",
+      "description": "Psychoeducation on trauma, PTSD symptoms, recovery approaches including EMDR and Prolonged Exposure, and somatic healing practices.",
+      "module_count": 10,
+      "duration_minutes": 130,
+      "level": "Intermediate",
+      "icon": "⚡",
+      "color_start": "#d4924a",
+      "color_end": "#f0b878",
+      "tags": ["PTSD", "trauma", "EMDR", "recovery"],
+      "enrolled_count": 670,
+      "rating": 4.7,
+      "is_active": true
+    }
+  ],
+  "tbl_resources": [
+    {
+      "resource_id": "REC001",
+      "title": "What is Autism Spectrum Disorder?",
+      "category": "Autism",
+      "type": "Article",
+      "read_time_min": 15,
+      "tags": ["ASD", "overview"],
+      "is_active": true
+    }
+  ],
+  "tbl_wellness_tips": [
+    {
+      "tip_id": "TIP001",
+      "tip": "Take 3 deep breaths before responding to any stressful situation. It activates your parasympathetic nervous system.",
+      "category": "Anxiety",
+      "is_active": true
+    }
+  ],
+  "tbl_platform_stats": {
+    "total_users": 12847,
+    "assessments_completed": 38920,
+    "satisfaction_rate_pct": 94,
+    "last_updated": "2025-01-01"
+  }
+}
