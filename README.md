@@ -6,7 +6,7 @@
 1. Look for **"Safe Space"** shortcut on your Desktop
 2. Double-click it
 3. The server will start automatically and open in your browser
-4. You'll see the login page at `http://localhost:3000`
+4. You'll see the login page at `http:// https://safespace-hub.onrender.com`
 
 ### Option 2: Manual Start
 1. Open Command Prompt or PowerShell

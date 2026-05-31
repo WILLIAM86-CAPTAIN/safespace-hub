@@ -12,6 +12,6 @@ if not exist "node_modules" (
 
 REM Start the server
 echo Starting Safe Space Hub server...
-start "" http://localhost:3000
+start "" http:// https://safespace-hub.onrender.com
 timeout /t 2 /nobreak
 node server.js
