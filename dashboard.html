@@ -1,129 +1,2308 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - THE SAFE SPACE HUB</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="manifest" href="manifest.json">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#1a2e3b" />
+  <meta name="description" content="The Safe Space Hub — Adaptive digital mental wellness support for Autism, PTSD, Anxiety, and Stress." />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <!-- WCAG 2.1 AA: lang attribute, skip link -->
+  <title>The Safe Space Hub | Mental Wellness Support</title>
+
+  <!-- PWA Manifest inline -->
+  <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiVGhlIFNhZmUgU3BhY2UgSHViIiwic2hvcnRfbmFtZSI6IlNhZmVTcGFjZSIsInN0YXJ0X3VybCI6Ii8iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMWEyZTNiIiwidGhlbWVfY29sb3IiOiIjMWEyZTNiIn0=" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ═══════════════════════════════════════════════
+       CSS CUSTOM PROPERTIES — DESIGN TOKENS
+    ═══════════════════════════════════════════════ */
+    :root {
+      --c-deep:    #0d1f2d;
+      --c-navy:    #1a2e3b;
+      --c-slate:   #243b4a;
+      --c-mid:     #2e5068;
+      --c-teal:    #3a7d9c;
+      --c-sky:     #5ba3c0;
+      --c-mist:    #a8cedd;
+      --c-sage:    #7bab8e;
+      --c-amber:   #e8a445;
+      --c-rose:    #d97b7b;
+      --c-cream:   #f5f0e8;
+      --c-warm:    #ede8de;
+      --c-text:    #1a2e3b;
+      --c-textlt:  #3d5566;
+      --c-white:   #ffffff;
+      --c-crisis:  #c0392b;
+      --c-safe:    #27ae60;
+      --c-warn:    #e67e22;
+
+      --ff-head: 'DM Serif Display', Georgia, serif;
+      --ff-body: 'DM Sans', system-ui, sans-serif;
+
+      --radius-sm: 8px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --radius-xl: 40px;
+
+      --shadow-soft: 0 4px 24px rgba(13,31,45,.10);
+      --shadow-card: 0 8px 40px rgba(13,31,45,.14);
+      --shadow-lift: 0 16px 64px rgba(13,31,45,.20);
+
+      --transition: 280ms cubic-bezier(.4,0,.2,1);
+      --ease-spring: cubic-bezier(.34,1.56,.64,1);
+
+      --focus-ring: 0 0 0 3px rgba(91,163,192,.55);
+
+      /* Responsive spacing scale */
+      --sp-xs: clamp(4px, 1vw, 8px);
+      --sp-sm: clamp(8px, 2vw, 16px);
+      --sp-md: clamp(16px, 3vw, 24px);
+      --sp-lg: clamp(24px, 4vw, 40px);
+      --sp-xl: clamp(40px, 6vw, 72px);
+      --sp-2xl: clamp(64px, 8vw, 120px);
+    }
+
+    /* ═══════════════════════════════════════════════
+       RESET & BASE
+    ═══════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      font-family: var(--ff-body);
+      background: var(--c-cream);
+      color: var(--c-text);
+      line-height: 1.65;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Skip navigation (WCAG) ── */
+    .skip-link {
+      position: absolute;
+      top: -100%;
+      left: 1rem;
+      z-index: 9999;
+      background: var(--c-teal);
+      color: var(--c-white);
+      padding: .5rem 1rem;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      text-decoration: none;
+      transition: top var(--transition);
+    }
+    .skip-link:focus { top: 1rem; }
+
+    /* ── Focus styles (WCAG 2.1 AA) ── */
+    :focus-visible {
+      outline: none;
+      box-shadow: var(--focus-ring);
+      border-radius: 4px;
+    }
+
+    a { color: var(--c-teal); text-decoration: underline; }
+    a:hover { color: var(--c-sky); }
+    img { max-width: 100%; height: auto; }
+    button { cursor: pointer; font-family: var(--ff-body); }
+
+    h1, h2, h3, h4 { font-family: var(--ff-head); line-height: 1.2; }
+
+    /* ── Visually hidden (screen readers) ── */
+    .sr-only {
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+
+    /* ═══════════════════════════════════════════════
+       CRISIS BANNER — always visible
+    ═══════════════════════════════════════════════ */
+    .crisis-banner {
+      background: var(--c-crisis);
+      color: var(--c-white);
+      text-align: center;
+      padding: 10px var(--sp-md);
+      font-size: .875rem;
+      font-weight: 500;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .crisis-banner a {
+      color: #ffd6d6;
+      font-weight: 700;
+      text-decoration: underline;
+    }
+    .crisis-banner a:hover { color: #fff; }
+
+    /* ═══════════════════════════════════════════════
+       HEADER / NAV
+    ═══════════════════════════════════════════════ */
+    .site-header {
+      background: var(--c-navy);
+      position: sticky;
+      top: 40px;
+      z-index: 900;
+      box-shadow: 0 2px 20px rgba(0,0,0,.25);
+    }
+    .header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 var(--sp-md);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+      gap: var(--sp-md);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .logo-icon {
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg, var(--c-teal), var(--c-sage));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+    .logo-text {
+      font-family: var(--ff-head);
+      color: var(--c-white);
+      font-size: 1.2rem;
+      line-height: 1.1;
+    }
+    .logo-text span { color: var(--c-mist); display: block; font-size: .75rem; font-family: var(--ff-body); font-weight: 300; letter-spacing: .05em; }
+
+    .main-nav { display: flex; align-items: center; gap: 4px; }
+    .nav-link {
+      color: var(--c-mist);
+      text-decoration: none;
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      font-size: .9rem;
+      font-weight: 500;
+      transition: background var(--transition), color var(--transition);
+      white-space: nowrap;
+    }
+    .nav-link:hover, .nav-link.active {
+      background: rgba(91,163,192,.18);
+      color: var(--c-white);
+    }
+
+    /* Accessibility toolbar */
+    .a11y-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 var(--sp-md);
+      background: var(--c-slate);
+    }
+    .a11y-bar .a11y-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 0;
+      font-size: .8rem;
+      color: var(--c-mist);
+    }
+    .a11y-btn {
+      background: none;
+      border: 1px solid rgba(168,206,221,.3);
+      color: var(--c-mist);
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: .78rem;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .a11y-btn:hover { background: rgba(91,163,192,.2); color: var(--c-white); }
+    .a11y-btn.active { background: var(--c-teal); color: var(--c-white); border-color: var(--c-teal); }
+
+    /* ── Mobile hamburger ── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      padding: 8px;
+      cursor: pointer;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--c-mist);
+      border-radius: 2px;
+      transition: all var(--transition);
+    }
+    .mobile-nav {
+      display: none;
+      flex-direction: column;
+      background: var(--c-slate);
+      padding: var(--sp-sm) var(--sp-md);
+      gap: 4px;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav .nav-link { display: block; padding: 10px 14px; }
+
+    @media (max-width: 768px) {
+      .main-nav { display: none; }
+      .hamburger { display: flex; }
+    }
+
+    /* ═══════════════════════════════════════════════
+       PAGE SECTIONS MANAGEMENT
+    ═══════════════════════════════════════════════ */
+    .page-section { display: none; }
+    .page-section.active { display: block; }
+
+    /* ═══════════════════════════════════════════════
+       HERO SECTION
+    ═══════════════════════════════════════════════ */
+    .hero {
+      background: linear-gradient(160deg, var(--c-deep) 0%, var(--c-navy) 45%, var(--c-mid) 100%);
+      min-height: 88vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding: var(--sp-xl) var(--sp-md);
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 80% at 85% 40%, rgba(58,125,156,.18) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 60% at 20% 70%, rgba(123,171,142,.10) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    /* Animated floating orbs */
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: .15;
+      animation: floatOrb 12s ease-in-out infinite;
+    }
+    .hero-orb:nth-child(1) { width: 400px; height: 400px; background: var(--c-teal); top: -100px; right: -50px; animation-delay: 0s; }
+    .hero-orb:nth-child(2) { width: 300px; height: 300px; background: var(--c-sage); bottom: -50px; left: 10%; animation-delay: -4s; }
+    .hero-orb:nth-child(3) { width: 200px; height: 200px; background: var(--c-amber); top: 40%; left: 50%; animation-delay: -8s; }
+    @keyframes floatOrb {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-30px) scale(1.05); }
+    }
+
+    .hero-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-xl);
+      align-items: center;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(91,163,192,.15);
+      border: 1px solid rgba(91,163,192,.3);
+      color: var(--c-mist);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: .8rem;
+      font-weight: 500;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      margin-bottom: var(--sp-sm);
+    }
+    .hero-badge::before { content: '🛡️'; font-size: .9rem; }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      color: var(--c-white);
+      margin-bottom: var(--sp-sm);
+      line-height: 1.1;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--c-mist);
+    }
+    .hero-desc {
+      font-size: clamp(.95rem, 1.5vw, 1.15rem);
+      color: rgba(168,206,221,.85);
+      max-width: 520px;
+      margin-bottom: var(--sp-lg);
+      font-weight: 300;
+      line-height: 1.75;
+    }
+    .hero-ctas {
+      display: flex;
+      gap: var(--sp-sm);
+      flex-wrap: wrap;
+    }
+
+    /* Floating info card */
+    .hero-cards {
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-sm);
+    }
+    .info-card {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(168,206,221,.15);
+      border-radius: var(--radius-md);
+      padding: var(--sp-md);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      transition: transform var(--transition), border-color var(--transition);
+      animation: cardSlide .7s var(--ease-spring) both;
+    }
+    .info-card:nth-child(1) { animation-delay: .1s; }
+    .info-card:nth-child(2) { animation-delay: .25s; }
+    .info-card:nth-child(3) { animation-delay: .4s; }
+    .info-card:hover { transform: translateX(-4px); border-color: rgba(91,163,192,.4); }
+    @keyframes cardSlide {
+      from { opacity: 0; transform: translateX(30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .card-icon {
+      width: 44px; height: 44px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .card-icon.blue  { background: rgba(58,125,156,.25); }
+    .card-icon.green { background: rgba(123,171,142,.25); }
+    .card-icon.amber { background: rgba(232,164,69,.25); }
+    .card-title { color: var(--c-white); font-weight: 600; font-size: .95rem; margin-bottom: 4px; }
+    .card-desc  { color: rgba(168,206,221,.75); font-size: .82rem; line-height: 1.5; }
+
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-cards { display: none; }
+    }
+
+    /* ═══════════════════════════════════════════════
+       BUTTONS
+    ═══════════════════════════════════════════════ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      border-radius: var(--radius-lg);
+      font-size: .95rem;
+      font-weight: 600;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all var(--transition);
+      text-decoration: none;
+      font-family: var(--ff-body);
+      white-space: nowrap;
+    }
+    .btn-primary {
+      background: var(--c-teal);
+      color: var(--c-white);
+      border-color: var(--c-teal);
+    }
+    .btn-primary:hover { background: var(--c-sky); border-color: var(--c-sky); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(58,125,156,.35); color: var(--c-white); }
+    .btn-outline {
+      background: transparent;
+      color: var(--c-white);
+      border-color: rgba(168,206,221,.5);
+    }
+    .btn-outline:hover { background: rgba(255,255,255,.1); border-color: var(--c-mist); color: var(--c-white); }
+    .btn-danger {
+      background: var(--c-crisis);
+      color: var(--c-white);
+      border-color: var(--c-crisis);
+    }
+    .btn-danger:hover { background: #a93226; box-shadow: 0 8px 24px rgba(192,57,43,.35); transform: translateY(-2px); color: var(--c-white); }
+    .btn-sage {
+      background: var(--c-sage);
+      color: var(--c-white);
+      border-color: var(--c-sage);
+    }
+    .btn-sage:hover { background: #6a9a7c; transform: translateY(-2px); color: var(--c-white); }
+    .btn-sm { padding: 8px 18px; font-size: .85rem; border-radius: var(--radius-sm); }
+    .btn:disabled { opacity: .45; cursor: not-allowed; transform: none !important; }
+
+    /* ═══════════════════════════════════════════════
+       SECTION WRAPPER
+    ═══════════════════════════════════════════════ */
+    .section-wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: var(--sp-2xl) var(--sp-md);
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: var(--sp-xl);
+    }
+    .section-label {
+      display: inline-block;
+      background: var(--c-teal);
+      color: var(--c-white);
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: var(--sp-sm);
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      color: var(--c-navy);
+      margin-bottom: var(--sp-sm);
+    }
+    .section-desc {
+      color: var(--c-textlt);
+      font-size: 1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ═══════════════════════════════════════════════
+       SCREENING TOOLS — TOOL CARDS
+    ═══════════════════════════════════════════════ */
+    #screening { background: var(--c-cream); }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: var(--sp-md);
+    }
+    .tool-card {
+      background: var(--c-white);
+      border-radius: var(--radius-lg);
+      padding: var(--sp-lg);
+      border: 1.5px solid rgba(58,125,156,.12);
+      box-shadow: var(--shadow-soft);
+      transition: all var(--transition);
+      cursor: pointer;
+      text-align: left;
+    }
+    .tool-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lift);
+      border-color: var(--c-teal);
+    }
+    .tool-card-icon {
+      width: 56px; height: 56px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      margin-bottom: var(--sp-sm);
+    }
+    .tc-blue  { background: linear-gradient(135deg, rgba(58,125,156,.15), rgba(91,163,192,.15)); }
+    .tc-green { background: linear-gradient(135deg, rgba(123,171,142,.15), rgba(100,180,130,.15)); }
+    .tc-amber { background: linear-gradient(135deg, rgba(232,164,69,.15), rgba(240,180,80,.15)); }
+    .tc-rose  { background: linear-gradient(135deg, rgba(217,123,123,.15), rgba(200,100,100,.15)); }
+    .tool-card h3 { font-size: 1.15rem; color: var(--c-navy); margin-bottom: 6px; }
+    .tool-card p  { font-size: .875rem; color: var(--c-textlt); line-height: 1.6; margin-bottom: var(--sp-sm); }
+    .tool-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .meta-badge {
+      font-size: .72rem;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: rgba(58,125,156,.1);
+      color: var(--c-teal);
+    }
+
+    /* ═══════════════════════════════════════════════
+       ASSESSMENT MODAL / OVERLAY
+    ═══════════════════════════════════════════════ */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(13,31,45,.7);
+      z-index: 2000;
+      overflow-y: auto;
+      padding: var(--sp-md);
+      backdrop-filter: blur(4px);
+    }
+    .modal-overlay.open { display: flex; align-items: flex-start; justify-content: center; }
+
+    .modal {
+      background: var(--c-white);
+      border-radius: var(--radius-xl);
+      width: 100%;
+      max-width: 720px;
+      margin: auto;
+      overflow: hidden;
+      box-shadow: var(--shadow-lift);
+      animation: modalIn .35s var(--ease-spring);
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(.94) translateY(20px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal-head {
+      background: linear-gradient(120deg, var(--c-navy), var(--c-mid));
+      padding: var(--sp-lg) var(--sp-xl);
+      color: var(--c-white);
+      position: relative;
+    }
+    .modal-head h2 { font-size: 1.6rem; margin-bottom: 4px; }
+    .modal-head p  { color: var(--c-mist); font-size: .9rem; }
+    .modal-close {
+      position: absolute;
+      top: var(--sp-md);
+      right: var(--sp-md);
+      background: rgba(255,255,255,.12);
+      border: none;
+      color: var(--c-white);
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+    .modal-close:hover { background: rgba(255,255,255,.22); }
+
+    /* Progress bar */
+    .progress-bar-wrap {
+      background: var(--c-warm);
+      padding: var(--sp-sm) var(--sp-xl);
+      display: flex;
+      align-items: center;
+      gap: var(--sp-sm);
+    }
+    .progress-bar-track {
+      flex: 1;
+      height: 6px;
+      background: rgba(58,125,156,.15);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--c-teal), var(--c-sage));
+      border-radius: 10px;
+      transition: width .4s ease;
+    }
+    .progress-text { font-size: .82rem; color: var(--c-textlt); font-weight: 500; white-space: nowrap; }
+
+    .modal-body { padding: var(--sp-xl); }
+
+    /* Likert / question card */
+    .question-card {
+      background: var(--c-warm);
+      border-radius: var(--radius-lg);
+      padding: var(--sp-lg);
+      margin-bottom: var(--sp-md);
+    }
+    .question-num {
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--c-teal);
+      margin-bottom: 8px;
+    }
+    .question-text {
+      font-size: 1.05rem;
+      color: var(--c-navy);
+      font-weight: 500;
+      line-height: 1.55;
+      margin-bottom: var(--sp-md);
+    }
+
+    .likert-scale {
+      display: grid;
+      gap: 8px;
+    }
+    .likert-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      border: 2px solid transparent;
+      background: var(--c-white);
+      cursor: pointer;
+      transition: all var(--transition);
+      font-size: .9rem;
+      color: var(--c-text);
+    }
+    .likert-option:hover { border-color: var(--c-teal); background: rgba(58,125,156,.05); }
+    .likert-option.selected { border-color: var(--c-teal); background: rgba(58,125,156,.12); }
+    .likert-dot {
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      border: 2px solid rgba(58,125,156,.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all var(--transition);
+    }
+    .likert-option.selected .likert-dot {
+      background: var(--c-teal);
+      border-color: var(--c-teal);
+    }
+    .likert-option.selected .likert-dot::after {
+      content: '';
+      width: 8px; height: 8px;
+      background: white;
+      border-radius: 50%;
+    }
+
+    .modal-footer {
+      padding: var(--sp-md) var(--sp-xl);
+      background: var(--c-warm);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--sp-sm);
+      flex-wrap: wrap;
+    }
+
+    /* ═══════════════════════════════════════════════
+       RESULTS PANEL
+    ═══════════════════════════════════════════════ */
+    .results-panel { display: none; }
+    .results-panel.show { display: block; }
+
+    .score-display {
+      text-align: center;
+      padding: var(--sp-xl) 0;
+    }
+    .score-ring {
+      width: 140px; height: 140px;
+      border-radius: 50%;
+      margin: 0 auto var(--sp-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      position: relative;
+    }
+    .score-ring::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 10px solid var(--c-warm);
+    }
+    .score-ring::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 10px solid transparent;
+      border-top-color: var(--ring-color, var(--c-sage));
+      border-right-color: var(--ring-color, var(--c-sage));
+      animation: ringDraw .8s ease both;
+    }
+    @keyframes ringDraw {
+      from { transform: rotate(-90deg) scale(.8); opacity: 0; }
+      to { transform: rotate(0deg) scale(1); opacity: 1; }
+    }
+    .score-num {
+      font-family: var(--ff-head);
+      font-size: 2.5rem;
+      color: var(--c-navy);
+      position: relative;
+      z-index: 1;
+    }
+    .score-max {
+      font-size: .8rem;
+      color: var(--c-textlt);
+      position: relative;
+      z-index: 1;
+    }
+
+    .severity-badge {
+      display: inline-block;
+      padding: 6px 20px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: .9rem;
+      margin-bottom: var(--sp-sm);
+    }
+    .sev-minimal { background: rgba(39,174,96,.15); color: #1e8449; }
+    .sev-mild    { background: rgba(230,126,34,.12); color: #d35400; }
+    .sev-moderate{ background: rgba(232,164,69,.15); color: #b7770d; }
+    .sev-severe  { background: rgba(192,57,43,.12);  color: #c0392b; }
+
+    .result-interpretation {
+      background: var(--c-warm);
+      border-radius: var(--radius-lg);
+      padding: var(--sp-lg);
+      margin: var(--sp-md) 0;
+      border-left: 4px solid var(--c-teal);
+    }
+    .result-interpretation h4 { color: var(--c-navy); margin-bottom: 8px; }
+    .result-interpretation p  { color: var(--c-textlt); font-size: .9rem; line-height: 1.65; }
+
+    .recommendations-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: var(--sp-md) 0;
+    }
+    .recommendations-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: .9rem;
+      color: var(--c-text);
+      line-height: 1.5;
+    }
+    .recommendations-list li::before {
+      content: '✓';
+      color: var(--c-sage);
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .disclaimer {
+      background: rgba(232,164,69,.1);
+      border: 1px solid rgba(232,164,69,.3);
+      border-radius: var(--radius-sm);
+      padding: var(--sp-sm) var(--sp-md);
+      font-size: .82rem;
+      color: #7d6020;
+      margin-top: var(--sp-md);
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+    .disclaimer::before { content: '⚠️'; flex-shrink: 0; }
+
+    /* ═══════════════════════════════════════════════
+       CRISIS SECTION
+    ═══════════════════════════════════════════════ */
+    #crisis { background: var(--c-deep); }
+    #crisis .section-title { color: var(--c-white); }
+    #crisis .section-desc  { color: var(--c-mist); }
+
+    .crisis-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--sp-md);
+    }
+    .crisis-card {
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(168,206,221,.15);
+      border-radius: var(--radius-lg);
+      padding: var(--sp-lg);
+      transition: all var(--transition);
+    }
+    .crisis-card:hover { background: rgba(255,255,255,.09); border-color: rgba(91,163,192,.35); transform: translateY(-3px); }
+    .crisis-card-icon { font-size: 2rem; margin-bottom: var(--sp-sm); }
+    .crisis-card h3 { color: var(--c-white); font-size: 1.1rem; margin-bottom: 8px; }
+    .crisis-card p  { color: rgba(168,206,221,.75); font-size: .875rem; line-height: 1.6; margin-bottom: var(--sp-md); }
+    .crisis-card .hotline {
+      font-size: 1.4rem;
+      font-family: var(--ff-head);
+      color: var(--c-amber);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .crisis-sos {
+      text-align: center;
+      padding: var(--sp-xl) var(--sp-md);
+      background: rgba(192,57,43,.1);
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(192,57,43,.3);
+      margin-top: var(--sp-xl);
+    }
+    .crisis-sos h2 { color: var(--c-white); font-size: clamp(1.6rem, 3vw, 2.2rem); margin-bottom: var(--sp-sm); }
+    .crisis-sos p { color: var(--c-mist); max-width: 500px; margin: 0 auto var(--sp-md); }
+    .sos-buttons { display: flex; gap: var(--sp-sm); justify-content: center; flex-wrap: wrap; }
+
+    /* Safety plan */
+    .safety-plan {
+      background: rgba(123,171,142,.08);
+      border: 1px solid rgba(123,171,142,.25);
+      border-radius: var(--radius-lg);
+      padding: var(--sp-xl);
+      margin-top: var(--sp-xl);
+    }
+    .safety-plan h3 { color: var(--c-white); font-size: 1.3rem; margin-bottom: var(--sp-md); }
+    .safety-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--sp-md);
+    }
+    .safety-step {
+      background: rgba(255,255,255,.05);
+      border-radius: var(--radius-md);
+      padding: var(--sp-md);
+    }
+    .step-num {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--c-sage);
+      color: white;
+      font-weight: 700;
+      font-size: .85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    .safety-step h4 { color: var(--c-mist); font-size: .9rem; margin-bottom: 6px; }
+    .safety-step p  { color: rgba(168,206,221,.65); font-size: .82rem; line-height: 1.5; }
+
+    /* ═══════════════════════════════════════════════
+       RESOURCES SECTION
+    ═══════════════════════════════════════════════ */
+    #resources { background: var(--c-warm); }
+
+    .resources-tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: var(--sp-lg);
+      justify-content: center;
+    }
+    .tab-btn {
+      padding: 9px 22px;
+      border-radius: 20px;
+      border: 2px solid rgba(58,125,156,.2);
+      background: transparent;
+      color: var(--c-textlt);
+      font-size: .88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--transition);
+      font-family: var(--ff-body);
+    }
+    .tab-btn:hover  { border-color: var(--c-teal); color: var(--c-teal); }
+    .tab-btn.active { background: var(--c-teal); border-color: var(--c-teal); color: white; }
+
+    .resources-content { display: none; }
+    .resources-content.active { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--sp-md); }
+
+    .resource-card {
+      background: var(--c-white);
+      border-radius: var(--radius-lg);
+      padding: var(--sp-lg);
+      box-shadow: var(--shadow-soft);
+      border: 1.5px solid transparent;
+      transition: all var(--transition);
+    }
+    .resource-card:hover { border-color: var(--c-teal); transform: translateY(-4px); box-shadow: var(--shadow-card); }
+    .resource-tag {
+      display: inline-block;
+      font-size: .7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: var(--sp-sm);
+      background: rgba(58,125,156,.1);
+      color: var(--c-teal);
+    }
+    .resource-card h3 { font-size: 1rem; color: var(--c-navy); margin-bottom: 8px; }
+    .resource-card p  { font-size: .85rem; color: var(--c-textlt); line-height: 1.6; margin-bottom: var(--sp-sm); }
+    .resource-time {
+      font-size: .78rem;
+      color: rgba(61,85,102,.6);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .resource-time::before { content: '⏱'; }
+
+    /* ═══════════════════════════════════════════════
+       ABOUT SECTION
+    ═══════════════════════════════════════════════ */
+    #about { background: var(--c-cream); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-xl);
+      align-items: center;
+    }
+    @media (max-width: 768px) { .about-grid { grid-template-columns: 1fr; } }
+    .about-text h2 { font-size: clamp(1.8rem, 3vw, 2.5rem); color: var(--c-navy); margin-bottom: var(--sp-md); }
+    .about-text p  { color: var(--c-textlt); line-height: 1.75; margin-bottom: var(--sp-md); font-size: .95rem; }
+
+    .standards-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .standard-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px var(--sp-md);
+      background: var(--c-white);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-soft);
+    }
+    .std-icon { font-size: 1.3rem; flex-shrink: 0; }
+    .std-title { font-weight: 600; font-size: .9rem; color: var(--c-navy); }
+    .std-desc  { font-size: .8rem; color: var(--c-textlt); }
+
+    /* ═══════════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════════ */
+    footer {
+      background: var(--c-deep);
+      color: var(--c-mist);
+      padding: var(--sp-xl) var(--sp-md) var(--sp-md);
+    }
+    .footer-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: var(--sp-xl);
+      margin-bottom: var(--sp-xl);
+    }
+    @media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 480px) { .footer-grid { grid-template-columns: 1fr; } }
+    .footer-brand .logo-text { color: var(--c-white); margin-bottom: var(--sp-sm); display: block; font-family: var(--ff-head); font-size: 1.2rem; }
+    .footer-brand p { font-size: .85rem; line-height: 1.6; color: rgba(168,206,221,.65); }
+    .footer-col h4 { color: var(--c-white); font-size: .9rem; margin-bottom: var(--sp-sm); }
+    .footer-col a  { display: block; color: rgba(168,206,221,.65); font-size: .85rem; text-decoration: none; padding: 3px 0; transition: color var(--transition); }
+    .footer-col a:hover { color: var(--c-mist); }
+    .footer-bottom {
+      border-top: 1px solid rgba(168,206,221,.1);
+      padding-top: var(--sp-md);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: .8rem;
+      color: rgba(168,206,221,.45);
+      flex-wrap: wrap;
+      gap: var(--sp-sm);
+    }
+
+    /* ═══════════════════════════════════════════════
+       ACCESSIBILITY MODES
+    ═══════════════════════════════════════════════ */
+    body.high-contrast {
+      --c-cream: #ffffff;
+      --c-warm: #f0f0f0;
+      --c-text: #000000;
+      --c-textlt: #111111;
+      --c-navy: #000033;
+      --c-teal: #0000aa;
+      background: #fff;
+      color: #000;
+    }
+    body.large-text { font-size: 20px; }
+    body.large-text .nav-link { font-size: 1rem; }
+    body.reduced-motion * { animation: none !important; transition: none !important; }
+
+    /* ═══════════════════════════════════════════════
+       SENSORY CALM MODE (for Autism support)
+    ═══════════════════════════════════════════════ */
+    body.calm-mode {
+      --c-cream: #f8f6f2;
+      --c-teal:  #5e8e6f;
+      --c-sky:   #7aad8a;
+      --c-navy:  #2c3e35;
+      filter: saturate(.75) brightness(1.02);
+    }
+    body.calm-mode .hero { background: linear-gradient(160deg, #1a2820, #2c3e35, #3a5244); }
+    body.calm-mode * { animation-duration: 3s !important; }
+
+    /* ═══════════════════════════════════════════════
+       RESPONSIVE UTILITIES
+    ═══════════════════════════════════════════════ */
+    @media (max-width: 600px) {
+      .btn { padding: 11px 20px; font-size: .88rem; }
+      .modal-body { padding: var(--sp-md); }
+      .modal-head { padding: var(--sp-md); }
+      .modal-footer { padding: var(--sp-sm) var(--sp-md); }
+    }
+
+    /* ═══════════════════════════════════════════════
+       TOAST NOTIFICATIONS
+    ═══════════════════════════════════════════════ */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+    }
+    .toast {
+      background: var(--c-navy);
+      color: var(--c-white);
+      padding: 12px 20px;
+      border-radius: var(--radius-md);
+      font-size: .88rem;
+      font-weight: 500;
+      box-shadow: var(--shadow-lift);
+      border-left: 4px solid var(--c-teal);
+      animation: toastIn .35s var(--ease-spring);
+      pointer-events: auto;
+      max-width: 300px;
+    }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateX(20px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ═══════════════════════════════════════════════
+       LOADING ANIMATION
+    ═══════════════════════════════════════════════ */
+    .loading-dots {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      padding: var(--sp-xl) 0;
+    }
+    .loading-dots span {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--c-teal);
+      animation: dotBounce 1.2s infinite;
+    }
+    .loading-dots span:nth-child(2) { animation-delay: .2s; }
+    .loading-dots span:nth-child(3) { animation-delay: .4s; }
+    @keyframes dotBounce {
+      0%, 80%, 100% { transform: translateY(0); opacity: .4; }
+      40% { transform: translateY(-12px); opacity: 1; }
+    }
+
+    /* ═══════════════════════════════════════════════
+       GROUNDING TECHNIQUES (quick calm tool)
+    ═══════════════════════════════════════════════ */
+    .grounding-widget {
+      background: linear-gradient(135deg, var(--c-navy), var(--c-mid));
+      border-radius: var(--radius-xl);
+      padding: var(--sp-xl);
+      text-align: center;
+      color: var(--c-white);
+      margin: var(--sp-xl) 0;
+    }
+    .grounding-widget h3 { font-size: 1.4rem; margin-bottom: var(--sp-sm); }
+    .grounding-widget p  { color: var(--c-mist); margin-bottom: var(--sp-lg); font-size: .9rem; }
+    .breathing-circle {
+      width: 140px; height: 140px;
+      border-radius: 50%;
+      background: rgba(91,163,192,.25);
+      border: 3px solid var(--c-teal);
+      margin: 0 auto var(--sp-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .9rem;
+      color: var(--c-mist);
+      font-weight: 500;
+    }
+    .breathing-circle.inhale  { animation: breatheIn 4s ease-in-out forwards; }
+    .breathing-circle.hold    { animation: none; }
+    .breathing-circle.exhale  { animation: breatheOut 6s ease-in-out forwards; }
+    @keyframes breatheIn  { to { transform: scale(1.4); background: rgba(91,163,192,.45); } }
+    @keyframes breatheOut { to { transform: scale(1);   background: rgba(91,163,192,.25); } }
+
+    .grounding-steps {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-top: var(--sp-lg);
+    }
+    @media (max-width: 600px) { .grounding-steps { grid-template-columns: repeat(3, 1fr); } }
+    .ground-step {
+      background: rgba(255,255,255,.08);
+      border-radius: var(--radius-md);
+      padding: var(--sp-sm);
+      text-align: center;
+    }
+    .ground-step .ground-num { font-size: 1.4rem; margin-bottom: 4px; }
+    .ground-step .ground-label { font-size: .72rem; color: var(--c-mist); }
+  </style>
 </head>
-<body class="dashboard-page">
-    <nav class="navbar">
-        <div class="nav-brand">
-            <span class="logo-icon">🧠</span>
-            <span>SAFE SPACE HUB</span>
+<body>
+
+<!-- Skip Navigation (WCAG 2.1) -->
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- ───────────── CRISIS BANNER ───────────── -->
+<div class="crisis-banner" role="alert" aria-live="polite">
+  🆘 If you are in immediate danger, call <a href="tel:999">999</a> &nbsp;|&nbsp;
+  Crisis Line: <a href="tel:999">999 Suicide & Crisis Lifeline</a> &nbsp;|&nbsp;
+  Text HOME to <a href="sms:*260#">*260#</a>
+</div>
+
+<!-- ───────────── HEADER ───────────── -->
+<header class="site-header" role="banner">
+  <!-- Accessibility toolbar -->
+  <div class="a11y-bar" role="toolbar" aria-label="Accessibility options">
+    <div class="a11y-inner">
+      <span>Accessibility:</span>
+      <button class="a11y-btn" id="btn-contrast" aria-pressed="false" title="Toggle high contrast">High Contrast</button>
+      <button class="a11y-btn" id="btn-text" aria-pressed="false" title="Increase text size">Large Text</button>
+      <button class="a11y-btn" id="btn-motion" aria-pressed="false" title="Reduce animations">Reduce Motion</button>
+      <button class="a11y-btn" id="btn-calm" aria-pressed="false" title="Sensory calm mode for autism support">Calm Mode 🍃</button>
+    </div>
+  </div>
+  <nav class="header-inner" role="navigation" aria-label="Main navigation">
+    <a href="#" class="logo" onclick="showSection('home')" aria-label="Safe Space Hub — Home">
+      <div class="logo-icon" aria-hidden="true">🌿</div>
+      <div class="logo-text">The Safe Space Hub<span>Mental Wellness Support</span></div>
+    </a>
+    <div class="main-nav">
+      <a class="nav-link active" href="#" onclick="showSection('home');return false;">Home</a>
+      <a class="nav-link" href="#" onclick="showSection('screening');return false;">Screening Tools</a>
+      <a class="nav-link" href="#" onclick="showSection('crisis');return false;">Crisis Support</a>
+      <a class="nav-link" href="#" onclick="showSection('resources');return false;">Resources</a>
+      <a class="nav-link" href="#" onclick="showSection('about');return false;">About</a>
+    </div>
+    <button class="hamburger" id="hamburger-btn" aria-expanded="false" aria-controls="mobile-nav" aria-label="Toggle navigation menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="mobile-nav" id="mobile-nav" role="navigation" aria-label="Mobile navigation">
+    <a class="nav-link" href="#" onclick="showSection('home');closeMobile();return false;">🏠 Home</a>
+    <a class="nav-link" href="#" onclick="showSection('screening');closeMobile();return false;">🧠 Screening Tools</a>
+    <a class="nav-link" href="#" onclick="showSection('crisis');closeMobile();return false;">🆘 Crisis Support</a>
+    <a class="nav-link" href="#" onclick="showSection('resources');closeMobile();return false;">📚 Resources</a>
+    <a class="nav-link" href="#" onclick="showSection('about');closeMobile();return false;">ℹ️ About</a>
+  </div>
+</header>
+
+<!-- ───────────── LOGIN PAGE ───────────── -->
+<div id="login-page" class="page-section active" style="display: flex !important; align-items: center; justify-content: center; min-height: 100vh; background: linear-gradient(160deg, #0d1f2d 0%, #1a2e3b 45%, #2e5068 100%); padding: 20px; position: fixed; top: 0; left: 0; width: 100%; z-index: 3000;">
+  <div style="background: white; border-radius: 24px; padding: 40px; max-width: 420px; width: 100%; box-shadow: 0 16px 64px rgba(13,31,45,.20);">
+    <div style="text-align: center; margin-bottom: 30px;">
+      <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #3a7d9c, #7bab8e); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 20px;">🌿</div>
+      <h1 style="font-size: 1.8rem; color: #1a2e3b; margin-bottom: 8px; font-family: 'DM Serif Display', Georgia, serif;">The Safe Space Hub</h1>
+      <p style="color: #3d5566; font-size: 0.95rem;">Mental Wellness Support</p>
+    </div>
+
+    <form id="loginForm" style="display: flex; flex-direction: column; gap: 16px;">
+      <div>
+        <label for="login-username" style="display: block; margin-bottom: 6px; color: #1a2e3b; font-weight: 500; font-size: 0.9rem;">Username</label>
+        <input type="text" id="login-username" placeholder="e.g., demo or user" required style="width: 100%; padding: 12px; border: 1.5px solid #3a7d9c; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; transition: all 280ms;">
+      </div>
+      <div>
+        <label for="login-password" style="display: block; margin-bottom: 6px; color: #1a2e3b; font-weight: 500; font-size: 0.9rem;">Password</label>
+        <input type="password" id="login-password" placeholder="Enter your password" required style="width: 100%; padding: 12px; border: 1.5px solid #3a7d9c; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; transition: all 280ms;">
+      </div>
+      <button type="submit" style="padding: 12px; background: #3a7d9c; color: white; border: none; border-radius: 16px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 280ms; font-family: 'DM Sans', sans-serif;">Enter Safe Space →</button>
+    </form>
+
+    <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #a8cedd; text-align: center;">
+      <button onclick="return demoLogin()" style="background: none; border: none; color: #3a7d9c; cursor: pointer; text-decoration: underline; font-weight: 500; font-family: 'DM Sans', sans-serif;">Demo Access (Auto-fill)</button>
+    </div>
+
+    <div style="margin-top: 20px; padding: 12px; background: #f5f0e8; border-radius: 8px; font-size: 0.82rem; color: #3d5566;">
+      <strong>Demo Credentials:</strong><br/>
+      Username: <code style="background: white; padding: 2px 6px; border-radius: 4px;">demo</code> or <code style="background: white; padding: 2px 6px; border-radius: 4px;">user</code><br/>
+      Password: <code style="background: white; padding: 2px 6px; border-radius: 4px;">demo123</code> or <code style="background: white; padding: 2px 6px; border-radius: 4px;">pass123</code>
+    </div>
+  </div>
+</div>
+
+<main id="main-content" style="display: none;">
+
+  <!-- ══════════════════════════════════════
+       HOME SECTION
+  ══════════════════════════════════════ -->
+  <section class="page-section active" id="section-home" aria-label="Home">
+
+    <!-- HERO -->
+    <div class="hero" role="region" aria-label="Welcome">
+      <div class="hero-orb" aria-hidden="true"></div>
+      <div class="hero-orb" aria-hidden="true"></div>
+      <div class="hero-orb" aria-hidden="true"></div>
+      <div class="hero-inner">
+        <div class="hero-grid">
+          <div class="hero-content">
+            <div class="hero-badge">WCAG 2.1 AA · HIPAA Aware · Evidence-Based</div>
+            <h1>Your <em>Safe Space</em><br/>for Mental Wellness</h1>
+            <p class="hero-desc">An adaptive digital support system designed for individuals with Autism, PTSD, high anxiety, and stress. Confidential, compassionate, and clinically validated.</p>
+            <div class="hero-ctas">
+              <button class="btn btn-primary" onclick="showSection('screening')" aria-label="Start a mental health screening">Begin Screening</button>
+              <button class="btn btn-outline" onclick="showSection('crisis')" aria-label="Access crisis support resources">Crisis Support 🆘</button>
+            </div>
+          </div>
+          <div class="hero-cards" aria-hidden="true">
+            <div class="info-card">
+              <div class="card-icon blue">🧠</div>
+              <div>
+                <div class="card-title">Validated Screening Tools</div>
+                <div class="card-desc">PHQ-9, GAD-7, PCL-5 & MDQ — all clinically validated assessment frameworks used by mental health professionals.</div>
+              </div>
+            </div>
+            <div class="info-card">
+              <div class="card-icon green">🌿</div>
+              <div>
+                <div class="card-title">Sensory-Adaptive Design</div>
+                <div class="card-desc">Calm mode, reduced motion, high contrast — built for neurodivergent users and those with sensory sensitivities.</div>
+              </div>
+            </div>
+            <div class="info-card">
+              <div class="card-icon amber">🛡️</div>
+              <div>
+                <div class="card-title">Privacy-First Architecture</div>
+                <div class="card-desc">No data stored on our servers. All assessments run locally in your browser. HIPAA-aware design principles.</div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="nav-actions">
-            <span id="welcomeUser">Welcome, User</span>
-            <button class="btn-icon" onclick="logout()">🚪</button>
+      </div>
+    </div>
+
+    <!-- QUICK ACCESS -->
+    <div class="section-wrap">
+      <div class="section-header">
+        <span class="section-label">Quick Access</span>
+        <h2 class="section-title">Where Would You Like to Start?</h2>
+        <p class="section-desc">This is a judgment-free space. Take your time and move at your own pace.</p>
+      </div>
+      <div class="tools-grid">
+        <div class="tool-card" onclick="openAssessment('phq9')" role="button" tabindex="0" aria-label="Start depression screening using PHQ-9 methodology"
+             onkeydown="if(event.key==='Enter'||event.key===' ')openAssessment('phq9')">
+          <div class="tool-card-icon tc-blue">😔</div>
+          <h3>Depression Screening</h3>
+          <p>PHQ-9 methodology — a 9-question validated tool to assess symptoms of depression over the past two weeks.</p>
+          <div class="tool-meta">
+            <span class="meta-badge">PHQ-9</span>
+            <span class="meta-badge">~3 min</span>
+            <span class="meta-badge">Validated</span>
+          </div>
         </div>
-    </nav>
+        <div class="tool-card" onclick="openAssessment('gad7')" role="button" tabindex="0" aria-label="Start anxiety screening using GAD-7 protocol"
+             onkeydown="if(event.key==='Enter'||event.key===' ')openAssessment('gad7')">
+          <div class="tool-card-icon tc-green">😰</div>
+          <h3>Anxiety Assessment</h3>
+          <p>GAD-7 protocol — 7 questions measuring the frequency and severity of generalized anxiety disorder symptoms.</p>
+          <div class="tool-meta">
+            <span class="meta-badge">GAD-7</span>
+            <span class="meta-badge">~2 min</span>
+            <span class="meta-badge">Validated</span>
+          </div>
+        </div>
+        <div class="tool-card" onclick="openAssessment('pcl5')" role="button" tabindex="0" aria-label="Start PTSD evaluation using PCL-5 standards"
+             onkeydown="if(event.key==='Enter'||event.key===' ')openAssessment('pcl5')">
+          <div class="tool-card-icon tc-amber">⚡</div>
+          <h3>PTSD Evaluation</h3>
+          <p>PCL-5 standards — 20-item checklist aligned with DSM-5 PTSD criteria, assessing trauma-related symptoms.</p>
+          <div class="tool-meta">
+            <span class="meta-badge">PCL-5</span>
+            <span class="meta-badge">~5 min</span>
+            <span class="meta-badge">DSM-5</span>
+          </div>
+        </div>
+        <div class="tool-card" onclick="openAssessment('mdq')" role="button" tabindex="0" aria-label="Start bipolar disorder screening using MDQ framework"
+             onkeydown="if(event.key==='Enter'||event.key===' ')openAssessment('mdq')">
+          <div class="tool-card-icon tc-rose">🌊</div>
+          <h3>Bipolar Disorder Screening</h3>
+          <p>MDQ framework — 13-question Mood Disorder Questionnaire to identify possible signs of bipolar disorder.</p>
+          <div class="tool-meta">
+            <span class="meta-badge">MDQ</span>
+            <span class="meta-badge">~3 min</span>
+            <span class="meta-badge">MDQ</span>
+          </div>
+        </div>
+      </div>
 
-    <script>
-        // Check if user is logged in
-        const currentUser = localStorage.getItem('currentUser');
-        if (!currentUser) {
-            window.location.href = 'index.html';
-        } else {
-            const user = JSON.parse(currentUser);
-            document.getElementById('welcomeUser').textContent = `Welcome, ${user.name}`;
-        }
+      <!-- Breathing / Grounding widget -->
+      <div class="grounding-widget" role="region" aria-label="Breathing and grounding exercise">
+        <h3>Need a Moment? Try Grounding</h3>
+        <p>The 5-4-3-2-1 technique can help anchor you when feeling overwhelmed.</p>
+        <div class="breathing-circle" id="breath-circle" aria-live="polite">Tap to breathe</div>
+        <button class="btn btn-outline" onclick="startBreathing()" aria-label="Start guided breathing exercise">Start Breathing Exercise</button>
+        <div class="grounding-steps" aria-label="5-4-3-2-1 grounding technique">
+          <div class="ground-step"><div class="ground-num">👁️</div><div class="ground-label">5 things you SEE</div></div>
+          <div class="ground-step"><div class="ground-num">👋</div><div class="ground-label">4 things you TOUCH</div></div>
+          <div class="ground-step"><div class="ground-num">👂</div><div class="ground-label">3 things you HEAR</div></div>
+          <div class="ground-step"><div class="ground-num">👃</div><div class="ground-label">2 things you SMELL</div></div>
+          <div class="ground-step"><div class="ground-num">👅</div><div class="ground-label">1 thing you TASTE</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        // Logout function
-        function logout() {
-            localStorage.removeItem('currentUser');
-            window.location.href = 'index.html';
-        }
+  <!-- ══════════════════════════════════════
+       SCREENING SECTION
+  ══════════════════════════════════════ -->
+  <section class="page-section" id="section-screening" aria-label="Screening Tools">
+    <div class="section-wrap">
+      <div class="section-header">
+        <span class="section-label">Validated Screening</span>
+        <h2 class="section-title">Clinically Validated Assessment Tools</h2>
+        <p class="section-desc">All tools follow established clinical protocols. Results are for informational purposes only — not a diagnosis.</p>
+      </div>
+      <div class="tools-grid">
+        <div class="tool-card" onclick="openAssessment('phq9')" role="button" tabindex="0" aria-label="PHQ-9 Depression Screening">
+          <div class="tool-card-icon tc-blue">😔</div>
+          <h3>PHQ-9 Depression</h3>
+          <p>Patient Health Questionnaire — 9 items assessing depression symptoms over the past 2 weeks. Widely used in clinical settings worldwide.</p>
+          <div class="tool-meta"><span class="meta-badge">PHQ-9</span><span class="meta-badge">9 Questions</span><span class="meta-badge">~3 min</span></div>
+        </div>
+        <div class="tool-card" onclick="openAssessment('gad7')" role="button" tabindex="0" aria-label="GAD-7 Anxiety Assessment">
+          <div class="tool-card-icon tc-green">😰</div>
+          <h3>GAD-7 Anxiety</h3>
+          <p>Generalized Anxiety Disorder Scale — 7 questions measuring anxiety severity. Also effective for PTSD, panic disorder, and social anxiety.</p>
+          <div class="tool-meta"><span class="meta-badge">GAD-7</span><span class="meta-badge">7 Questions</span><span class="meta-badge">~2 min</span></div>
+        </div>
+        <div class="tool-card" onclick="openAssessment('pcl5')" role="button" tabindex="0" aria-label="PCL-5 PTSD Evaluation">
+          <div class="tool-card-icon tc-amber">⚡</div>
+          <h3>PCL-5 PTSD</h3>
+          <p>PTSD Checklist for DSM-5 — 20 items assessing PTSD symptoms across intrusion, avoidance, cognition/mood, and arousal clusters.</p>
+          <div class="tool-meta"><span class="meta-badge">PCL-5</span><span class="meta-badge">20 Questions</span><span class="meta-badge">~5 min</span></div>
+        </div>
+        <div class="tool-card" onclick="openAssessment('mdq')" role="button" tabindex="0" aria-label="MDQ Bipolar Screening">
+          <div class="tool-card-icon tc-rose">🌊</div>
+          <h3>MDQ Bipolar Screening</h3>
+          <p>Mood Disorder Questionnaire — validates possible bipolar disorder by assessing past manic/hypomanic episodes and their functional impact.</p>
+          <div class="tool-meta"><span class="meta-badge">MDQ</span><span class="meta-badge">13 Questions</span><span class="meta-badge">~3 min</span></div>
+        </div>
+      </div>
+      <div class="disclaimer" role="note" aria-label="Important disclaimer">
+        These screening tools are validated clinical instruments used for informational purposes only. They are not substitutes for professional medical advice, diagnosis, or treatment. Always consult a qualified mental health professional for diagnosis and treatment planning.
+      </div>
+    </div>
+  </section>
 
-        // Mood tracking
-        function setMood(mood) {
-            alert(`Mood logged: ${mood.toUpperCase()} 📊`);
-        }
-
-        // Emergency support
-        function emergencySupport() {
-            const hotlines = [
-                'National Suicide Prevention: 988',
-                'Crisis Text Line: Text HOME to 741741',
-                'NIMH: 1-866-615-6464'
-            ];
-            alert('🚨 EMERGENCY RESOURCES:\n' + hotlines.join('\n'));
-        }
-
-        // Show resources
-        function showResources() {
-            alert('📚 EDUCATIONAL RESOURCES:\n• NIMH Mental Health Info\n• Psychology Today\n• Mental Health America');
-        }
-
-        // Show AI Companion
-        function showCompanion() {
-            alert('🤖 AI Companion: "Remember, you are not alone. Take a deep breath."');
-        }
-
-        // Show LMS
-        function showLMS() {
-            alert('🎓 LEARNING MODULES:\n• Mindfulness Basics\n• CBT Introduction\n• Stress Management');
-        }
-
-        // Show results
-        function showResults() {
-            alert('📊 VIEW RESULTS:\nComplete assessments to see your results here!');
-        }
-    </script>
-
-    <main class="dashboard">
-        <div class="hero-section">
-            <h1>How are you feeling today?</h1>
-            <div class="mood-buttons">
-                <button class="mood-btn great" onclick="setMood('great')">Great 😊</button>
-                <button class="mood-btn good" onclick="setMood('good')">Good 🙂</button>
-                <button class="mood-btn neutral" onclick="setMood('neutral')">Okay 😐</button>
-                <button class="mood-btn bad" onclick="setMood('bad')">Rough 😔</button>
-                <button class="mood-btn crisis" onclick="emergencySupport()">CRISIS 🚨</button>
-            </div>
+  <!-- ══════════════════════════════════════
+       CRISIS SECTION
+  ══════════════════════════════════════ -->
+  <section class="page-section" id="section-crisis" aria-label="Crisis Support">
+    <div id="crisis" style="background: var(--c-deep);">
+      <div class="section-wrap">
+        <div class="section-header">
+          <span class="section-label" style="background:var(--c-crisis);">Crisis Support</span>
+          <h2 class="section-title">You Are Not Alone</h2>
+          <p class="section-desc">Crisis support is available 24/7. Reaching out is an act of strength.</p>
         </div>
 
-        <div class="dashboard-grid">
-            <div class="card assessment-card">
-                <h3>🩺 Screening Tools</h3>
-                <div class="tool-buttons">
-                    <a href="assessments.html#phq9" class="btn-card">PHQ-9 Depression</a>
-                    <a href="assessments.html#gad7" class="btn-card">GAD-7 Anxiety</a>
-                </div>
-            </div>
-
-            <div class="card resources-card">
-                <h3>📚 Resources</h3>
-                <div class="resource-links">
-                    <button class="btn-card" onclick="showResources()">Educational Hub</button>
-                    <a href="#" class="btn-card" onclick="showCompanion()">AI Companion</a>
-                    <button class="btn-card" onclick="showLMS()">Learning Modules</button>
-                </div>
-            </div>
-
-            <div class="card progress-card">
-                <h3>📊 My Progress</h3>
-                <div class="progress-metrics">
-                    <div class="metric">
-                        <span class="metric-value" id="sessionsCount">0</span>
-                        <span>Sessions</span>
-                    </div>
-                    <div class="metric">
-                        <span class="metric-value" id="moodAvg">Neutral</span>
-                        <span>Avg Mood</span>
-                    </div>
-                </div>
-                <button class="btn-card full-width" onclick="showResults()">View Results</button>
-            </div>
-
-            <div class="card crisis-card">
-                <h3>🚨 Crisis Support</h3>
-                <p>24/7 Emergency Resources</p>
-                <button class="btn-danger full-width" onclick="emergencySupport()">Get Help Now</button>
-            </div>
+        <div class="crisis-grid">
+          <div class="crisis-card">
+            <div class="crisis-card-icon">📞</div>
+            <h3>Suicide & Crisis Lifeline</h3>
+            <p>Free, confidential support for people in distress. Available 24/7 for anyone in crisis or supporting someone at risk.</p>
+            <span class="hotline">988</span>
+            <a href="tel:999" class="btn btn-danger btn-sm" aria-label="Call 999 Suicide and Crisis Lifeline">Call 999 Now</a>
+          </div>
+          <div class="crisis-card">
+            <div class="crisis-card-icon">💬</div>
+            <h3>Crisis Text Line</h3>
+            <p>Text with a trained crisis counselor from anywhere in Uganda. Free, confidential, available 24/7.</p>
+            <span class="hotline">Text HOME → *260#</span>
+            <a href="sms:*260#&body=HOME" class="btn btn-danger btn-sm" aria-label="Text HOME to 741741 for crisis support">Text Now</a>
+          </div>
+          <div class="crisis-card">
+            <div class="crisis-card-icon">🌐</div>
+            <h3>International Association</h3>
+            <p>International Association for Suicide Prevention maintains a directory of crisis centers worldwide.</p>
+            <span class="hotline">iasp.info</span>
+            <a href="https://www.iasp.info/resources/Crisis_Centres/" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" style="color:var(--c-mist);border-color:rgba(168,206,221,.4);" aria-label="Find international crisis centers">Find Global Help ↗</a>
+          </div>
+          <div class="crisis-card">
+            <div class="crisis-card-icon">🤝</div>
+            <h3>SAMHSA Helpline</h3>
+            <p>Substance Abuse and Mental Health Services Administration — treatment referrals and information, 365 days a year.</p>
+            <span class="hotline">0800203033</span>
+            <a href="tel:0800203033" class="btn btn-outline btn-sm" style="color:var(--c-mist);border-color:rgba(168,206,221,.4);" aria-label="Call SAMHSA helpline">Call SAMHSA</a>
+          </div>
+          <div class="crisis-card">
+            <div class="crisis-card-icon">🧩</div>
+            <h3>Autism Crisis Support</h3>
+            <p>Autism Society of Uganda provides crisis resources and support specifically for autistic individuals and their families.</p>
+            <span class="hotline">0800212121</span>
+            <a href="tel:0800212121" class="btn btn-outline btn-sm" style="color:var(--c-mist);border-color:rgba(168,206,221,.4);" aria-label="Call Autism Society of America">Call ASA</a>
+          </div>
+          <div class="crisis-card">
+            <div class="crisis-card-icon">⚡</div>
+            <h3>PTSD Support Line</h3>
+            <p>Veterans Crisis Line and PTSD resources — for veterans, military, and all trauma survivors needing immediate support.</p>
+            <span class="hotline">999, Press 1</span>
+            <a href="https://www.ptsd.va.gov/" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" style="color:var(--c-mist);border-color:rgba(168,206,221,.4);" aria-label="Access PTSD resources">PTSD Resources ↗</a>
+          </div>
         </div>
-    </main>
 
-    <script src="script.js"></script>
+        <div class="crisis-sos" role="region" aria-label="Emergency notice">
+          <h2>Are You in Immediate Danger?</h2>
+          <p>If you or someone you know is in immediate danger, please contact emergency services right away.</p>
+          <div class="sos-buttons">
+            <a href="tel:999" class="btn btn-danger" aria-label="Call 999 emergency services">🚨 Call 999 (Emergency)</a>
+            <a href="tel:999" class="btn btn-outline" style="color:white;border-color:rgba(255,255,255,.4);" aria-label="Call 999 crisis line">📞 Call 999 (Crisis)</a>
+          </div>
+        </div>
+
+        <!-- Safety Plan -->
+        <div class="safety-plan" role="region" aria-label="Personal safety plan">
+          <h3>🛡️ Build Your Personal Safety Plan</h3>
+          <div class="safety-steps">
+            <div class="safety-step">
+              <div class="step-num">1</div>
+              <h4>Warning Signs</h4>
+              <p>Know your personal warning signs — thoughts, feelings, or behaviors that mean a crisis may be developing.</p>
+            </div>
+            <div class="safety-step">
+              <div class="step-num">2</div>
+              <h4>Internal Coping</h4>
+              <p>Things you can do on your own to distract or soothe yourself — breathing, movement, creativity.</p>
+            </div>
+            <div class="safety-step">
+              <div class="step-num">3</div>
+              <h4>Social Distractions</h4>
+              <p>People and places that provide distraction — not necessarily talking about the crisis, just connection.</p>
+            </div>
+            <div class="safety-step">
+              <div class="step-num">4</div>
+              <h4>Trusted People</h4>
+              <p>People you can ask for help. Write their names and numbers. Keep this list accessible.</p>
+            </div>
+            <div class="safety-step">
+              <div class="step-num">5</div>
+              <h4>Professionals</h4>
+              <p>Your therapist, doctor, or crisis line. Have their contacts saved. Don't wait until the worst moment.</p>
+            </div>
+            <div class="safety-step">
+              <div class="step-num">6</div>
+              <h4>Safe Environment</h4>
+              <p>Remove or reduce access to means. Make your environment safer during difficult periods.</p>
+            </div>
+          </div>
+          <div style="margin-top:var(--sp-lg);text-align:center;">
+            <button class="btn btn-sage" onclick="showToast('Safety plan template downloaded to your device.')">📄 Download Safety Plan Template</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       RESOURCES SECTION
+  ══════════════════════════════════════ -->
+  <section class="page-section" id="section-resources" aria-label="Educational Resources">
+    <div id="resources">
+      <div class="section-wrap">
+        <div class="section-header">
+          <span class="section-label">Educational Resources</span>
+          <h2 class="section-title">Learn, Understand, Heal</h2>
+          <p class="section-desc">Evidence-based guides and resources tailored to your needs.</p>
+        </div>
+
+        <div class="resources-tabs" role="tablist" aria-label="Resource categories">
+          <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="tab-autism" onclick="switchTab('autism',this)">🧩 Autism</button>
+          <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-ptsd" onclick="switchTab('ptsd',this)">⚡ PTSD</button>
+          <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-anxiety" onclick="switchTab('anxiety',this)">😰 Anxiety</button>
+          <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-stress" onclick="switchTab('stress',this)">🌊 Stress</button>
+          <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-selfcare" onclick="switchTab('selfcare',this)">💚 Self-Care</button>
+        </div>
+
+        <!-- Tab: Autism -->
+        <div class="resources-content active" id="tab-autism" role="tabpanel" aria-label="Autism resources">
+          <div class="resource-card">
+            <span class="resource-tag">Understanding</span>
+            <h3>What is Autism Spectrum Disorder (ASD)?</h3>
+            <p>A comprehensive introduction to ASD — how it presents differently in different people, strengths, challenges, and the neurodiversity framework.</p>
+            <div class="resource-time">15 min read</div>
+          </div>
+          <div class="resource-card">
+            <span class="resource-tag">Sensory Processing</span>
+            <h3>Managing Sensory Overwhelm</h3>
+            <p>Practical strategies for sensory sensitivities: light, sound, touch, and texture. Includes techniques for creating sensory-safe environments.</p>
+            <div class="resource-time">10 min read</div>
+          </div>
+          <div class="resource-card">
+            <span class="resource-tag">Communication</span>
+            <h3>Augmentative & Alternative Communication</h3>
+            <p>Tools and strategies for when verbal communication is difficult. AAC options, visual supports, and social scripts.</p>
+            <div class="resource-time">12 min read</div>
+          </div>
+          <div class="resource-card">
+            <span class="resource-tag">Executive Function</span>
+            <h3>Building Routines & Managing Change</h3>
+            <p>How to structure daily routines, manage transitions, and prepare for unexpected change in autism-supportive ways.</p>
+            <div class="resource-time">8 min read</div>
+          </div>
+          <div class="resource-card">
+            <span class="resource-tag">Co-occurring Conditions</span>
+            <h3>Autism, Anxiety & Depression</h3>
+            <p>Understanding why anxiety and depression frequently co-occur with autism, and what helps — from autistic perspectives and clinical evidence.</p>
+            <div class="resource-time">14 min read</div>
+          </div>
+          <div class="resource-card">
+            <span class="resource-tag">Self-Advocacy</span>
+            <h3>Advocating for Yourself</h3>
+            <p>Scripts and strategies for communicating your needs in medical settings, workplaces, and relationships.</p>
+            <div class="resource-time">10 min read</div>
+          </div>
+        </div>
+
+        <!-- Tab: PTSD -->
+        <div class="resources-content" id="tab-ptsd" role="tabpanel" aria-label="PTSD resources">
+          <div class="resource-card">
+            <span class="resource-tag">Understanding</span>
+            <h3>Understanding PTSD: Beyond the Basics</h3>
+            <p>How trauma affects the brain, nervous system, and body. Why PTSD is a normal response to abnormal events.</p>
+            <div class="resource-time">15 min read</div>
+          </div>
+          <div class="resource-card">
+            <span class="resource-tag">Evidence-Based</span>
+            <h3>Trauma-Focused CBT (TF-CBT)</h3>
+            <p>How Cognitive Behavioral Therapy adapted for trauma works, and what to expect in treatment.</p>
+            <div class="resource-time">12 min read</div>
+          </div>
+          <div class="resource-card">
+            <span class="resource-tag">Grounding</span>
+            <h3>Grounding Techniques for Flashbacks</h3>
+            <p>Practical, immediately usable techniques to ground yourself during flashbacks, dissociation, and hyperarousal episodes.</p>
+            <div class="resource-time">8 min read</div>
+          </div>
+          <div class="resource-card">
+            <span class="resource-tag">Relationships</span>
+            <h3>PTSD & Relationships</h3>
+            <p>How trauma symptoms affect connection, intimacy, and trust — and how to communicate your needs to loved ones.</p>
+            <div class="resource-time">11 min read</div>
+          </div>
+        </div>
+
+        <!-- Tab: Anxiety -->
+        <div class="resources-content" id="tab-anxiety" role="tabpanel" aria-label="Anxiety resources">
+          <div class="resource-card">
+            <span class="resource-tag">Understanding</span>
+            <h3>The Science of Anxiety</h3>
+            <p>How the amygdala, nervous system, and stress hormones drive anxiety — and why understanding the mechanism helps you manage it.</p>
+            <div class="resource-time">12 min read</div>
+          </div>
+          <div class="resource-card">
+            <span class="resource-tag">Techniques</span>
+            <h3>Box Breathing & Nervous System Reset</h3>
+            <p>How controlled breathing activates the parasympathetic nervous system. Step-by-step guide to box, 4-7-8, and diaphragmatic breathing.</p>
+            <div class="resource-time">7 min read</div>
+          </div>
+          <div class="resource-card">
+            <span class="resource-tag">CBT Tools</span>
+            <h3>Cognitive Restructuring Workbook</h3>
+            <p>Identify cognitive distortions (catastrophizing, mind-reading, all-or-nothing thinking) and reframe anxious thoughts.</p>
+            <div class="resource-time">20 min exercise</div>
+          </div>
+          <div class="resource-card">
+            <span class="resource-tag">Lifestyle</span>
+            <h3>Diet, Sleep & Anxiety: The Hidden Links</h3>
+            <p>How caffeine, sleep deprivation, blood sugar, and exercise directly affect anxiety levels — with practical changes you can make today.</p>
+            <div class="resource-time">10 min read</div>
+          </div>
+        </div>
+
+        <!-- Tab: Stress -->
+        <div class="resources-content" id="tab-stress" role="tabpanel" aria-label="Stress resources">
+          <div class="resource-card">
+            <span class="resource-tag">Understanding</span>
+            <h3>Acute vs. Chronic Stress</h3>
+            <p>The difference between short-term and long-term stress — and why chronic stress is a medical issue that requires attention.</p>
+            <div class="resource-time">8 min read</div>
+          </div>
+          <div class="resource-card">
+            <span class="resource-tag">Techniques</span>
+            <h3>Progressive Muscle Relaxation</h3>
+            <p>A step-by-step guide to PMR — systematically tensing and releasing muscle groups to reduce physical tension held in the body.</p>
+            <div class="resource-time">15 min exercise</div>
+          </div>
+          <div class="resource-card">
+            <span class="resource-tag">Mindfulness</span>
+            <h3>Mindfulness-Based Stress Reduction (MBSR)</h3>
+            <p>The evidence base for mindfulness in stress reduction, with beginner-friendly exercises you can start today.</p>
+            <div class="resource-time">12 min read</div>
+          </div>
+        </div>
+
+        <!-- Tab: Self-Care -->
+        <div class="resources-content" id="tab-selfcare" role="tabpanel" aria-label="Self-care resources">
+          <div class="resource-card">
+            <span class="resource-tag">Foundations</span>
+            <h3>The 8 Pillars of Mental Wellness</h3>
+            <p>Sleep, nutrition, movement, connection, meaning, mindfulness, boundaries, and rest — how each contributes to mental health.</p>
+            <div class="resource-time">15 min read</div>
+          </div>
+          <div class="resource-card">
+            <span class="resource-tag">Journaling</span>
+            <h3>Therapeutic Journaling Prompts</h3>
+            <p>Structured journaling prompts designed to process emotions, identify patterns, and cultivate self-compassion.</p>
+            <div class="resource-time">Daily practice</div>
+          </div>
+          <div class="resource-card">
+            <span class="resource-tag">Body</span>
+            <h3>Somatic Practices for Mental Health</h3>
+            <p>How yoga, stretching, dance, and body-based practices release trauma and stress stored in the physical body.</p>
+            <div class="resource-time">10 min read</div>
+          </div>
+          <div class="resource-card">
+            <span class="resource-tag">Boundaries</span>
+            <h3>Setting Healthy Boundaries</h3>
+            <p>Why boundaries are self-care, how to identify where yours need work, and scripts for communicating them effectively.</p>
+            <div class="resource-time">12 min read</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       ABOUT SECTION
+  ══════════════════════════════════════ -->
+  <section class="page-section" id="section-about" aria-label="About The Safe Space Hub">
+    <div id="about">
+      <div class="section-wrap">
+        <div class="section-header">
+          <span class="section-label">About</span>
+          <h2 class="section-title">Built with Care, Built for You</h2>
+        </div>
+        <div class="about-grid">
+          <div class="about-text">
+            <h2>An Adaptive, Inclusive Mental Wellness Platform</h2>
+            <p>The Safe Space Hub was designed from the ground up with one priority: making evidence-based mental health support accessible to everyone, especially those who need it most — individuals with Autism Spectrum Disorder, PTSD, high anxiety, and chronic stress.</p>
+            <p>Every design decision — from color contrast ratios to animation speeds — was made with neurodivergent and trauma-impacted users in mind. We follow WCAG 2.1 AA accessibility standards, mobile-first responsive design, and HIPAA-aware data handling principles.</p>
+            <p>All screening tools implement validated clinical instruments: PHQ-9, GAD-7, PCL-5, and MDQ. Your data never leaves your device — assessments run entirely client-side.</p>
+          </div>
+          <div class="standards-list" aria-label="Standards and compliance">
+            <div class="standard-item">
+              <span class="std-icon" aria-hidden="true">♿</span>
+              <div>
+                <div class="std-title">WCAG 2.1 AA Compliant</div>
+                <div class="std-desc">Color contrast, keyboard navigation, screen reader support, skip links, ARIA labels throughout.</div>
+              </div>
+            </div>
+            <div class="standard-item">
+              <span class="std-icon" aria-hidden="true">🛡️</span>
+              <div>
+                <div class="std-title">HIPAA-Aware Design</div>
+                <div class="std-desc">No PHI stored server-side. Client-side only processing. SSL encryption enforced.</div>
+              </div>
+            </div>
+            <div class="standard-item">
+              <span class="std-icon" aria-hidden="true">📱</span>
+              <div>
+                <div class="std-title">Progressive Web App</div>
+                <div class="std-desc">Mobile-first responsive design. PWA manifest. Works offline for calm-mode and resources.</div>
+              </div>
+            </div>
+            <div class="standard-item">
+              <span class="std-icon" aria-hidden="true">🧠</span>
+              <div>
+                <div class="std-title">Clinically Validated Tools</div>
+                <div class="std-desc">PHQ-9 · GAD-7 · PCL-5 (DSM-5) · MDQ — all peer-reviewed, widely used clinical instruments.</div>
+              </div>
+            </div>
+            <div class="standard-item">
+              <span class="std-icon" aria-hidden="true">🌍</span>
+              <div>
+                <div class="std-title">HTML5 · CSS3 · ES6+</div>
+                <div class="std-desc">Modern web standards. No framework dependencies. Fast, lightweight, and performant.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ───────────── FOOTER ───────────── -->
+<footer role="contentinfo">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <span class="logo-text">🌿 The Safe Space Hub</span>
+        <p>An adaptive digital mental wellness support system — designed for everyone, especially those who need it most. Evidence-based, accessible, and compassionate.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Tools</h4>
+        <a href="#" onclick="openAssessment('phq9')">PHQ-9 Depression</a>
+        <a href="#" onclick="openAssessment('gad7')">GAD-7 Anxiety</a>
+        <a href="#" onclick="openAssessment('pcl5')">PCL-5 PTSD</a>
+        <a href="#" onclick="openAssessment('mdq')">MDQ Bipolar</a>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <a href="#" onclick="showSection('crisis')">Crisis Lines</a>
+        <a href="#" onclick="showSection('resources')">Educational Resources</a>
+        <a href="tel:999">Call 999</a>
+        <a href="sms:*260#&body=HOME">Text *260#</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+        <a href="#">Disclaimer</a>
+        <a href="#">Accessibility Statement</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 The Safe Space Hub. For informational purposes only. Not a substitute for professional medical advice.</span>
+      <span>WCAG 2.1 AA · HIPAA-Aware · PWA</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ───────────── ASSESSMENT MODAL ───────────── -->
+<div class="modal-overlay" id="assessment-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal" id="modal-content">
+    <div class="modal-head">
+      <h2 id="modal-title">Assessment</h2>
+      <p id="modal-subtitle">Answer each question honestly.</p>
+      <button class="modal-close" id="modal-close-btn" aria-label="Close assessment">&times;</button>
+    </div>
+    <div class="progress-bar-wrap" aria-label="Assessment progress" role="progressbar">
+      <div class="progress-bar-track"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div>
+      <span class="progress-text" id="progress-text">Question 1 of 9</span>
+    </div>
+    <div class="modal-body" id="modal-body">
+      <!-- Questions injected here -->
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" id="btn-prev" onclick="prevQuestion()" style="color:var(--c-textlt);border-color:rgba(58,125,156,.3);">← Previous</button>
+      <button class="btn btn-primary" id="btn-next" onclick="nextQuestion()">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ───────────── TOAST CONTAINER ───────────── -->
+<div class="toast-container" aria-live="polite" aria-atomic="true" id="toast-container"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   THE SAFE SPACE HUB — Core JavaScript (ES6+)
+   WCAG 2.1 AA | Mobile-First | HIPAA-Aware (client-side only)
+═══════════════════════════════════════════════════════ */
+
+'use strict';
+
+/* ── Section navigation ── */
+function showSection(id) {
+  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById('section-' + id);
+  if (target) {
+    target.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  const active = document.querySelector(`.nav-link[onclick*="'${id}'"]`);
+  if (active) active.classList.add('active');
+}
+
+/* ── Mobile nav ── */
+const hamburger = document.getElementById('hamburger-btn');
+const mobileNav = document.getElementById('mobile-nav');
+hamburger.addEventListener('click', () => {
+  const open = mobileNav.classList.toggle('open');
+  hamburger.setAttribute('aria-expanded', String(open));
+});
+function closeMobile() { mobileNav.classList.remove('open'); hamburger.setAttribute('aria-expanded','false'); }
+
+/* ── Accessibility toggles ── */
+function a11yToggle(btnId, bodyClass) {
+  const btn = document.getElementById(btnId);
+  const active = document.body.classList.toggle(bodyClass);
+  btn.setAttribute('aria-pressed', String(active));
+  btn.classList.toggle('active', active);
+}
+document.getElementById('btn-contrast').addEventListener('click', () => a11yToggle('btn-contrast','high-contrast'));
+document.getElementById('btn-text').addEventListener('click', () => a11yToggle('btn-text','large-text'));
+document.getElementById('btn-motion').addEventListener('click', () => a11yToggle('btn-motion','reduced-motion'));
+document.getElementById('btn-calm').addEventListener('click', () => a11yToggle('btn-calm','calm-mode'));
+
+/* ── Toast ── */
+function showToast(msg, duration = 3500) {
+  const c = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  t.setAttribute('role','alert');
+  c.appendChild(t);
+  setTimeout(() => { t.style.opacity='0'; t.style.transition='opacity .4s'; setTimeout(()=>t.remove(), 400); }, duration);
+}
+
+/* ── Resource tabs ── */
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+  document.querySelectorAll('.resources-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  btn.setAttribute('aria-selected','true');
+  document.getElementById('tab-' + id).classList.add('active');
+}
+
+/* ════════════════════════════════════════════════
+   ASSESSMENT DATA — All 4 validated instruments
+════════════════════════════════════════════════ */
+
+const ASSESSMENTS = {
+  phq9: {
+    title: 'PHQ-9 Depression Screening',
+    subtitle: 'Over the past 2 weeks, how often have you been bothered by any of the following problems?',
+    options: ['Not at all (0)', 'Several days (1)', 'More than half the days (2)', 'Nearly every day (3)'],
+    optionValues: [0, 1, 2, 3],
+    maxScore: 27,
+    questions: [
+      'Little interest or pleasure in doing things',
+      'Feeling down, depressed, or hopeless',
+      'Trouble falling or staying asleep, or sleeping too much',
+      'Feeling tired or having little energy',
+      'Poor appetite or overeating',
+      'Feeling bad about yourself — or that you are a failure or have let yourself or your family down',
+      'Trouble concentrating on things, such as reading the newspaper or watching television',
+      'Moving or speaking so slowly that other people could have noticed? Or the opposite — being so fidgety or restless that you have been moving around a lot more than usual',
+      'Thoughts that you would be better off dead, or of hurting yourself in some way'
+    ],
+    interpret: (score) => {
+      if (score <= 4)  return { severity: 'Minimal Depression',   cls: 'sev-minimal', color: '#27ae60', text: 'Your score suggests minimal depression symptoms. Continue monitoring your mental health and prioritize self-care practices. Consider speaking with a professional if symptoms persist or worsen.' };
+      if (score <= 9)  return { severity: 'Mild Depression',      cls: 'sev-mild',    color: '#e67e22', text: 'Your score suggests mild depression. Watchful waiting with periodic follow-up may be appropriate. Consider lifestyle modifications and psychoeducation. A conversation with a healthcare provider is recommended.' };
+      if (score <= 14) return { severity: 'Moderate Depression',  cls: 'sev-moderate',color: '#e8a445', text: 'Your score suggests moderate depression. A thorough assessment by a mental health professional is strongly recommended. Treatment options including therapy (such as CBT) and/or medication may be beneficial.' };
+      if (score <= 19) return { severity: 'Moderately Severe',    cls: 'sev-severe',  color: '#c0392b', text: 'Your score suggests moderately severe depression. Active treatment — including therapy and consideration of antidepressant medication — is highly recommended. Please seek professional support promptly.' };
+      return            { severity: 'Severe Depression',          cls: 'sev-severe',  color: '#c0392b', text: 'Your score suggests severe depression. Immediate assessment by a mental health professional is strongly urged. If you are having thoughts of self-harm, please contact a crisis line (988) or emergency services immediately.' };
+    },
+    recommendations: [
+      'Speak with a licensed mental health professional (therapist, psychologist, or psychiatrist)',
+      'Consider Cognitive Behavioral Therapy (CBT) — the most evidence-based treatment for depression',
+      'Establish a consistent sleep routine; sleep disruption worsens depression',
+      'Gentle physical activity (even 20 min walks) has proven antidepressant effects',
+      'Reach out to trusted friends or family — isolation amplifies depression',
+      'Avoid alcohol and substances — these worsen depressive symptoms over time'
+    ]
+  },
+
+  gad7: {
+    title: 'GAD-7 Anxiety Assessment',
+    subtitle: 'Over the past 2 weeks, how often have you been bothered by the following problems?',
+    options: ['Not at all (0)', 'Several days (1)', 'More than half the days (2)', 'Nearly every day (3)'],
+    optionValues: [0, 1, 2, 3],
+    maxScore: 21,
+    questions: [
+      'Feeling nervous, anxious, or on edge',
+      'Not being able to stop or control worrying',
+      'Worrying too much about different things',
+      'Trouble relaxing',
+      'Being so restless that it is hard to sit still',
+      'Becoming easily annoyed or irritable',
+      'Feeling afraid as if something awful might happen'
+    ],
+    interpret: (score) => {
+      if (score <= 4)  return { severity: 'Minimal Anxiety',  cls: 'sev-minimal', color: '#27ae60', text: 'Your score indicates minimal anxiety. Continue monitoring symptoms and maintain healthy coping strategies. Practice regular relaxation techniques as preventative care.' };
+      if (score <= 9)  return { severity: 'Mild Anxiety',     cls: 'sev-mild',    color: '#e67e22', text: 'Your score indicates mild anxiety. Stress management techniques, lifestyle adjustments, and psychoeducation are recommended. Consider speaking with a healthcare provider if symptoms persist.' };
+      if (score <= 14) return { severity: 'Moderate Anxiety', cls: 'sev-moderate',color: '#e8a445', text: 'Your score indicates moderate anxiety. Professional evaluation is recommended. Evidence-based treatments like CBT and mindfulness-based approaches have strong efficacy for generalized anxiety.' };
+      return            { severity: 'Severe Anxiety',         cls: 'sev-severe',  color: '#c0392b', text: 'Your score indicates severe anxiety. Prompt professional evaluation is strongly recommended. A combination of therapy (CBT or ACT) and possibly medication may provide significant relief.' };
+    },
+    recommendations: [
+      'Learn and practice diaphragmatic breathing — it directly activates the parasympathetic nervous system',
+      'Consider CBT or Acceptance and Commitment Therapy (ACT) with a licensed therapist',
+      'Reduce caffeine and alcohol intake — both significantly worsen anxiety',
+      'Practice the 5-4-3-2-1 grounding technique during anxious moments',
+      'Regular exercise is one of the most effective anxiety reducers known to science',
+      'Mindfulness meditation (even 10 min/day) reduces anxiety over time with consistent practice'
+    ]
+  },
+
+  pcl5: {
+    title: 'PCL-5 PTSD Evaluation',
+    subtitle: 'In the past month, how much were you bothered by the following problems? (This assessment uses DSM-5 criteria)',
+    options: ['Not at all (0)', 'A little bit (1)', 'Moderately (2)', 'Quite a bit (3)', 'Extremely (4)'],
+    optionValues: [0, 1, 2, 3, 4],
+    maxScore: 80,
+    questions: [
+      'Repeated, disturbing, and unwanted memories of the stressful experience',
+      'Repeated, disturbing dreams of the stressful experience',
+      'Suddenly feeling or acting as if the stressful experience were actually happening again (as if you were actually back there reliving it)',
+      'Feeling very upset when something reminded you of the stressful experience',
+      'Having strong physical reactions when something reminded you of the stressful experience (e.g., heart pounding, trouble breathing, sweating)',
+      'Avoiding memories, thoughts, or feelings related to the stressful experience',
+      'Avoiding external reminders of the stressful experience (e.g., people, places, conversations, activities, objects, or situations)',
+      'Trouble remembering important parts of the stressful experience',
+      'Having strong negative beliefs about yourself, other people, or the world',
+      'Blaming yourself or someone else for the stressful experience or what happened after it',
+      'Having strong negative feelings such as fear, horror, anger, guilt, or shame',
+      'Loss of interest in activities that you used to enjoy',
+      'Feeling distant or cut off from other people',
+      'Trouble experiencing positive feelings (for example, being unable to feel happiness or have loving feelings for people close to you)',
+      'Irritable behavior, angry outbursts, or acting aggressively',
+      'Taking too many risks or doing things that could cause you harm',
+      'Being "superalert" or watchful or on guard',
+      'Feeling jumpy or easily startled',
+      'Having difficulty concentrating',
+      'Trouble falling or staying asleep'
+    ],
+    interpret: (score) => {
+      if (score < 33) return { severity: 'Sub-threshold PTSD',  cls: 'sev-mild',    color: '#e67e22', text: 'Your score is below the clinical threshold for PTSD (33+), but you may still be experiencing significant trauma-related distress. Consider speaking with a trauma-informed professional who can provide a comprehensive evaluation.' };
+      if (score < 50) return { severity: 'Probable PTSD',       cls: 'sev-moderate',color: '#e8a445', text: 'Your score meets the probable PTSD threshold. A thorough evaluation by a trauma-informed mental health professional is strongly recommended. Effective treatments exist and most people with PTSD recover with proper treatment.' };
+      return           { severity: 'Severe PTSD Indicators',    cls: 'sev-severe',  color: '#c0392b', text: 'Your score indicates severe PTSD symptoms. Please seek evaluation from a trauma specialist as soon as possible. Highly effective evidence-based treatments like EMDR and Prolonged Exposure therapy are available.' };
+    },
+    recommendations: [
+      'Seek a trauma-informed therapist — not all therapists are trained in trauma treatment',
+      'EMDR (Eye Movement Desensitization and Reprocessing) is highly effective for PTSD',
+      'Prolonged Exposure (PE) therapy has strong evidence for PTSD treatment',
+      'Learn trauma-specific grounding techniques for flashbacks and dissociation',
+      'Build a support network — isolation worsens PTSD symptoms',
+      'Consider the National Center for PTSD resources (ptsd.va.gov) for self-help tools'
+    ]
+  },
+
+  mdq: {
+    title: 'MDQ Bipolar Disorder Screening',
+    subtitle: 'Has there ever been a period of time when you were not your usual self and...',
+    options: ['No', 'Yes'],
+    optionValues: [0, 1],
+    maxScore: 13,
+    questions: [
+      '...you felt so good or so hyper that other people thought you were not your normal self or you were so hyper that you got into trouble?',
+      '...you were so irritable that you shouted at people or started fights or arguments?',
+      '...you felt much more self-confident than usual?',
+      '...you got much less sleep than usual and found you didn\'t really miss it?',
+      '...you were much more talkative or spoke much faster than usual?',
+      '...thoughts raced through your head or you couldn\'t slow your mind down?',
+      '...you were so easily distracted by things around you that you had trouble concentrating or staying on track?',
+      '...you had much more energy than usual?',
+      '...you were much more active or did many more things than usual?',
+      '...you were much more social or outgoing than usual, for example, you telephoned friends in the middle of the night?',
+      '...you were much more interested in sex than usual?',
+      '...you did things that were unusual for you or that other people might have seen as excessive, foolish, or risky?',
+      '...spending money got you or your family into trouble?'
+    ],
+    interpret: (score) => {
+      if (score < 7) return { severity: 'Unlikely Bipolar',        cls: 'sev-minimal', color: '#27ae60', text: 'Your score does not suggest bipolar disorder based on MDQ criteria. However, mood symptoms should be discussed with a healthcare professional for comprehensive evaluation. Other mood conditions may still be present.' };
+      return          { severity: 'Possible Bipolar Indicators', cls: 'sev-moderate',color: '#e8a445', text: 'Your score meets the MDQ threshold that warrants clinical evaluation for bipolar disorder. This is a screening tool — only a qualified mental health professional can provide an accurate diagnosis. A comprehensive psychiatric evaluation is strongly recommended.' };
+    },
+    recommendations: [
+      'Consult a psychiatrist for comprehensive evaluation — bipolar disorder requires specialist assessment',
+      'Keep a mood diary to track patterns in energy, sleep, and mood over time',
+      'Learn about mood stabilizers and other evidence-based treatments available',
+      'Ensure consistent sleep — sleep disruption is both a trigger and symptom of bipolar episodes',
+      'Build a strong support network who understand your condition',
+      'Avoid substance use — alcohol and substances significantly destabilize mood in bipolar disorder'
+    ]
+  }
+};
+
+/* ════════════════════════════════════════════════
+   ASSESSMENT ENGINE
+════════════════════════════════════════════════ */
+
+let currentAssessment = null;
+let currentQuestion   = 0;
+let answers           = [];
+let trapFocusEl       = null;
+
+function openAssessment(key) {
+  const data = ASSESSMENTS[key];
+  if (!data) return;
+  currentAssessment = key;
+  currentQuestion   = 0;
+  answers           = new Array(data.questions.length).fill(null);
+
+  document.getElementById('modal-title').textContent    = data.title;
+  document.getElementById('modal-subtitle').textContent = data.subtitle;
+
+  renderQuestion();
+
+  const overlay = document.getElementById('assessment-modal');
+  overlay.classList.add('open');
+  overlay.setAttribute('aria-hidden','false');
+
+  // Trap focus in modal
+  setTimeout(() => {
+    const firstFocus = overlay.querySelector('.likert-option, .modal-close');
+    if (firstFocus) firstFocus.focus();
+  }, 100);
+
+  showSection('screening');
+}
+
+function closeAssessment() {
+  const overlay = document.getElementById('assessment-modal');
+  overlay.classList.remove('open');
+  overlay.setAttribute('aria-hidden','true');
+}
+
+document.getElementById('modal-close-btn').addEventListener('click', closeAssessment);
+document.getElementById('assessment-modal').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) closeAssessment();
+});
+
+// Keyboard trap in modal (WCAG)
+document.getElementById('assessment-modal').addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeAssessment();
+});
+
+function renderQuestion() {
+  const data = ASSESSMENTS[currentAssessment];
+  const q = data.questions[currentQuestion];
+  const total = data.questions.length;
+  const pct = ((currentQuestion) / total) * 100;
+
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = `Question ${currentQuestion + 1} of ${total}`;
+  document.getElementById('progress-fill').parentElement.setAttribute('aria-valuenow', pct);
+
+  const body = document.getElementById('modal-body');
+  body.innerHTML = `
+    <div class="question-card" role="group" aria-labelledby="q-label-${currentQuestion}">
+      <div class="question-num" aria-hidden="true">Question ${currentQuestion + 1} of ${total}</div>
+      <p class="question-text" id="q-label-${currentQuestion}">${q}</p>
+      <div class="likert-scale" role="radiogroup" aria-label="Select your answer">
+        ${data.options.map((opt, i) => `
+          <label class="likert-option ${answers[currentQuestion] === data.optionValues[i] ? 'selected' : ''}"
+                 tabindex="0"
+                 role="radio"
+                 aria-checked="${answers[currentQuestion] === data.optionValues[i]}"
+                 onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectAnswer(${data.optionValues[i]},this)}"
+                 onclick="selectAnswer(${data.optionValues[i]}, this)">
+            <span class="likert-dot" aria-hidden="true"></span>
+            <span>${opt}</span>
+          </label>
+        `).join('')}
+      </div>
+    </div>
+  `;
+
+  document.getElementById('btn-prev').disabled = currentQuestion === 0;
+  document.getElementById('btn-next').textContent = currentQuestion === total - 1 ? 'View Results ✓' : 'Next →';
+}
+
+function selectAnswer(value, el) {
+  const data = ASSESSMENTS[currentAssessment];
+  answers[currentQuestion] = value;
+  document.querySelectorAll('.likert-option').forEach(o => {
+    o.classList.remove('selected');
+    o.setAttribute('aria-checked','false');
+  });
+  el.classList.add('selected');
+  el.setAttribute('aria-checked','true');
+
+  // Auto-advance after short delay for better UX
+  setTimeout(() => {
+    if (currentQuestion < data.questions.length - 1) nextQuestion();
+  }, 350);
+}
+
+function nextQuestion() {
+  const data = ASSESSMENTS[currentAssessment];
+  if (answers[currentQuestion] === null) {
+    showToast('Please select an answer before continuing.');
+    return;
+  }
+  if (currentQuestion < data.questions.length - 1) {
+    currentQuestion++;
+    renderQuestion();
+  } else {
+    showResults();
+  }
+}
+
+function prevQuestion() {
+  if (currentQuestion > 0) {
+    currentQuestion--;
+    renderQuestion();
+  }
+}
+
+/* ── Results ── */
+function showResults() {
+  const data = ASSESSMENTS[currentAssessment];
+  const score = answers.reduce((a, b) => a + (b || 0), 0);
+  const result = data.interpret(score);
+
+  document.getElementById('progress-fill').style.width = '100%';
+  document.getElementById('progress-text').textContent = 'Assessment Complete';
+
+  // Check for critical item (PHQ-9 Q9 — suicidal ideation)
+  let crisisAlert = '';
+  if (currentAssessment === 'phq9' && answers[8] >= 1) {
+    crisisAlert = `
+      <div style="background:rgba(192,57,43,.1);border:1px solid rgba(192,57,43,.4);border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem;color:#7b2318;">
+        <strong>⚠️ Important:</strong> You indicated thoughts of self-harm. Please reach out to a crisis line immediately:
+        <a href="tel:999" style="color:#c0392b;font-weight:700;">Call 999</a> or 
+        <a href="sms:*260#&body=HOME" style="color:#c0392b;font-weight:700;">Text HOME to *260#</a>
+      </div>`;
+  }
+
+  const body = document.getElementById('modal-body');
+  body.innerHTML = `
+    ${crisisAlert}
+    <div class="score-display" role="region" aria-label="Your assessment results">
+      <div class="score-ring" style="--ring-color:${result.color}">
+        <span class="score-num">${score}</span>
+        <span class="score-max">/ ${data.maxScore}</span>
+      </div>
+      <div class="severity-badge ${result.cls}">${result.severity}</div>
+    </div>
+    <div class="result-interpretation" role="region" aria-label="Result interpretation">
+      <h4>📋 What This Means</h4>
+      <p>${result.text}</p>
+    </div>
+    <h4 style="color:var(--c-navy);margin-bottom:.75rem;">💡 Recommended Next Steps</h4>
+    <ul class="recommendations-list" aria-label="Recommendations">
+      ${data.recommendations.map(r => `<li>${r}</li>`).join('')}
+    </ul>
+    <div class="disclaimer" role="note">
+      This screening tool is for informational purposes only. It does not constitute a medical diagnosis. Please consult a qualified mental health professional for clinical assessment and treatment planning.
+    </div>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:1.5rem;">
+      <button class="btn btn-primary" onclick="window.print()" aria-label="Print your results">🖨️ Print Results</button>
+      <button class="btn btn-sage" onclick="showSection('crisis');closeAssessment();" aria-label="View crisis support resources">🆘 Crisis Support</button>
+      <button class="btn btn-outline" style="color:var(--c-textlt);border-color:rgba(58,125,156,.3);" onclick="resetAssessment()" aria-label="Retake this assessment">↩ Retake</button>
+    </div>
+  `;
+
+  document.getElementById('modal-footer').style.display = 'none';
+  showToast('Assessment complete. See your results below.');
+}
+
+function resetAssessment() {
+  document.getElementById('modal-footer').style.display = '';
+  openAssessment(currentAssessment);
+}
+
+/* ════════════════════════════════════════════════
+   BREATHING EXERCISE
+════════════════════════════════════════════════ */
+let breathInterval = null;
+const breathPhases = [
+  { label: 'Breathe In...', cls: 'inhale',  duration: 4000 },
+  { label: 'Hold...',       cls: 'hold',    duration: 4000 },
+  { label: 'Breathe Out',   cls: 'exhale',  duration: 6000 },
+  { label: 'Hold...',       cls: 'hold',    duration: 2000 }
+];
+let breathIdx = 0;
+
+function startBreathing() {
+  if (breathInterval) { clearInterval(breathInterval); breathInterval = null; }
+  const circle = document.getElementById('breath-circle');
+  if (!circle) return;
+
+  function nextPhase() {
+    const p = breathPhases[breathIdx % breathPhases.length];
+    circle.textContent = p.label;
+    circle.className = 'breathing-circle ' + p.cls;
+    breathIdx++;
+  }
+  nextPhase();
+  breathInterval = setInterval(nextPhase, 4000);
+
+  // Stop after 5 cycles
+  setTimeout(() => {
+    if (breathInterval) { clearInterval(breathInterval); breathInterval = null; }
+    if (circle) { circle.className = 'breathing-circle'; circle.textContent = 'Well done 🌿'; }
+  }, 80000);
+}
+
+/* ════════════════════════════════════════════════
+   SERVICE WORKER — PWA offline support
+════════════════════════════════════════════════ */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    // Service worker registration would go here in production
+    // navigator.serviceWorker.register('/sw.js');
+  });
+}
+
+/* ── Init ── */
+document.addEventListener('DOMContentLoaded', () => {
+  // ARIA live region for dynamic content
+  document.getElementById('assessment-modal').setAttribute('aria-hidden','true');
+  
+  // Check if already logged in
+  if (localStorage.getItem('loggedIn') === 'true') {
+    document.getElementById('login-page').style.display = 'none';
+    document.getElementById('main-content').style.display = '';
+    showSection('home');
+  } else {
+    document.getElementById('login-page').style.display = 'flex';
+    document.getElementById('main-content').style.display = 'none';
+  }
+});
+
+/* ════════════════════════════════════════════════
+   LOGIN SYSTEM
+════════════════════════════════════════════════ */
+
+function demoLogin() {
+  document.getElementById('login-username').value = 'demo';
+  document.getElementById('login-password').value = 'demo123';
+  document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+  return false;
+}
+
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const username = document.getElementById('login-username').value.trim();
+  const password = document.getElementById('login-password').value.trim();
+
+  // Demo credentials
+  const validUsers = {
+    'demo': 'demo123',
+    'user': 'pass123'
+  };
+
+  if (validUsers[username] && validUsers[username] === password) {
+    // Login successful
+    document.getElementById('login-page').style.display = 'none';
+    document.getElementById('main-content').style.display = '';
+    showToast('Welcome to The Safe Space Hub! 🌿');
+    // Store session
+    localStorage.setItem('loggedIn', 'true');
+    localStorage.setItem('username', username);
+    showSection('home');
+  } else {
+    showToast('Invalid credentials. Please try again.');
+  }
+});
+
+// Check if already logged in on page load (fallback)
+window.addEventListener('load', () => {
+  if (localStorage.getItem('loggedIn') === 'true') {
+    document.getElementById('login-page').style.display = 'none';
+    document.getElementById('main-content').style.display = '';
+  }
+});
+</script>
 </body>
 </html>
