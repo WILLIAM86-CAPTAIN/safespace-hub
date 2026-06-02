@@ -427,3 +427,14 @@ window.onerror = function(msg, url, line) {
     return true;
 };
 
+// Expose handlers for inline HTML event bindings and deployed page scripts
+window.showDemoLogin = showDemoLogin;
+window.showSignupPanel = showSignupPanel;
+window.showLoginPanel = showLoginPanel;
+window.logout = logout;
+window.handleLogin = handleLogin;
+window.registerUser = registerUser;
+window.showResources = showResources;
+window.showLMS = showLMS;
+window.showResults = showResults;
+
