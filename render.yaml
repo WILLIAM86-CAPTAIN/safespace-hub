@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: safespace-hub
+    env: node
+    plan: free
+    branch: main
+    buildCommand: npm install
+    startCommand: npm start
+    autoDeploy: true
+    envVars:
+      - key: JWT_SECRET
+        value: ""
+      - key: MONGODB_URI
+        value: ""
+    healthCheckPath: /api/health
