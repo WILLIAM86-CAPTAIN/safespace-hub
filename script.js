@@ -9,11 +9,14 @@ if ('serviceWorker' in navigator) {
 
 // Demo users database (localStorage simulation of HIPAA-compliant storage)
 const demoUsers = {
-    'demo': { password: 'demo123', name: 'Demo User', email: 'demo@safehub.com' },
-    'user': { password: 'pass123', name: 'Safe Space User', email: 'user@safehub.com' },
-    'demo@safehub.com': { password: 'demo123', name: 'Demo User', email: 'demo@safehub.com' },
-    'user@safehub.com': { password: 'pass123', name: 'Safe Space User', email: 'user@safehub.com' }
+    'demo': { password: 'demo123', name: 'Demo User', email: 'demo@safehub.com', phone: '+0000000000', district: 'Demo District' },
+    'user': { password: 'pass123', name: 'Safe Space User', email: 'user@safehub.com', phone: '+0000000000', district: 'Demo District' },
+    'demo@safehub.com': { password: 'demo123', name: 'Demo User', email: 'demo@safehub.com', phone: '+0000000000', district: 'Demo District' },
+    'user@safehub.com': { password: 'pass123', name: 'Safe Space User', email: 'user@safehub.com', phone: '+0000000000', district: 'Demo District' }
 };
+
+// Registered users saved locally in browser
+let registeredUsers = {};
 
 // Initialize app state
 let currentUser = null;
@@ -38,6 +41,16 @@ document.addEventListener('DOMContentLoaded', function() {
     if (loginForm) {
         loginForm.addEventListener('submit', handleLogin);
     }
+    const signupForm = document.getElementById('signupForm');
+    if (signupForm) {
+        signupForm.addEventListener('submit', registerUser);
+    }
+    const showSignupBtn = document.getElementById('showSignupBtn');
+    const showLoginBtn = document.getElementById('showLoginBtn');
+    const backToLoginBtn = document.getElementById('backToLoginBtn');
+    if (showSignupBtn) showSignupBtn.addEventListener('click', showSignupPanel);
+    if (showLoginBtn) showLoginBtn.addEventListener('click', showLoginPanel);
+    if (backToLoginBtn) backToLoginBtn.addEventListener('click', showLoginPanel);
     
     // Modal handling
     document.querySelectorAll('.modal-trigger').forEach(trigger => {
@@ -58,15 +71,58 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.assessment-form').forEach(form => {
         form.addEventListener('submit', handleAssessment);
     });
+    // Load registered users from storage
+    loadRegisteredUsers();
+
+    // If already logged in, hide login overlay and show main content
+    const savedUser = localStorage.getItem('currentUser');
+    if (savedUser) {
+        currentUser = JSON.parse(savedUser);
+        const loginPage = document.getElementById('login-page');
+        if (loginPage) loginPage.style.display = 'none';
+        const main = document.getElementById('main-content');
+        if (main) main.style.display = 'block';
+        document.getElementById('welcomeUser') && (document.getElementById('welcomeUser').textContent = `Welcome, ${currentUser.name}`);
+        document.getElementById('welcomeUser') && (document.getElementById('welcomeUser').style.display = 'inline');
+        document.getElementById('logoutBtn') && (document.getElementById('logoutBtn').style.display = 'inline-flex');
+        updateProgress();
+    }
 });
 
 // Demo login function
 function showDemoLogin() {
-    document.getElementById('uname-in').value = 'demo';
-    document.getElementById('pw-in').value = 'demo123';
-    // Focus on password field so user can just hit Enter
-    document.getElementById('pw-in').focus();
+    const uname = document.getElementById('uname-in');
+    const pw = document.getElementById('pw-in');
+    if (uname && pw) {
+        uname.value = 'demo';
+        pw.value = 'demo123';
+        pw.focus();
+    }
     return false;
+}
+
+function loadRegisteredUsers() {
+    const saved = localStorage.getItem('safehub_users');
+    if (saved) {
+        try {
+            registeredUsers = JSON.parse(saved);
+        } catch {
+            registeredUsers = {};
+        }
+    }
+}
+
+function saveRegisteredUsers() {
+    localStorage.setItem('safehub_users', JSON.stringify(registeredUsers));
+}
+
+function findUser(login) {
+    const lower = login.trim().toLowerCase();
+    const demo = demoUsers[lower] || Object.values(demoUsers).find(user => user.email.toLowerCase() === lower);
+    if (demo && demo.password) return demo;
+    const registered = Object.entries(registeredUsers).find(([key, user]) => key.toLowerCase() === lower);
+    if (registered) return registered[1];
+    return Object.values(registeredUsers).find(user => user.email.toLowerCase() === lower) || null;
 }
 
 // Login handler
@@ -74,32 +130,41 @@ function handleLogin(e) {
     e.preventDefault();
     const username = document.getElementById('uname-in').value.trim();
     const password = document.getElementById('pw-in').value;
-    
-    // Validate input
+
     if (!username || !password) {
-        alert('Please enter both username and password');
+        alert('Please enter both username/email and password');
         return;
     }
-    
-    // Check credentials
-    if (demoUsers[username] && demoUsers[username].password === password) {
-        currentUser = demoUsers[username];
-        localStorage.setItem('currentUser', JSON.stringify({
-            username: username,
-            name: currentUser.name,
-            email: currentUser.email
-        }));
-        console.log('Login successful, redirecting to dashboard...');
-        window.location.href = 'dashboard.html';
-    } else {
-        alert('❌ Invalid credentials.\n\nTry:\nUsername: demo\nPassword: demo123\n\nor\n\nUsername: user\nPassword: pass123');
+
+    const user = findUser(username);
+    if (!user || user.password !== password) {
+        alert('❌ Invalid credentials.\n\nTry using your registered username/email and password.');
         document.getElementById('pw-in').value = '';
         document.getElementById('uname-in').focus();
+        return;
     }
+
+    currentUser = user;
+    localStorage.setItem('currentUser', JSON.stringify({
+        username: user.username || user.email,
+        name: user.name || user.username,
+        email: user.email,
+        phone: user.phone || '',
+        district: user.district || ''
+    }));
+
+    const loginPage = document.getElementById('login-page');
+    const main = document.getElementById('main-content');
+    if (loginPage) loginPage.style.display = 'none';
+    if (main) main.style.display = 'block';
+    document.getElementById('welcomeUser') && (document.getElementById('welcomeUser').textContent = `Welcome, ${currentUser.name}`);
+    document.getElementById('welcomeUser') && (document.getElementById('welcomeUser').style.display = 'inline');
+    document.getElementById('logoutBtn') && (document.getElementById('logoutBtn').style.display = 'inline-flex');
+    updateProgress();
 }
 
-// Auto-login check for protected pages
-if (window.location.pathname.includes('dashboard') || window.location.pathname.includes('assessments')) {
+// Auto-login check for protected pages (only redirect when login overlay is NOT present)
+if ((window.location.pathname.includes('dashboard') || window.location.pathname.includes('assessments')) && !document.getElementById('login-page')) {
     const savedUser = localStorage.getItem('currentUser');
     if (!savedUser) {
         window.location.href = 'index.html';
@@ -114,7 +179,111 @@ if (window.location.pathname.includes('dashboard') || window.location.pathname.i
 function logout() {
     currentUser = null;
     localStorage.removeItem('currentUser');
-    window.location.href = 'index.html';
+    // Show login overlay again
+    const loginPage = document.getElementById('login-page');
+    const main = document.getElementById('main-content');
+    if (loginPage) loginPage.style.display = 'flex';
+    if (main) main.style.display = 'none';
+    document.getElementById('welcomeUser') && (document.getElementById('welcomeUser').style.display = 'none');
+    document.getElementById('logoutBtn') && (document.getElementById('logoutBtn').style.display = 'none');
+}
+
+function registerUser(e) {
+    e.preventDefault();
+    const username = document.getElementById('signup-username').value.trim();
+    const email = document.getElementById('signup-email').value.trim().toLowerCase();
+    const password = document.getElementById('signup-password').value;
+    const confirm = document.getElementById('signup-confirm').value;
+    const phone = document.getElementById('signup-phone').value.trim();
+    const district = document.getElementById('signup-district').value.trim();
+
+    if (!username || !email || !password || !confirm || !phone || !district) {
+        alert('Please complete all fields before continuing.');
+        return;
+    }
+    if (password !== confirm) {
+        alert('Passwords do not match. Please re-enter them.');
+        return;
+    }
+    if (demoUsers[username] || registeredUsers[username] || Object.values(registeredUsers).some(u => u.email === email)) {
+        alert('This username or email is already registered. Please choose another.');
+        return;
+    }
+
+    const newUser = {
+        username,
+        email,
+        password,
+        name: username,
+        phone,
+        district
+    };
+    registeredUsers[username] = newUser;
+    saveRegisteredUsers();
+
+    currentUser = newUser;
+    localStorage.setItem('currentUser', JSON.stringify({
+        username,
+        name: username,
+        email,
+        phone,
+        district
+    }));
+
+    const loginPanel = document.getElementById('loginPanel');
+    const signupPanel = document.getElementById('signupPanel');
+    const loginPage = document.getElementById('login-page');
+    const main = document.getElementById('main-content');
+    if (loginPanel) loginPanel.style.display = 'none';
+    if (signupPanel) signupPanel.style.display = 'none';
+    if (loginPage) loginPage.style.display = 'none';
+    if (main) main.style.display = 'block';
+    document.getElementById('welcomeUser') && (document.getElementById('welcomeUser').textContent = `Welcome, ${currentUser.name}`);
+    document.getElementById('welcomeUser') && (document.getElementById('welcomeUser').style.display = 'inline');
+    document.getElementById('logoutBtn') && (document.getElementById('logoutBtn').style.display = 'inline-flex');
+    updateProgress();
+}
+
+function showSignupPanel() {
+    const loginPanel = document.getElementById('loginPanel');
+    const signupPanel = document.getElementById('signupPanel');
+    const loginBtn = document.getElementById('showLoginBtn');
+    const signupBtn = document.getElementById('showSignupBtn');
+    if (loginPanel) loginPanel.style.display = 'none';
+    if (signupPanel) signupPanel.style.display = 'block';
+    if (signupBtn) {
+        signupBtn.classList.add('btn-primary');
+        signupBtn.classList.remove('btn-outline');
+    }
+    if (loginBtn) {
+        loginBtn.classList.remove('btn-primary');
+        loginBtn.classList.add('btn-outline');
+    }
+    document.getElementById('signup-username')?.focus();
+}
+
+function showLoginPanel() {
+    const loginPanel = document.getElementById('loginPanel');
+    const signupPanel = document.getElementById('signupPanel');
+    const loginBtn = document.getElementById('showLoginBtn');
+    const signupBtn = document.getElementById('showSignupBtn');
+    if (loginPanel) loginPanel.style.display = 'block';
+    if (signupPanel) signupPanel.style.display = 'none';
+    if (loginBtn) {
+        loginBtn.classList.add('btn-primary');
+        loginBtn.classList.remove('btn-outline');
+    }
+    if (signupBtn) {
+        signupBtn.classList.remove('btn-primary');
+        signupBtn.classList.add('btn-outline');
+    }
+    document.getElementById('uname-in')?.focus();
+}
+
+function closeRegisterModal() {
+    const modal = document.getElementById('registerModal');
+    if (modal) modal.classList.remove('open');
+    if (modal) modal.style.display = 'none';
 }
 
 // Mood tracking

@@ -1198,6 +1198,10 @@
       <a class="nav-link" href="#" onclick="showSection('crisis');return false;">Crisis Support</a>
       <a class="nav-link" href="#" onclick="showSection('resources');return false;">Resources</a>
       <a class="nav-link" href="#" onclick="showSection('about');return false;">About</a>
+      <div id="profileMenu" style="display:flex;align-items:center;gap:8px;margin-left:8px;">
+        <span id="welcomeUser" style="color:var(--c-mist);font-weight:600;display:none;"></span>
+        <button id="logoutBtn" class="btn btn-sm btn-outline" style="display:none;" onclick="logout()">Logout</button>
+      </div>
     </div>
     <button class="hamburger" id="hamburger-btn" aria-expanded="false" aria-controls="mobile-nav" aria-label="Toggle navigation menu">
       <span></span><span></span><span></span>
@@ -1213,7 +1217,7 @@
 </header>
 
 <!-- ───────────── LOGIN PAGE ───────────── -->
-<div id="login-page" class="page-section active" style="display: flex !important; align-items: center; justify-content: center; min-height: 100vh; background: linear-gradient(160deg, #0d1f2d 0%, #1a2e3b 45%, #2e5068 100%); padding: 20px; position: fixed; top: 0; left: 0; width: 100%; z-index: 3000;">
+<div id="login-page" class="page-section active" style="display: flex; align-items: center; justify-content: center; min-height: 100vh; background: linear-gradient(160deg, #0d1f2d 0%, #1a2e3b 45%, #2e5068 100%); padding: 20px; position: fixed; top: 0; left: 0; width: 100%; z-index: 3000;">
   <div style="background: white; border-radius: 24px; padding: 40px; max-width: 420px; width: 100%; box-shadow: 0 16px 64px rgba(13,31,45,.20);">
     <div style="text-align: center; margin-bottom: 30px;">
       <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #3a7d9c, #7bab8e); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 20px;">🌿</div>
@@ -1221,26 +1225,62 @@
       <p style="color: #3d5566; font-size: 0.95rem;">Mental Wellness Support</p>
     </div>
 
-    <form id="loginForm" style="display: flex; flex-direction: column; gap: 16px;">
-      <div>
-        <label for="login-username" style="display: block; margin-bottom: 6px; color: #1a2e3b; font-weight: 500; font-size: 0.9rem;">Username</label>
-        <input type="text" id="login-username" placeholder="e.g., demo or user" required style="width: 100%; padding: 12px; border: 1.5px solid #3a7d9c; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; transition: all 280ms;">
-      </div>
-      <div>
-        <label for="login-password" style="display: block; margin-bottom: 6px; color: #1a2e3b; font-weight: 500; font-size: 0.9rem;">Password</label>
-        <input type="password" id="login-password" placeholder="Enter your password" required style="width: 100%; padding: 12px; border: 1.5px solid #3a7d9c; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; transition: all 280ms;">
-      </div>
-      <button type="submit" style="padding: 12px; background: #3a7d9c; color: white; border: none; border-radius: 16px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 280ms; font-family: 'DM Sans', sans-serif;">Enter Safe Space →</button>
-    </form>
-
-    <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #a8cedd; text-align: center;">
-      <button onclick="return demoLogin()" style="background: none; border: none; color: #3a7d9c; cursor: pointer; text-decoration: underline; font-weight: 500; font-family: 'DM Sans', sans-serif;">Demo Access (Auto-fill)</button>
+    <div style="display:flex; justify-content:center; gap:10px; margin-bottom:20px;">
+      <button id="showLoginBtn" class="btn btn-primary btn-sm" style="flex:1;">Login</button>
+      <button id="showSignupBtn" class="btn btn-outline btn-sm" style="flex:1;">Sign Up</button>
     </div>
 
-    <div style="margin-top: 20px; padding: 12px; background: #f5f0e8; border-radius: 8px; font-size: 0.82rem; color: #3d5566;">
-      <strong>Demo Credentials:</strong><br/>
-      Username: <code style="background: white; padding: 2px 6px; border-radius: 4px;">demo</code> or <code style="background: white; padding: 2px 6px; border-radius: 4px;">user</code><br/>
-      Password: <code style="background: white; padding: 2px 6px; border-radius: 4px;">demo123</code> or <code style="background: white; padding: 2px 6px; border-radius: 4px;">pass123</code>
+    <div id="loginPanel">
+      <form id="loginForm" style="display: flex; flex-direction: column; gap: 16px;">
+        <div>
+          <label for="uname-in" style="display: block; margin-bottom: 6px; color: #1a2e3b; font-weight: 500; font-size: 0.9rem;">Username or Email</label>
+          <input type="text" id="uname-in" placeholder="e.g., demo or demo@safehub.com" required style="width: 100%; padding: 12px; border: 1.5px solid #3a7d9c; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; transition: all 280ms;">
+        </div>
+        <div>
+          <label for="pw-in" style="display: block; margin-bottom: 6px; color: #1a2e3b; font-weight: 500; font-size: 0.9rem;">Password</label>
+          <input type="password" id="pw-in" placeholder="Enter your password" required style="width: 100%; padding: 12px; border: 1.5px solid #3a7d9c; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; transition: all 280ms;">
+        </div>
+        <button type="submit" style="padding: 12px; background: #3a7d9c; color: white; border: none; border-radius: 16px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 280ms; font-family: 'DM Sans', sans-serif;">Enter Safe Space →</button>
+      </form>
+
+      <div style="margin-top: 18px; display:flex; gap:8px; justify-content:center; align-items:center; flex-wrap:wrap;">
+        <button onclick="showDemoLogin()" style="background: none; border: none; color: #3a7d9c; cursor: pointer; text-decoration: underline; font-weight: 500; font-family: 'DM Sans', sans-serif;">Demo Access (Auto-fill)</button>
+      </div>
+    </div>
+
+    <div id="signupPanel" style="display:none;">
+      <form id="signupForm" style="display: flex; flex-direction: column; gap: 16px;">
+        <div>
+          <label for="signup-username" style="display: block; margin-bottom: 6px; color: #1a2e3b; font-weight: 500; font-size: 0.9rem;">Username</label>
+          <input type="text" id="signup-username" placeholder="Choose a username" required style="width: 100%; padding: 12px; border: 1.5px solid #3a7d9c; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; transition: all 280ms;">
+        </div>
+        <div>
+          <label for="signup-email" style="display: block; margin-bottom: 6px; color: #1a2e3b; font-weight: 500; font-size: 0.9rem;">Email</label>
+          <input type="email" id="signup-email" placeholder="you@example.com" required style="width: 100%; padding: 12px; border: 1.5px solid #3a7d9c; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; transition: all 280ms;">
+        </div>
+        <div>
+          <label for="signup-password" style="display: block; margin-bottom: 6px; color: #1a2e3b; font-weight: 500; font-size: 0.9rem;">Password</label>
+          <input type="password" id="signup-password" placeholder="Create a password" required style="width: 100%; padding: 12px; border: 1.5px solid #3a7d9c; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; transition: all 280ms;">
+        </div>
+        <div>
+          <label for="signup-confirm" style="display: block; margin-bottom: 6px; color: #1a2e3b; font-weight: 500; font-size: 0.9rem;">Confirm Password</label>
+          <input type="password" id="signup-confirm" placeholder="Repeat your password" required style="width: 100%; padding: 12px; border: 1.5px solid #3a7d9c; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; transition: all 280ms;">
+        </div>
+        <div>
+          <label for="signup-phone" style="display: block; margin-bottom: 6px; color: #1a2e3b; font-weight: 500; font-size: 0.9rem;">Phone Number</label>
+          <input type="tel" id="signup-phone" placeholder="e.g., +254712345678" required style="width: 100%; padding: 12px; border: 1.5px solid #3a7d9c; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; transition: all 280ms;">
+        </div>
+        <div>
+          <label for="signup-district" style="display: block; margin-bottom: 6px; color: #1a2e3b; font-weight: 500; font-size: 0.9rem;">District</label>
+          <input type="text" id="signup-district" placeholder="Your district" required style="width: 100%; padding: 12px; border: 1.5px solid #3a7d9c; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; transition: all 280ms;">
+        </div>
+        <button type="submit" style="padding: 12px; background: #3a7d9c; color: white; border: none; border-radius: 16px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 280ms; font-family: 'DM Sans', sans-serif;">Create account</button>
+      </form>
+      <div style="margin-top: 18px; text-align: center;">
+        <button id="backToLoginBtn" type="button" style="background: none; border: none; color: #3a7d9c; cursor: pointer; text-decoration: underline; font-weight: 500; font-family: 'DM Sans', sans-serif;">Already have an account? Login</button>
+      </div>
+    </div>
+
     </div>
   </div>
 </div>
