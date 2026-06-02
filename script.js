@@ -34,9 +34,9 @@ function saveUserData() {
 }
 
 // Login handling
-document.addEventListener('DOMContentLoaded', function() {
+function initApp() {
     loadUserData();
-    
+
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
         loginForm.addEventListener('submit', handleLogin);
@@ -51,26 +51,27 @@ document.addEventListener('DOMContentLoaded', function() {
     if (showSignupBtn) showSignupBtn.addEventListener('click', showSignupPanel);
     if (showLoginBtn) showLoginBtn.addEventListener('click', showLoginPanel);
     if (backToLoginBtn) backToLoginBtn.addEventListener('click', showLoginPanel);
-    
+
     // Modal handling
     document.querySelectorAll('.modal-trigger').forEach(trigger => {
         trigger.addEventListener('click', (e) => {
             e.preventDefault();
             const modalId = trigger.dataset.modal;
-            document.getElementById(modalId).classList.add('active');
+            document.getElementById(modalId)?.classList.add('active');
         });
     });
-    
+
     document.querySelectorAll('.modal-close').forEach(close => {
         close.addEventListener('click', () => {
-            close.closest('.modal').classList.remove('active');
+            close.closest('.modal')?.classList.remove('active');
         });
     });
-    
+
     // Assessment forms (shared)
     document.querySelectorAll('.assessment-form').forEach(form => {
         form.addEventListener('submit', handleAssessment);
     });
+
     // Load registered users from storage
     loadRegisteredUsers();
 
@@ -82,12 +83,21 @@ document.addEventListener('DOMContentLoaded', function() {
         if (loginPage) loginPage.style.display = 'none';
         const main = document.getElementById('main-content');
         if (main) main.style.display = 'block';
-        document.getElementById('welcomeUser') && (document.getElementById('welcomeUser').textContent = `Welcome, ${currentUser.name}`);
-        document.getElementById('welcomeUser') && (document.getElementById('welcomeUser').style.display = 'inline');
+        const welcomeUserEl = document.getElementById('welcomeUser');
+        if (welcomeUserEl) {
+            welcomeUserEl.textContent = `Welcome, ${currentUser.name}`;
+            welcomeUserEl.style.display = 'inline';
+        }
         document.getElementById('logoutBtn') && (document.getElementById('logoutBtn').style.display = 'inline-flex');
         updateProgress();
     }
-});
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+} else {
+    initApp();
+}
 
 // Demo login function
 function showDemoLogin() {
@@ -157,8 +167,11 @@ function handleLogin(e) {
     const main = document.getElementById('main-content');
     if (loginPage) loginPage.style.display = 'none';
     if (main) main.style.display = 'block';
-    document.getElementById('welcomeUser') && (document.getElementById('welcomeUser').textContent = `Welcome, ${currentUser.name}`);
-    document.getElementById('welcomeUser') && (document.getElementById('welcomeUser').style.display = 'inline');
+    const welcomeUserEl = document.getElementById('welcomeUser');
+    if (welcomeUserEl) {
+        welcomeUserEl.textContent = `Welcome, ${currentUser.name}`;
+        welcomeUserEl.style.display = 'inline';
+    }
     document.getElementById('logoutBtn') && (document.getElementById('logoutBtn').style.display = 'inline-flex');
     updateProgress();
 }
@@ -170,7 +183,10 @@ if ((window.location.pathname.includes('dashboard') || window.location.pathname.
         window.location.href = 'index.html';
     } else {
         currentUser = JSON.parse(savedUser);
-        document.getElementById('welcomeUser')?.textContent = `Welcome, ${currentUser.name}`;
+        const welcomeUserEl = document.getElementById('welcomeUser');
+        if (welcomeUserEl) {
+            welcomeUserEl.textContent = `Welcome, ${currentUser.name}`;
+        }
         updateProgress();
     }
 }
