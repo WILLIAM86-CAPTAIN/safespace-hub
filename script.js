@@ -427,6 +427,74 @@ window.onerror = function(msg, url, line) {
     return true;
 };
 
+// Section navigation
+function showSection(sectionName) {
+    // Hide all sections by removing active class
+    document.querySelectorAll('.page-section').forEach(section => {
+        section.classList.remove('active');
+    });
+    
+    // Show the requested section by adding active class
+    const targetSection = document.getElementById(`section-${sectionName}`);
+    if (targetSection) {
+        targetSection.classList.add('active');
+        targetSection.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+// Open assessment - scroll to section and show modal if it exists
+function openAssessment(assessmentType) {
+    const modalMap = {
+        'phq9': 'phq9Modal',
+        'gad7': 'gad7Modal',
+        'mdq': 'mdqModal',
+        'pcl5': 'pcl5Modal'
+    };
+    
+    const modalId = modalMap[assessmentType];
+    if (modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.add('active');
+            modal.style.display = 'block';
+        }
+    }
+    
+    // Also show screening section
+    showSection('screening');
+}
+
+// Close mobile navigation
+function closeMobile() {
+    const mobileNav = document.getElementById('mobile-nav');
+    const hamburger = document.getElementById('hamburger-btn');
+    if (mobileNav) {
+        mobileNav.classList.remove('open');
+    }
+    if (hamburger) {
+        hamburger.setAttribute('aria-expanded', 'false');
+    }
+}
+
+// Mobile menu toggle
+document.addEventListener('DOMContentLoaded', () => {
+    const hamburger = document.getElementById('hamburger-btn');
+    const mobileNav = document.getElementById('mobile-nav');
+    
+    if (hamburger && mobileNav) {
+        hamburger.addEventListener('click', () => {
+            const isOpen = mobileNav.classList.contains('open');
+            if (isOpen) {
+                mobileNav.classList.remove('open');
+                hamburger.setAttribute('aria-expanded', 'false');
+            } else {
+                mobileNav.classList.add('open');
+                hamburger.setAttribute('aria-expanded', 'true');
+            }
+        });
+    }
+});
+
 // Expose handlers for inline HTML event bindings and deployed page scripts
 window.showDemoLogin = showDemoLogin;
 window.showSignupPanel = showSignupPanel;
@@ -437,4 +505,7 @@ window.registerUser = registerUser;
 window.showResources = showResources;
 window.showLMS = showLMS;
 window.showResults = showResults;
+window.showSection = showSection;
+window.openAssessment = openAssessment;
+window.closeMobile = closeMobile;
 
