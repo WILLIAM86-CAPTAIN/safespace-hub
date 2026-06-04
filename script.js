@@ -128,7 +128,15 @@ function initApp() {
     if (showSignupBtn) showSignupBtn.addEventListener('click', showSignupPanel);
     if (showLoginBtn) showLoginBtn.addEventListener('click', showLoginPanel);
     if (backToLoginBtn) backToLoginBtn.addEventListener('click', showLoginPanel);
-    if (signupBottomBtn) signupBottomBtn.addEventListener('click', () => document.getElementById('signupForm')?.requestSubmit());
+    if (signupBottomBtn) signupBottomBtn.addEventListener('click', () => {
+        const signupFormEl = document.getElementById('signupForm');
+        if (!signupFormEl) return;
+        if (typeof signupFormEl.requestSubmit === 'function') {
+            signupFormEl.requestSubmit();
+        } else {
+            signupFormEl.submit();
+        }
+    });
 
     const contrastBtn = document.getElementById('btn-contrast');
     const textBtn = document.getElementById('btn-text');
@@ -705,13 +713,35 @@ function nextQuestion() {
 function submitAssessment() {
     if (!assessmentState) return;
     const assessment = assessmentLibrary[assessmentState.type];
-    const score = assessment.answers.reduce((total, answer) => total + (parseInt(answer, 10) || 0), 0);
+    const score = assessment.answers.reduce((total, answer) => total + (Number.parseInt(answer, 10) || 0), 0);
     userData.assessments.push({ type: assessmentState.type, score, date: new Date().toISOString() });
     userData.sessions += 1;
     saveUserData();
     updateProgress();
+    const body = document.getElementById('modal-body');
+    const prevBtn = document.getElementById('btn-prev');
+    const nextBtn = document.getElementById('btn-next');
+    if (body) {
+        body.innerHTML = `
+            <div style="padding: 24px; background: rgba(255,255,255,.96); border-radius: 20px;">
+              <h3 style="margin-bottom: 14px; color: #102334;">${assessment.title}</h3>
+              <p style="margin-bottom: 10px; color: #2e4d6d; font-weight: 600;">Score: ${score}</p>
+              <p style="margin-bottom: 18px; color: #33455f;">${assessment.interpret(score)}</p>
+              <p style="color: #475c73;">Your responses are for informational use and may help you decide whether to seek professional support.</p>
+            </div>
+        `;
+    }
+    if (prevBtn) {
+        prevBtn.disabled = true;
+    }
+    if (nextBtn) {
+        nextBtn.textContent = 'Close';
+        nextBtn.onclick = closeAssessmentModal;
+    }
     showToast(`${assessment.title} completed.`);
-    alert(`${assessment.title}\nScore: ${score}\n\n${assessment.interpret(score)}`);
+}
+
+function closeAssessmentModal() {
     const overlay = document.getElementById('assessment-modal');
     if (overlay) {
         overlay.style.display = 'none';
@@ -767,5 +797,6 @@ window.startBreathing = startBreathing;
 window.switchTab = switchTab;
 window.prevQuestion = prevQuestion;
 window.nextQuestion = nextQuestion;
+window.closeAssessmentModal = closeAssessmentModal;
 window.closeMobile = closeMobile;
 
