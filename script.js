@@ -22,6 +22,82 @@ let registeredUsers = {};
 let currentUser = null;
 let userData = { moods: [], assessments: [], sessions: 0 };
 
+let assessmentState = null;
+const assessmentLibrary = {
+    phq9: {
+        title: 'PHQ-9 Depression Screening',
+        questions: [
+            'Little interest or pleasure in doing things?',
+            'Feeling down, depressed, or hopeless?',
+            'Trouble falling or staying asleep, or sleeping too much?',
+            'Feeling tired or having little energy?',
+            'Poor appetite or overeating?',
+            'Feeling bad about yourself — or that you are a failure or have let yourself or your family down?',
+            'Trouble concentrating on things, such as reading or watching television?',
+            'Moving or speaking so slowly that other people could have noticed? Or the opposite — being so fidgety or restless that you have been moving around a lot more than usual?',
+            'Thoughts that you would be better off dead or of hurting yourself in some way?'
+        ],
+        labels: ['Not at all', 'Several days', 'More than half the days', 'Nearly every day'],
+        interpret(score) {
+            if (score <= 4) return 'Minimal depression';
+            if (score <= 9) return 'Mild depression';
+            if (score <= 14) return 'Moderate depression';
+            return 'Severe depression - seek professional help';
+        }
+    },
+    gad7: {
+        title: 'GAD-7 Anxiety Assessment',
+        questions: [
+            'Feeling nervous, anxious, or on edge?',
+            'Not being able to stop or control worrying?',
+            'Worrying too much about different things?',
+            'Trouble relaxing?',
+            'Being so restless that it is hard to sit still?',
+            'Becoming easily annoyed or irritable?',
+            'Feeling afraid as if something awful might happen?'
+        ],
+        labels: ['Not at all', 'Several days', 'More than half the days', 'Nearly every day'],
+        interpret(score) {
+            if (score <= 4) return 'Minimal anxiety';
+            if (score <= 9) return 'Mild anxiety';
+            if (score <= 14) return 'Moderate anxiety';
+            return 'Severe anxiety - seek professional help';
+        }
+    },
+    pcl5: {
+        title: 'PCL-5 PTSD Screening',
+        questions: [
+            'Repeated, disturbing memories of a stressful experience?',
+            'Avoiding memories, thoughts, or feelings related to a stressful experience?',
+            'Trouble falling or staying asleep?',
+            'Feeling irritable or having angry outbursts?',
+            'Feeling jumpy or easily startled?'
+        ],
+        labels: ['Not at all', 'A little bit', 'Moderately', 'Quite a bit'],
+        interpret(score) {
+            if (score <= 4) return 'Mild symptoms';
+            if (score <= 8) return 'Moderate symptoms';
+            return 'High distress - consider professional support';
+        }
+    },
+    mdq: {
+        title: 'MDQ Bipolar Screening',
+        questions: [
+            'Feeling more self-confident than usual?',
+            'Needing less sleep than usual?',
+            'Being more talkative or outgoing than usual?',
+            'Being more active or doing more things than usual?',
+            'Being more distracted than usual?'
+        ],
+        labels: ['Not at all', 'A little', 'Moderately', 'A lot'],
+        interpret(score) {
+            if (score <= 4) return 'Low likelihood of bipolar symptoms';
+            if (score <= 8) return 'Possibly moderate symptoms';
+            return 'High likelihood - speak with a professional';
+        }
+    }
+};
+
 // Load user data from localStorage
 function loadUserData() {
     const saved = localStorage.getItem('safehub_data');
@@ -48,9 +124,20 @@ function initApp() {
     const showSignupBtn = document.getElementById('showSignupBtn');
     const showLoginBtn = document.getElementById('showLoginBtn');
     const backToLoginBtn = document.getElementById('backToLoginBtn');
+    const signupBottomBtn = document.getElementById('signupCreateBottom');
     if (showSignupBtn) showSignupBtn.addEventListener('click', showSignupPanel);
     if (showLoginBtn) showLoginBtn.addEventListener('click', showLoginPanel);
     if (backToLoginBtn) backToLoginBtn.addEventListener('click', showLoginPanel);
+    if (signupBottomBtn) signupBottomBtn.addEventListener('click', () => document.getElementById('signupForm')?.requestSubmit());
+
+    const contrastBtn = document.getElementById('btn-contrast');
+    const textBtn = document.getElementById('btn-text');
+    const motionBtn = document.getElementById('btn-motion');
+    const calmBtn = document.getElementById('btn-calm');
+    if (contrastBtn) contrastBtn.addEventListener('click', () => toggleHighContrast(contrastBtn));
+    if (textBtn) textBtn.addEventListener('click', () => toggleLargeText(textBtn));
+    if (motionBtn) motionBtn.addEventListener('click', () => toggleReduceMotion(motionBtn));
+    if (calmBtn) calmBtn.addEventListener('click', () => toggleCalmMode(calmBtn));
 
     // Modal handling
     document.querySelectorAll('.modal-trigger').forEach(trigger => {
@@ -63,7 +150,14 @@ function initApp() {
 
     document.querySelectorAll('.modal-close').forEach(close => {
         close.addEventListener('click', () => {
-            close.closest('.modal')?.classList.remove('active');
+            const modal = close.closest('.modal');
+            modal?.classList.remove('active');
+            const overlay = close.closest('.modal-overlay');
+            if (overlay) {
+                overlay.style.display = 'none';
+                overlay.classList.remove('active');
+                assessmentState = null;
+            }
         });
     });
 
@@ -270,10 +364,16 @@ function showSignupPanel() {
     if (signupBtn) {
         signupBtn.classList.add('btn-primary');
         signupBtn.classList.remove('btn-outline');
+        signupBtn.style.background = '#000';
+        signupBtn.style.color = '#fff';
+        signupBtn.style.border = '1px solid #000';
     }
     if (loginBtn) {
         loginBtn.classList.remove('btn-primary');
         loginBtn.classList.add('btn-outline');
+        loginBtn.style.background = '';
+        loginBtn.style.color = '';
+        loginBtn.style.border = '';
     }
     document.getElementById('signup-username')?.focus();
 }
@@ -288,10 +388,16 @@ function showLoginPanel() {
     if (loginBtn) {
         loginBtn.classList.add('btn-primary');
         loginBtn.classList.remove('btn-outline');
+        loginBtn.style.background = '';
+        loginBtn.style.color = '';
+        loginBtn.style.border = '';
     }
     if (signupBtn) {
         signupBtn.classList.remove('btn-primary');
         signupBtn.classList.add('btn-outline');
+        signupBtn.style.background = '#000';
+        signupBtn.style.color = '#fff';
+        signupBtn.style.border = '1px solid #000';
     }
     document.getElementById('uname-in')?.focus();
 }
@@ -341,6 +447,78 @@ function updateProgress() {
         const avgMood = userData.moods[userData.moods.length - 1].mood;
         document.getElementById('moodAvg') && (document.getElementById('moodAvg').textContent = avgMood.charAt(0).toUpperCase() + avgMood.slice(1));
     }
+}
+
+function showToast(message, duration = 3200) {
+    const container = document.getElementById('toast-container');
+    if (!container) {
+        alert(message);
+        return;
+    }
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    container.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.add('visible'));
+    setTimeout(() => {
+        toast.classList.remove('visible');
+        toast.addEventListener('transitionend', () => toast.remove(), { once: true });
+    }, duration);
+}
+
+function startBreathing() {
+    const phases = ['Breathe in…', 'Hold…', 'Breathe out…', 'Relax…'];
+    let step = 0;
+    showToast('Guided breathing started. Follow the prompts.');
+    const timer = setInterval(() => {
+        if (step >= phases.length) {
+            clearInterval(timer);
+            showToast('Well done. Keep breathing calmly.');
+            return;
+        }
+        showToast(phases[step], 2600);
+        step++;
+    }, 2800);
+}
+
+function toggleHighContrast(button) {
+    const enabled = button.getAttribute('aria-pressed') === 'true';
+    button.setAttribute('aria-pressed', String(!enabled));
+    document.body.classList.toggle('high-contrast', !enabled);
+    showToast(`High contrast ${!enabled ? 'enabled' : 'disabled'}`);
+}
+
+function toggleLargeText(button) {
+    const enabled = button.getAttribute('aria-pressed') === 'true';
+    button.setAttribute('aria-pressed', String(!enabled));
+    document.documentElement.classList.toggle('large-text', !enabled);
+    showToast(`${!enabled ? 'Large text enabled' : 'Normal text restored'}`);
+}
+
+function toggleReduceMotion(button) {
+    const enabled = button.getAttribute('aria-pressed') === 'true';
+    button.setAttribute('aria-pressed', String(!enabled));
+    document.body.classList.toggle('reduce-motion', !enabled);
+    showToast(`${!enabled ? 'Motion reduced' : 'Motion restored'}`);
+}
+
+function toggleCalmMode(button) {
+    const enabled = button.getAttribute('aria-pressed') === 'true';
+    button.setAttribute('aria-pressed', String(!enabled));
+    document.body.classList.toggle('calm-mode', !enabled);
+    showToast(`${!enabled ? 'Calm mode enabled' : 'Calm mode disabled'}`);
+}
+
+function switchTab(tabId, button) {
+    const tabs = document.querySelectorAll('.resources-tabs .tab-btn');
+    const panels = document.querySelectorAll('.resources-content');
+    tabs.forEach(tab => {
+        tab.classList.toggle('active', tab === button);
+        tab.setAttribute('aria-selected', tab === button ? 'true' : 'false');
+    });
+    panels.forEach(panel => {
+        panel.classList.toggle('active', panel.id === `tab-${tabId}`);
+    });
 }
 
 // Assessment scoring (PHQ9, GAD7)
@@ -444,24 +622,102 @@ function showSection(sectionName) {
 
 // Open assessment - scroll to section and show modal if it exists
 function openAssessment(assessmentType) {
-    const modalMap = {
-        'phq9': 'phq9Modal',
-        'gad7': 'gad7Modal',
-        'mdq': 'mdqModal',
-        'pcl5': 'pcl5Modal'
-    };
-    
-    const modalId = modalMap[assessmentType];
-    if (modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) {
-            modal.classList.add('active');
-            modal.style.display = 'block';
-        }
+    const assessment = assessmentLibrary[assessmentType];
+    if (!assessment) {
+        showToast('Assessment currently unavailable.');
+        return;
     }
-    
-    // Also show screening section
+
+    assessmentState = {
+        type: assessmentType,
+        currentIndex: 0,
+        answers: new Array(assessment.questions.length).fill(0)
+    };
+
+    const overlay = document.getElementById('assessment-modal');
+    const title = document.getElementById('modal-title');
+    const subtitle = document.getElementById('modal-subtitle');
+    if (!overlay || !title || !subtitle) {
+        showToast('Unable to open assessment.');
+        return;
+    }
+
+    title.textContent = assessment.title;
+    subtitle.textContent = 'Answer each question honestly.';
+    overlay.style.display = 'flex';
+    overlay.classList.add('active');
+    renderAssessmentQuestion();
     showSection('screening');
+}
+
+function renderAssessmentQuestion() {
+    if (!assessmentState) return;
+    const assessment = assessmentLibrary[assessmentState.type];
+    const body = document.getElementById('modal-body');
+    const progressFill = document.getElementById('progress-fill');
+    const progressText = document.getElementById('progress-text');
+    const prevBtn = document.getElementById('btn-prev');
+    const nextBtn = document.getElementById('btn-next');
+    if (!body || !progressFill || !progressText || !prevBtn || !nextBtn) return;
+
+    const question = assessment.questions[assessmentState.currentIndex];
+    body.innerHTML = `
+        <div class="question-card" style="padding: 20px; background: rgba(255,255,255,.92); border-radius: 18px; box-shadow: 0 12px 28px rgba(0,0,0,.08);">
+            <p style="font-size: 1rem; color: #102334; margin-bottom: 18px;">${question}</p>
+            ${assessment.labels.map((label, index) => `
+                <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font-size: 0.98rem; color: #1f425f;">
+                    <input type="radio" name="assessment-answer" value="${index}" ${assessmentState.answers[assessmentState.currentIndex] === index ? 'checked' : ''}>
+                    <span>${label}</span>
+                </label>
+            `).join('')}
+        </div>
+    `;
+
+    body.querySelectorAll('input[name="assessment-answer"]').forEach(input => {
+        input.addEventListener('change', (event) => {
+            assessmentState.answers[assessmentState.currentIndex] = parseInt(event.target.value, 10);
+        });
+    });
+
+    const progress = Math.round(((assessmentState.currentIndex + 1) / assessment.questions.length) * 100);
+    progressFill.style.width = `${progress}%`;
+    progressText.textContent = `Question ${assessmentState.currentIndex + 1} of ${assessment.questions.length}`;
+    prevBtn.disabled = assessmentState.currentIndex === 0;
+    nextBtn.textContent = assessmentState.currentIndex === assessment.questions.length - 1 ? 'Finish' : 'Next →';
+}
+
+function prevQuestion() {
+    if (!assessmentState || assessmentState.currentIndex === 0) return;
+    assessmentState.currentIndex -= 1;
+    renderAssessmentQuestion();
+}
+
+function nextQuestion() {
+    if (!assessmentState) return;
+    if (assessmentState.currentIndex === assessmentLibrary[assessmentState.type].questions.length - 1) {
+        submitAssessment();
+        return;
+    }
+    assessmentState.currentIndex += 1;
+    renderAssessmentQuestion();
+}
+
+function submitAssessment() {
+    if (!assessmentState) return;
+    const assessment = assessmentLibrary[assessmentState.type];
+    const score = assessment.answers.reduce((total, answer) => total + (parseInt(answer, 10) || 0), 0);
+    userData.assessments.push({ type: assessmentState.type, score, date: new Date().toISOString() });
+    userData.sessions += 1;
+    saveUserData();
+    updateProgress();
+    showToast(`${assessment.title} completed.`);
+    alert(`${assessment.title}\nScore: ${score}\n\n${assessment.interpret(score)}`);
+    const overlay = document.getElementById('assessment-modal');
+    if (overlay) {
+        overlay.style.display = 'none';
+        overlay.classList.remove('active');
+    }
+    assessmentState = null;
 }
 
 // Close mobile navigation
@@ -507,5 +763,9 @@ window.showLMS = showLMS;
 window.showResults = showResults;
 window.showSection = showSection;
 window.openAssessment = openAssessment;
+window.startBreathing = startBreathing;
+window.switchTab = switchTab;
+window.prevQuestion = prevQuestion;
+window.nextQuestion = nextQuestion;
 window.closeMobile = closeMobile;
 

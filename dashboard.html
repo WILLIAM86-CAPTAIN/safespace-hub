@@ -111,6 +111,73 @@
     img { max-width: 100%; height: auto; }
     button { cursor: pointer; font-family: var(--ff-body); }
 
+    .btn-black {
+      background: #000 !important;
+      color: #fff !important;
+      border: 1px solid #000 !important;
+    }
+
+    .high-contrast {
+      background: #000 !important;
+      color: #fff !important;
+    }
+    .high-contrast a { color: #00ffff !important; }
+    .high-contrast .section-wrap,
+    .high-contrast .page-section,
+    .high-contrast .site-header,
+    .high-contrast .footer-inner,
+    .high-contrast .modal,
+    .high-contrast .modal-overlay,
+    .high-contrast .a11y-bar { background: #000 !important; color: #fff !important; }
+    .high-contrast input,
+    .high-contrast textarea,
+    .high-contrast select,
+    .high-contrast button { background: #111 !important; color: #fff !important; border-color: #fff !important; }
+
+    .calm-mode { background: #eef6f0 !important; color: #163c31 !important; }
+    .calm-mode a { color: #2d6557 !important; }
+    .calm-mode .section-wrap,
+    .calm-mode .page-section,
+    .calm-mode .site-header,
+    .calm-mode .footer-inner,
+    .calm-mode .modal,
+    .calm-mode .modal-overlay,
+    .calm-mode .a11y-bar { background: #f3fbf5 !important; color: #163c31 !important; }
+
+    .reduce-motion *,
+    .reduce-motion *::before,
+    .reduce-motion *::after {
+      transition-duration: 0s !important;
+      animation-duration: 0s !important;
+      animation-delay: 0s !important;
+    }
+
+    html.large-text { font-size: 36px !important; }
+
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 9999;
+      pointer-events: none;
+    }
+    .toast {
+      background: rgba(32, 45, 58, 0.95);
+      color: #fff;
+      padding: 14px 18px;
+      border-radius: 999px;
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.22);
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 240ms ease, transform 240ms ease;
+      pointer-events: auto;
+      min-width: 260px;
+    }
+    .toast.visible { opacity: 1; transform: translateY(0); }
+
     h1, h2, h3, h4 { font-family: var(--ff-head); line-height: 1.2; }
 
     /* ── Visually hidden (screen readers) ── */
@@ -1227,7 +1294,7 @@
 
     <div style="display:flex; justify-content:center; gap:10px; margin-bottom:20px;">
       <button id="showLoginBtn" class="btn btn-primary btn-sm" style="flex:1;">Login</button>
-      <button id="showSignupBtn" class="btn btn-outline btn-sm" style="flex:1;">Sign Up</button>
+      <button id="showSignupBtn" class="btn btn-outline btn-sm btn-black" style="flex:1; background:#000; color:#fff; border:1px solid #000;">Sign Up</button>
     </div>
 
     <div id="loginPanel">
@@ -1276,6 +1343,7 @@
         </div>
         <button type="submit" style="padding: 12px; background: #3a7d9c; color: white; border: none; border-radius: 16px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 280ms; font-family: 'DM Sans', sans-serif;">Create account</button>
       </form>
+      <button id="signupCreateBottom" type="button" class="btn btn-primary" style="width:100%; margin-top: 14px; padding: 12px; border-radius: 16px; font-size: 0.95rem; font-weight: 600;">Create account</button>
       <div style="margin-top: 18px; text-align: center;">
         <button id="backToLoginBtn" type="button" style="background: none; border: none; color: #3a7d9c; cursor: pointer; text-decoration: underline; font-weight: 500; font-family: 'DM Sans', sans-serif;">Already have an account? Login</button>
       </div>
