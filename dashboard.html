@@ -264,7 +264,7 @@
       <div class="grounding-widget" role="region" aria-label="Breathing and grounding exercise">
         <h3>Need a Moment? Try Grounding</h3>
         <p>The 5-4-3-2-1 technique can help anchor you when feeling overwhelmed.</p>
-        <div class="breathing-circle" id="breath-circle" aria-live="polite">Tap to breathe</div>
+        <div class="breathing-circle" id="breath-circle" aria-live="polite" role="button" tabindex="0" aria-label="Tap to start guided breathing" onclick="startBreathing()" onkeydown="if(event.key==='Enter'||event.key===' ')startBreathing()">Tap to breathe</div>
         <button class="btn btn-outline" onclick="startBreathing()" aria-label="Start guided breathing exercise">Start Breathing Exercise</button>
         <div class="grounding-steps" aria-label="5-4-3-2-1 grounding technique">
           <div class="ground-step"><div class="ground-num">👁️</div><div class="ground-label">5 things you SEE</div></div>

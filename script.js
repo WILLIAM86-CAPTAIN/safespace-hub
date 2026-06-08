@@ -23,6 +23,8 @@ let currentUser = null;
 let userData = { moods: [], assessments: [], sessions: 0 };
 
 let assessmentState = null;
+// Breathing control state
+let breathingTimer = null;
 const assessmentLibrary = {
     phq9: {
         title: 'PHQ-9 Depression Screening',
@@ -485,11 +487,17 @@ function showToast(message, duration = 3200) {
 function startBreathing() {
     const phases = ['Breathe in…', 'Hold…', 'Breathe out…', 'Relax…'];
     let step = 0;
-    showToast('Guided breathing started. Follow the prompts.');
-    const timer = setInterval(() => {
+    // Prevent multiple simultaneous runs
+    if (breathingTimer) {
+        // already running
+        return;
+    }
+    showToast('Guided breathing started. Follow the prompts.', 2000);
+    breathingTimer = setInterval(() => {
         if (step >= phases.length) {
-            clearInterval(timer);
-            showToast('Well done. Keep breathing calmly.');
+            clearInterval(breathingTimer);
+            breathingTimer = null;
+            showToast('Well done. Keep breathing calmly.', 3000);
             return;
         }
         showToast(phases[step], 2600);

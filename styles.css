@@ -458,6 +458,9 @@ html.large-text { font-size: 20px !important; }
   max-width: 440px;
   width: 100%;
   box-shadow: var(--shadow-xl), inset 0 1px 0 rgba(255,255,255,0.2);
+  /* Allow internal scrolling on small viewports so signup can be navigated while login overlay is active */
+  max-height: calc(100vh - 40px);
+  overflow: auto;
 }
 
 .login-card-header { text-align: center; margin-bottom: 28px; }
@@ -1780,13 +1783,20 @@ footer::before {
   font-weight: 500;
   box-shadow: var(--shadow-xl);
   border-left: 4px solid var(--c-primary);
-  animation: toastIn 0.35s var(--ease-spring);
   pointer-events: auto;
   max-width: 300px;
+  opacity: 0;
+  transform: translateX(12px);
+  transition: opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease);
 }
 @keyframes toastIn {
   from { opacity: 0; transform: translateX(20px); }
   to   { opacity: 1; transform: translateX(0); }
+}
+
+.toast.visible {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 /* ═══════════════════════════════════════════════════════════════
