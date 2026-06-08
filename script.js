@@ -589,9 +589,14 @@ function getScoreInterpretation(formId, score) {
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({ behavior: 'smooth' });
+        const href = this.getAttribute('href');
+        // Ignore bare '#' links which are not valid selectors
+        if (!href || href === '#') return;
+        try {
+            const target = document.querySelector(href);
+            if (target) target.scrollIntoView({ behavior: 'smooth' });
+        } catch (err) {
+            // invalid selector — do nothing
         }
     });
 });
