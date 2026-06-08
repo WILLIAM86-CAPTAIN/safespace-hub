@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#1a2e3b" />
+  <meta name="theme-color" content="#0d1b2a" />
   <meta name="description" content="The Safe Space Hub — Adaptive digital mental wellness support for Autism, PTSD, Anxiety, and Stress." />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -15,1220 +15,10 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 
-  <style>
-    /* ═══════════════════════════════════════════════
-       CSS CUSTOM PROPERTIES — DESIGN TOKENS
-    ═══════════════════════════════════════════════ */
-    :root {
-      --c-deep:    #0d1f2d;
-      --c-navy:    #1a2e3b;
-      --c-slate:   #243b4a;
-      --c-mid:     #2e5068;
-      --c-teal:    #3a7d9c;
-      --c-sky:     #5ba3c0;
-      --c-mist:    #a8cedd;
-      --c-sage:    #7bab8e;
-      --c-amber:   #e8a445;
-      --c-rose:    #d97b7b;
-      --c-cream:   #f5f0e8;
-      --c-warm:    #ede8de;
-      --c-text:    #1a2e3b;
-      --c-textlt:  #3d5566;
-      --c-white:   #ffffff;
-      --c-crisis:  #c0392b;
-      --c-safe:    #27ae60;
-      --c-warn:    #e67e22;
-
-      --ff-head: 'DM Serif Display', Georgia, serif;
-      --ff-body: 'DM Sans', system-ui, sans-serif;
-
-      --radius-sm: 8px;
-      --radius-md: 16px;
-      --radius-lg: 24px;
-      --radius-xl: 40px;
-
-      --shadow-soft: 0 4px 24px rgba(13,31,45,.10);
-      --shadow-card: 0 8px 40px rgba(13,31,45,.14);
-      --shadow-lift: 0 16px 64px rgba(13,31,45,.20);
-
-      --transition: 280ms cubic-bezier(.4,0,.2,1);
-      --ease-spring: cubic-bezier(.34,1.56,.64,1);
-
-      --focus-ring: 0 0 0 3px rgba(91,163,192,.55);
-
-      /* Responsive spacing scale */
-      --sp-xs: clamp(4px, 1vw, 8px);
-      --sp-sm: clamp(8px, 2vw, 16px);
-      --sp-md: clamp(16px, 3vw, 24px);
-      --sp-lg: clamp(24px, 4vw, 40px);
-      --sp-xl: clamp(40px, 6vw, 72px);
-      --sp-2xl: clamp(64px, 8vw, 120px);
-    }
-
-    /* ═══════════════════════════════════════════════
-       RESET & BASE
-    ═══════════════════════════════════════════════ */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html { scroll-behavior: smooth; font-size: 16px; }
-
-    body {
-      font-family: var(--ff-body);
-      background: var(--c-cream);
-      color: var(--c-text);
-      line-height: 1.65;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    /* ── Skip navigation (WCAG) ── */
-    .skip-link {
-      position: absolute;
-      top: -100%;
-      left: 1rem;
-      z-index: 9999;
-      background: var(--c-teal);
-      color: var(--c-white);
-      padding: .5rem 1rem;
-      border-radius: var(--radius-sm);
-      font-weight: 600;
-      text-decoration: none;
-      transition: top var(--transition);
-    }
-    .skip-link:focus { top: 1rem; }
-
-    /* ── Focus styles (WCAG 2.1 AA) ── */
-    :focus-visible {
-      outline: none;
-      box-shadow: var(--focus-ring);
-      border-radius: 4px;
-    }
-
-    a { color: var(--c-teal); text-decoration: underline; }
-    a:hover { color: var(--c-sky); }
-    img { max-width: 100%; height: auto; }
-    button { cursor: pointer; font-family: var(--ff-body); }
-
-    .btn-black {
-      background: #000 !important;
-      color: #fff !important;
-      border: 1px solid #000 !important;
-    }
-
-    .high-contrast {
-      background: #000 !important;
-      color: #fff !important;
-    }
-    .high-contrast a { color: #00ffff !important; }
-    .high-contrast .section-wrap,
-    .high-contrast .page-section,
-    .high-contrast .site-header,
-    .high-contrast .footer-inner,
-    .high-contrast .modal,
-    .high-contrast .modal-overlay,
-    .high-contrast .a11y-bar { background: #000 !important; color: #fff !important; }
-    .high-contrast input,
-    .high-contrast textarea,
-    .high-contrast select,
-    .high-contrast button { background: #111 !important; color: #fff !important; border-color: #fff !important; }
-
-    .calm-mode { background: #eef6f0 !important; color: #163c31 !important; }
-    .calm-mode a { color: #2d6557 !important; }
-    .calm-mode .section-wrap,
-    .calm-mode .page-section,
-    .calm-mode .site-header,
-    .calm-mode .footer-inner,
-    .calm-mode .modal,
-    .calm-mode .modal-overlay,
-    .calm-mode .a11y-bar { background: #f3fbf5 !important; color: #163c31 !important; }
-
-    .reduce-motion *,
-    .reduce-motion *::before,
-    .reduce-motion *::after {
-      transition-duration: 0s !important;
-      animation-duration: 0s !important;
-      animation-delay: 0s !important;
-    }
-
-    html.large-text { font-size: 36px !important; }
-
-    .toast-container {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      z-index: 9999;
-      pointer-events: none;
-    }
-    .toast {
-      background: rgba(32, 45, 58, 0.95);
-      color: #fff;
-      padding: 14px 18px;
-      border-radius: 999px;
-      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.22);
-      opacity: 0;
-      transform: translateY(12px);
-      transition: opacity 240ms ease, transform 240ms ease;
-      pointer-events: auto;
-      min-width: 260px;
-    }
-    .toast.visible { opacity: 1; transform: translateY(0); }
-
-    h1, h2, h3, h4 { font-family: var(--ff-head); line-height: 1.2; }
-
-    /* ── Visually hidden (screen readers) ── */
-    .sr-only {
-      position: absolute; width: 1px; height: 1px;
-      padding: 0; margin: -1px; overflow: hidden;
-      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
-    }
-
-    /* ═══════════════════════════════════════════════
-       CRISIS BANNER — always visible
-    ═══════════════════════════════════════════════ */
-    .crisis-banner {
-      background: var(--c-crisis);
-      color: var(--c-white);
-      text-align: center;
-      padding: 10px var(--sp-md);
-      font-size: .875rem;
-      font-weight: 500;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-    .crisis-banner a {
-      color: #ffd6d6;
-      font-weight: 700;
-      text-decoration: underline;
-    }
-    .crisis-banner a:hover { color: #fff; }
-
-    /* ═══════════════════════════════════════════════
-       HEADER / NAV
-    ═══════════════════════════════════════════════ */
-    .site-header {
-      background: var(--c-navy);
-      position: sticky;
-      top: 40px;
-      z-index: 900;
-      box-shadow: 0 2px 20px rgba(0,0,0,.25);
-    }
-    .header-inner {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 0 var(--sp-md);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 68px;
-      gap: var(--sp-md);
-    }
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-      flex-shrink: 0;
-    }
-    .logo-icon {
-      width: 38px; height: 38px;
-      background: linear-gradient(135deg, var(--c-teal), var(--c-sage));
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-    }
-    .logo-text {
-      font-family: var(--ff-head);
-      color: var(--c-white);
-      font-size: 1.2rem;
-      line-height: 1.1;
-    }
-    .logo-text span { color: var(--c-mist); display: block; font-size: .75rem; font-family: var(--ff-body); font-weight: 300; letter-spacing: .05em; }
-
-    .main-nav { display: flex; align-items: center; gap: 4px; }
-    .nav-link {
-      color: var(--c-mist);
-      text-decoration: none;
-      padding: 6px 14px;
-      border-radius: var(--radius-sm);
-      font-size: .9rem;
-      font-weight: 500;
-      transition: background var(--transition), color var(--transition);
-      white-space: nowrap;
-    }
-    .nav-link:hover, .nav-link.active {
-      background: rgba(91,163,192,.18);
-      color: var(--c-white);
-    }
-
-    /* Accessibility toolbar */
-    .a11y-bar {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 0 var(--sp-md);
-      background: var(--c-slate);
-    }
-    .a11y-bar .a11y-inner {
-      max-width: 1280px;
-      margin: 0 auto;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 6px 0;
-      font-size: .8rem;
-      color: var(--c-mist);
-    }
-    .a11y-btn {
-      background: none;
-      border: 1px solid rgba(168,206,221,.3);
-      color: var(--c-mist);
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-size: .78rem;
-      cursor: pointer;
-      transition: all var(--transition);
-    }
-    .a11y-btn:hover { background: rgba(91,163,192,.2); color: var(--c-white); }
-    .a11y-btn.active { background: var(--c-teal); color: var(--c-white); border-color: var(--c-teal); }
-
-    /* ── Mobile hamburger ── */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      background: none;
-      border: none;
-      padding: 8px;
-      cursor: pointer;
-    }
-    .hamburger span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--c-mist);
-      border-radius: 2px;
-      transition: all var(--transition);
-    }
-    .mobile-nav {
-      display: none;
-      flex-direction: column;
-      background: var(--c-slate);
-      padding: var(--sp-sm) var(--sp-md);
-      gap: 4px;
-    }
-    .mobile-nav.open { display: flex; }
-    .mobile-nav .nav-link { display: block; padding: 10px 14px; }
-
-    @media (max-width: 768px) {
-      .main-nav { display: none; }
-      .hamburger { display: flex; }
-    }
-
-    /* ═══════════════════════════════════════════════
-       PAGE SECTIONS MANAGEMENT
-    ═══════════════════════════════════════════════ */
-    .page-section { display: none; }
-    .page-section.active { display: block; }
-
-    /* ═══════════════════════════════════════════════
-       HERO SECTION
-    ═══════════════════════════════════════════════ */
-    .hero {
-      background: linear-gradient(160deg, var(--c-deep) 0%, var(--c-navy) 45%, var(--c-mid) 100%);
-      min-height: 88vh;
-      display: flex;
-      align-items: center;
-      position: relative;
-      overflow: hidden;
-      padding: var(--sp-xl) var(--sp-md);
-    }
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 60% 80% at 85% 40%, rgba(58,125,156,.18) 0%, transparent 60%),
-        radial-gradient(ellipse 40% 60% at 20% 70%, rgba(123,171,142,.10) 0%, transparent 50%);
-      pointer-events: none;
-    }
-    /* Animated floating orbs */
-    .hero-orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(60px);
-      opacity: .15;
-      animation: floatOrb 12s ease-in-out infinite;
-    }
-    .hero-orb:nth-child(1) { width: 400px; height: 400px; background: var(--c-teal); top: -100px; right: -50px; animation-delay: 0s; }
-    .hero-orb:nth-child(2) { width: 300px; height: 300px; background: var(--c-sage); bottom: -50px; left: 10%; animation-delay: -4s; }
-    .hero-orb:nth-child(3) { width: 200px; height: 200px; background: var(--c-amber); top: 40%; left: 50%; animation-delay: -8s; }
-    @keyframes floatOrb {
-      0%, 100% { transform: translateY(0) scale(1); }
-      50% { transform: translateY(-30px) scale(1.05); }
-    }
-
-    .hero-inner {
-      max-width: 1280px;
-      margin: 0 auto;
-      width: 100%;
-      position: relative;
-      z-index: 1;
-    }
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--sp-xl);
-      align-items: center;
-    }
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(91,163,192,.15);
-      border: 1px solid rgba(91,163,192,.3);
-      color: var(--c-mist);
-      padding: 6px 16px;
-      border-radius: 20px;
-      font-size: .8rem;
-      font-weight: 500;
-      letter-spacing: .05em;
-      text-transform: uppercase;
-      margin-bottom: var(--sp-sm);
-    }
-    .hero-badge::before { content: '🛡️'; font-size: .9rem; }
-
-    .hero h1 {
-      font-size: clamp(2.4rem, 5vw, 4rem);
-      color: var(--c-white);
-      margin-bottom: var(--sp-sm);
-      line-height: 1.1;
-    }
-    .hero h1 em {
-      font-style: italic;
-      color: var(--c-mist);
-    }
-    .hero-desc {
-      font-size: clamp(.95rem, 1.5vw, 1.15rem);
-      color: rgba(168,206,221,.85);
-      max-width: 520px;
-      margin-bottom: var(--sp-lg);
-      font-weight: 300;
-      line-height: 1.75;
-    }
-    .hero-ctas {
-      display: flex;
-      gap: var(--sp-sm);
-      flex-wrap: wrap;
-    }
-
-    /* Floating info card */
-    .hero-cards {
-      display: flex;
-      flex-direction: column;
-      gap: var(--sp-sm);
-    }
-    .info-card {
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(168,206,221,.15);
-      border-radius: var(--radius-md);
-      padding: var(--sp-md);
-      backdrop-filter: blur(10px);
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      transition: transform var(--transition), border-color var(--transition);
-      animation: cardSlide .7s var(--ease-spring) both;
-    }
-    .info-card:nth-child(1) { animation-delay: .1s; }
-    .info-card:nth-child(2) { animation-delay: .25s; }
-    .info-card:nth-child(3) { animation-delay: .4s; }
-    .info-card:hover { transform: translateX(-4px); border-color: rgba(91,163,192,.4); }
-    @keyframes cardSlide {
-      from { opacity: 0; transform: translateX(30px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-    .card-icon {
-      width: 44px; height: 44px;
-      border-radius: var(--radius-sm);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3rem;
-      flex-shrink: 0;
-    }
-    .card-icon.blue  { background: rgba(58,125,156,.25); }
-    .card-icon.green { background: rgba(123,171,142,.25); }
-    .card-icon.amber { background: rgba(232,164,69,.25); }
-    .card-title { color: var(--c-white); font-weight: 600; font-size: .95rem; margin-bottom: 4px; }
-    .card-desc  { color: rgba(168,206,221,.75); font-size: .82rem; line-height: 1.5; }
-
-    @media (max-width: 900px) {
-      .hero-grid { grid-template-columns: 1fr; }
-      .hero-cards { display: none; }
-    }
-
-    /* ═══════════════════════════════════════════════
-       BUTTONS
-    ═══════════════════════════════════════════════ */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 28px;
-      border-radius: var(--radius-lg);
-      font-size: .95rem;
-      font-weight: 600;
-      border: 2px solid transparent;
-      cursor: pointer;
-      transition: all var(--transition);
-      text-decoration: none;
-      font-family: var(--ff-body);
-      white-space: nowrap;
-    }
-    .btn-primary {
-      background: var(--c-teal);
-      color: var(--c-white);
-      border-color: var(--c-teal);
-    }
-    .btn-primary:hover { background: var(--c-sky); border-color: var(--c-sky); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(58,125,156,.35); color: var(--c-white); }
-    .btn-outline {
-      background: transparent;
-      color: var(--c-white);
-      border-color: rgba(168,206,221,.5);
-    }
-    .btn-outline:hover { background: rgba(255,255,255,.1); border-color: var(--c-mist); color: var(--c-white); }
-    .btn-danger {
-      background: var(--c-crisis);
-      color: var(--c-white);
-      border-color: var(--c-crisis);
-    }
-    .btn-danger:hover { background: #a93226; box-shadow: 0 8px 24px rgba(192,57,43,.35); transform: translateY(-2px); color: var(--c-white); }
-    .btn-sage {
-      background: var(--c-sage);
-      color: var(--c-white);
-      border-color: var(--c-sage);
-    }
-    .btn-sage:hover { background: #6a9a7c; transform: translateY(-2px); color: var(--c-white); }
-    .btn-sm { padding: 8px 18px; font-size: .85rem; border-radius: var(--radius-sm); }
-    .btn:disabled { opacity: .45; cursor: not-allowed; transform: none !important; }
-
-    /* ═══════════════════════════════════════════════
-       SECTION WRAPPER
-    ═══════════════════════════════════════════════ */
-    .section-wrap {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: var(--sp-2xl) var(--sp-md);
-    }
-    .section-header {
-      text-align: center;
-      margin-bottom: var(--sp-xl);
-    }
-    .section-label {
-      display: inline-block;
-      background: var(--c-teal);
-      color: var(--c-white);
-      font-size: .75rem;
-      font-weight: 600;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      padding: 4px 14px;
-      border-radius: 20px;
-      margin-bottom: var(--sp-sm);
-    }
-    .section-title {
-      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
-      color: var(--c-navy);
-      margin-bottom: var(--sp-sm);
-    }
-    .section-desc {
-      color: var(--c-textlt);
-      font-size: 1rem;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    /* ═══════════════════════════════════════════════
-       SCREENING TOOLS — TOOL CARDS
-    ═══════════════════════════════════════════════ */
-    #screening { background: var(--c-cream); }
-
-    .tools-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: var(--sp-md);
-    }
-    .tool-card {
-      background: var(--c-white);
-      border-radius: var(--radius-lg);
-      padding: var(--sp-lg);
-      border: 1.5px solid rgba(58,125,156,.12);
-      box-shadow: var(--shadow-soft);
-      transition: all var(--transition);
-      cursor: pointer;
-      text-align: left;
-    }
-    .tool-card:hover {
-      transform: translateY(-6px);
-      box-shadow: var(--shadow-lift);
-      border-color: var(--c-teal);
-    }
-    .tool-card-icon {
-      width: 56px; height: 56px;
-      border-radius: var(--radius-md);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.6rem;
-      margin-bottom: var(--sp-sm);
-    }
-    .tc-blue  { background: linear-gradient(135deg, rgba(58,125,156,.15), rgba(91,163,192,.15)); }
-    .tc-green { background: linear-gradient(135deg, rgba(123,171,142,.15), rgba(100,180,130,.15)); }
-    .tc-amber { background: linear-gradient(135deg, rgba(232,164,69,.15), rgba(240,180,80,.15)); }
-    .tc-rose  { background: linear-gradient(135deg, rgba(217,123,123,.15), rgba(200,100,100,.15)); }
-    .tool-card h3 { font-size: 1.15rem; color: var(--c-navy); margin-bottom: 6px; }
-    .tool-card p  { font-size: .875rem; color: var(--c-textlt); line-height: 1.6; margin-bottom: var(--sp-sm); }
-    .tool-meta {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .meta-badge {
-      font-size: .72rem;
-      font-weight: 600;
-      padding: 3px 10px;
-      border-radius: 20px;
-      background: rgba(58,125,156,.1);
-      color: var(--c-teal);
-    }
-
-    /* ═══════════════════════════════════════════════
-       ASSESSMENT MODAL / OVERLAY
-    ═══════════════════════════════════════════════ */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(13,31,45,.7);
-      z-index: 2000;
-      overflow-y: auto;
-      padding: var(--sp-md);
-      backdrop-filter: blur(4px);
-    }
-    .modal-overlay.open { display: flex; align-items: flex-start; justify-content: center; }
-
-    .modal {
-      background: var(--c-white);
-      border-radius: var(--radius-xl);
-      width: 100%;
-      max-width: 720px;
-      margin: auto;
-      overflow: hidden;
-      box-shadow: var(--shadow-lift);
-      animation: modalIn .35s var(--ease-spring);
-    }
-    @keyframes modalIn {
-      from { opacity: 0; transform: scale(.94) translateY(20px); }
-      to   { opacity: 1; transform: scale(1) translateY(0); }
-    }
-
-    .modal-head {
-      background: linear-gradient(120deg, var(--c-navy), var(--c-mid));
-      padding: var(--sp-lg) var(--sp-xl);
-      color: var(--c-white);
-      position: relative;
-    }
-    .modal-head h2 { font-size: 1.6rem; margin-bottom: 4px; }
-    .modal-head p  { color: var(--c-mist); font-size: .9rem; }
-    .modal-close {
-      position: absolute;
-      top: var(--sp-md);
-      right: var(--sp-md);
-      background: rgba(255,255,255,.12);
-      border: none;
-      color: var(--c-white);
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      font-size: 1.2rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: background var(--transition);
-    }
-    .modal-close:hover { background: rgba(255,255,255,.22); }
-
-    /* Progress bar */
-    .progress-bar-wrap {
-      background: var(--c-warm);
-      padding: var(--sp-sm) var(--sp-xl);
-      display: flex;
-      align-items: center;
-      gap: var(--sp-sm);
-    }
-    .progress-bar-track {
-      flex: 1;
-      height: 6px;
-      background: rgba(58,125,156,.15);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    .progress-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--c-teal), var(--c-sage));
-      border-radius: 10px;
-      transition: width .4s ease;
-    }
-    .progress-text { font-size: .82rem; color: var(--c-textlt); font-weight: 500; white-space: nowrap; }
-
-    .modal-body { padding: var(--sp-xl); }
-
-    /* Likert / question card */
-    .question-card {
-      background: var(--c-warm);
-      border-radius: var(--radius-lg);
-      padding: var(--sp-lg);
-      margin-bottom: var(--sp-md);
-    }
-    .question-num {
-      font-size: .78rem;
-      font-weight: 700;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      color: var(--c-teal);
-      margin-bottom: 8px;
-    }
-    .question-text {
-      font-size: 1.05rem;
-      color: var(--c-navy);
-      font-weight: 500;
-      line-height: 1.55;
-      margin-bottom: var(--sp-md);
-    }
-
-    .likert-scale {
-      display: grid;
-      gap: 8px;
-    }
-    .likert-option {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 16px;
-      border-radius: var(--radius-sm);
-      border: 2px solid transparent;
-      background: var(--c-white);
-      cursor: pointer;
-      transition: all var(--transition);
-      font-size: .9rem;
-      color: var(--c-text);
-    }
-    .likert-option:hover { border-color: var(--c-teal); background: rgba(58,125,156,.05); }
-    .likert-option.selected { border-color: var(--c-teal); background: rgba(58,125,156,.12); }
-    .likert-dot {
-      width: 20px; height: 20px;
-      border-radius: 50%;
-      border: 2px solid rgba(58,125,156,.4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      transition: all var(--transition);
-    }
-    .likert-option.selected .likert-dot {
-      background: var(--c-teal);
-      border-color: var(--c-teal);
-    }
-    .likert-option.selected .likert-dot::after {
-      content: '';
-      width: 8px; height: 8px;
-      background: white;
-      border-radius: 50%;
-    }
-
-    .modal-footer {
-      padding: var(--sp-md) var(--sp-xl);
-      background: var(--c-warm);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: var(--sp-sm);
-      flex-wrap: wrap;
-    }
-
-    /* ═══════════════════════════════════════════════
-       RESULTS PANEL
-    ═══════════════════════════════════════════════ */
-    .results-panel { display: none; }
-    .results-panel.show { display: block; }
-
-    .score-display {
-      text-align: center;
-      padding: var(--sp-xl) 0;
-    }
-    .score-ring {
-      width: 140px; height: 140px;
-      border-radius: 50%;
-      margin: 0 auto var(--sp-md);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      position: relative;
-    }
-    .score-ring::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: 50%;
-      border: 10px solid var(--c-warm);
-    }
-    .score-ring::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: 50%;
-      border: 10px solid transparent;
-      border-top-color: var(--ring-color, var(--c-sage));
-      border-right-color: var(--ring-color, var(--c-sage));
-      animation: ringDraw .8s ease both;
-    }
-    @keyframes ringDraw {
-      from { transform: rotate(-90deg) scale(.8); opacity: 0; }
-      to { transform: rotate(0deg) scale(1); opacity: 1; }
-    }
-    .score-num {
-      font-family: var(--ff-head);
-      font-size: 2.5rem;
-      color: var(--c-navy);
-      position: relative;
-      z-index: 1;
-    }
-    .score-max {
-      font-size: .8rem;
-      color: var(--c-textlt);
-      position: relative;
-      z-index: 1;
-    }
-
-    .severity-badge {
-      display: inline-block;
-      padding: 6px 20px;
-      border-radius: 20px;
-      font-weight: 700;
-      font-size: .9rem;
-      margin-bottom: var(--sp-sm);
-    }
-    .sev-minimal { background: rgba(39,174,96,.15); color: #1e8449; }
-    .sev-mild    { background: rgba(230,126,34,.12); color: #d35400; }
-    .sev-moderate{ background: rgba(232,164,69,.15); color: #b7770d; }
-    .sev-severe  { background: rgba(192,57,43,.12);  color: #c0392b; }
-
-    .result-interpretation {
-      background: var(--c-warm);
-      border-radius: var(--radius-lg);
-      padding: var(--sp-lg);
-      margin: var(--sp-md) 0;
-      border-left: 4px solid var(--c-teal);
-    }
-    .result-interpretation h4 { color: var(--c-navy); margin-bottom: 8px; }
-    .result-interpretation p  { color: var(--c-textlt); font-size: .9rem; line-height: 1.65; }
-
-    .recommendations-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin: var(--sp-md) 0;
-    }
-    .recommendations-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      font-size: .9rem;
-      color: var(--c-text);
-      line-height: 1.5;
-    }
-    .recommendations-list li::before {
-      content: '✓';
-      color: var(--c-sage);
-      font-weight: 700;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-
-    .disclaimer {
-      background: rgba(232,164,69,.1);
-      border: 1px solid rgba(232,164,69,.3);
-      border-radius: var(--radius-sm);
-      padding: var(--sp-sm) var(--sp-md);
-      font-size: .82rem;
-      color: #7d6020;
-      margin-top: var(--sp-md);
-      display: flex;
-      gap: 8px;
-      align-items: flex-start;
-    }
-    .disclaimer::before { content: '⚠️'; flex-shrink: 0; }
-
-    /* ═══════════════════════════════════════════════
-       CRISIS SECTION
-    ═══════════════════════════════════════════════ */
-    #crisis { background: var(--c-deep); }
-    #crisis .section-title { color: var(--c-white); }
-    #crisis .section-desc  { color: var(--c-mist); }
-
-    .crisis-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: var(--sp-md);
-    }
-    .crisis-card {
-      background: rgba(255,255,255,.05);
-      border: 1px solid rgba(168,206,221,.15);
-      border-radius: var(--radius-lg);
-      padding: var(--sp-lg);
-      transition: all var(--transition);
-    }
-    .crisis-card:hover { background: rgba(255,255,255,.09); border-color: rgba(91,163,192,.35); transform: translateY(-3px); }
-    .crisis-card-icon { font-size: 2rem; margin-bottom: var(--sp-sm); }
-    .crisis-card h3 { color: var(--c-white); font-size: 1.1rem; margin-bottom: 8px; }
-    .crisis-card p  { color: rgba(168,206,221,.75); font-size: .875rem; line-height: 1.6; margin-bottom: var(--sp-md); }
-    .crisis-card .hotline {
-      font-size: 1.4rem;
-      font-family: var(--ff-head);
-      color: var(--c-amber);
-      display: block;
-      margin-bottom: 6px;
-    }
-
-    .crisis-sos {
-      text-align: center;
-      padding: var(--sp-xl) var(--sp-md);
-      background: rgba(192,57,43,.1);
-      border-radius: var(--radius-xl);
-      border: 1px solid rgba(192,57,43,.3);
-      margin-top: var(--sp-xl);
-    }
-    .crisis-sos h2 { color: var(--c-white); font-size: clamp(1.6rem, 3vw, 2.2rem); margin-bottom: var(--sp-sm); }
-    .crisis-sos p { color: var(--c-mist); max-width: 500px; margin: 0 auto var(--sp-md); }
-    .sos-buttons { display: flex; gap: var(--sp-sm); justify-content: center; flex-wrap: wrap; }
-
-    /* Safety plan */
-    .safety-plan {
-      background: rgba(123,171,142,.08);
-      border: 1px solid rgba(123,171,142,.25);
-      border-radius: var(--radius-lg);
-      padding: var(--sp-xl);
-      margin-top: var(--sp-xl);
-    }
-    .safety-plan h3 { color: var(--c-white); font-size: 1.3rem; margin-bottom: var(--sp-md); }
-    .safety-steps {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: var(--sp-md);
-    }
-    .safety-step {
-      background: rgba(255,255,255,.05);
-      border-radius: var(--radius-md);
-      padding: var(--sp-md);
-    }
-    .step-num {
-      width: 32px; height: 32px;
-      border-radius: 50%;
-      background: var(--c-sage);
-      color: white;
-      font-weight: 700;
-      font-size: .85rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 10px;
-    }
-    .safety-step h4 { color: var(--c-mist); font-size: .9rem; margin-bottom: 6px; }
-    .safety-step p  { color: rgba(168,206,221,.65); font-size: .82rem; line-height: 1.5; }
-
-    /* ═══════════════════════════════════════════════
-       RESOURCES SECTION
-    ═══════════════════════════════════════════════ */
-    #resources { background: var(--c-warm); }
-
-    .resources-tabs {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      margin-bottom: var(--sp-lg);
-      justify-content: center;
-    }
-    .tab-btn {
-      padding: 9px 22px;
-      border-radius: 20px;
-      border: 2px solid rgba(58,125,156,.2);
-      background: transparent;
-      color: var(--c-textlt);
-      font-size: .88rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all var(--transition);
-      font-family: var(--ff-body);
-    }
-    .tab-btn:hover  { border-color: var(--c-teal); color: var(--c-teal); }
-    .tab-btn.active { background: var(--c-teal); border-color: var(--c-teal); color: white; }
-
-    .resources-content { display: none; }
-    .resources-content.active { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--sp-md); }
-
-    .resource-card {
-      background: var(--c-white);
-      border-radius: var(--radius-lg);
-      padding: var(--sp-lg);
-      box-shadow: var(--shadow-soft);
-      border: 1.5px solid transparent;
-      transition: all var(--transition);
-    }
-    .resource-card:hover { border-color: var(--c-teal); transform: translateY(-4px); box-shadow: var(--shadow-card); }
-    .resource-tag {
-      display: inline-block;
-      font-size: .7rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .07em;
-      padding: 3px 10px;
-      border-radius: 20px;
-      margin-bottom: var(--sp-sm);
-      background: rgba(58,125,156,.1);
-      color: var(--c-teal);
-    }
-    .resource-card h3 { font-size: 1rem; color: var(--c-navy); margin-bottom: 8px; }
-    .resource-card p  { font-size: .85rem; color: var(--c-textlt); line-height: 1.6; margin-bottom: var(--sp-sm); }
-    .resource-time {
-      font-size: .78rem;
-      color: rgba(61,85,102,.6);
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .resource-time::before { content: '⏱'; }
-
-    /* ═══════════════════════════════════════════════
-       ABOUT SECTION
-    ═══════════════════════════════════════════════ */
-    #about { background: var(--c-cream); }
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--sp-xl);
-      align-items: center;
-    }
-    @media (max-width: 768px) { .about-grid { grid-template-columns: 1fr; } }
-    .about-text h2 { font-size: clamp(1.8rem, 3vw, 2.5rem); color: var(--c-navy); margin-bottom: var(--sp-md); }
-    .about-text p  { color: var(--c-textlt); line-height: 1.75; margin-bottom: var(--sp-md); font-size: .95rem; }
-
-    .standards-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .standard-item {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 14px var(--sp-md);
-      background: var(--c-white);
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow-soft);
-    }
-    .std-icon { font-size: 1.3rem; flex-shrink: 0; }
-    .std-title { font-weight: 600; font-size: .9rem; color: var(--c-navy); }
-    .std-desc  { font-size: .8rem; color: var(--c-textlt); }
-
-    /* ═══════════════════════════════════════════════
-       FOOTER
-    ═══════════════════════════════════════════════ */
-    footer {
-      background: var(--c-deep);
-      color: var(--c-mist);
-      padding: var(--sp-xl) var(--sp-md) var(--sp-md);
-    }
-    .footer-inner {
-      max-width: 1280px;
-      margin: 0 auto;
-    }
-    .footer-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: var(--sp-xl);
-      margin-bottom: var(--sp-xl);
-    }
-    @media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
-    @media (max-width: 480px) { .footer-grid { grid-template-columns: 1fr; } }
-    .footer-brand .logo-text { color: var(--c-white); margin-bottom: var(--sp-sm); display: block; font-family: var(--ff-head); font-size: 1.2rem; }
-    .footer-brand p { font-size: .85rem; line-height: 1.6; color: rgba(168,206,221,.65); }
-    .footer-col h4 { color: var(--c-white); font-size: .9rem; margin-bottom: var(--sp-sm); }
-    .footer-col a  { display: block; color: rgba(168,206,221,.65); font-size: .85rem; text-decoration: none; padding: 3px 0; transition: color var(--transition); }
-    .footer-col a:hover { color: var(--c-mist); }
-    .footer-bottom {
-      border-top: 1px solid rgba(168,206,221,.1);
-      padding-top: var(--sp-md);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: .8rem;
-      color: rgba(168,206,221,.45);
-      flex-wrap: wrap;
-      gap: var(--sp-sm);
-    }
-
-    /* ═══════════════════════════════════════════════
-       ACCESSIBILITY MODES
-    ═══════════════════════════════════════════════ */
-    body.high-contrast {
-      --c-cream: #ffffff;
-      --c-warm: #f0f0f0;
-      --c-text: #000000;
-      --c-textlt: #111111;
-      --c-navy: #000033;
-      --c-teal: #0000aa;
-      background: #fff;
-      color: #000;
-    }
-    body.large-text { font-size: 20px; }
-    body.large-text .nav-link { font-size: 1rem; }
-    body.reduced-motion * { animation: none !important; transition: none !important; }
-
-    /* ═══════════════════════════════════════════════
-       SENSORY CALM MODE (for Autism support)
-    ═══════════════════════════════════════════════ */
-    body.calm-mode {
-      --c-cream: #f8f6f2;
-      --c-teal:  #5e8e6f;
-      --c-sky:   #7aad8a;
-      --c-navy:  #2c3e35;
-      filter: saturate(.75) brightness(1.02);
-    }
-    body.calm-mode .hero { background: linear-gradient(160deg, #1a2820, #2c3e35, #3a5244); }
-    body.calm-mode * { animation-duration: 3s !important; }
-
-    /* ═══════════════════════════════════════════════
-       RESPONSIVE UTILITIES
-    ═══════════════════════════════════════════════ */
-    @media (max-width: 600px) {
-      .btn { padding: 11px 20px; font-size: .88rem; }
-      .modal-body { padding: var(--sp-md); }
-      .modal-head { padding: var(--sp-md); }
-      .modal-footer { padding: var(--sp-sm) var(--sp-md); }
-    }
-
-    /* ═══════════════════════════════════════════════
-       TOAST NOTIFICATIONS
-    ═══════════════════════════════════════════════ */
-    .toast-container {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      pointer-events: none;
-    }
-    .toast {
-      background: var(--c-navy);
-      color: var(--c-white);
-      padding: 12px 20px;
-      border-radius: var(--radius-md);
-      font-size: .88rem;
-      font-weight: 500;
-      box-shadow: var(--shadow-lift);
-      border-left: 4px solid var(--c-teal);
-      animation: toastIn .35s var(--ease-spring);
-      pointer-events: auto;
-      max-width: 300px;
-    }
-    @keyframes toastIn {
-      from { opacity: 0; transform: translateX(20px); }
-      to   { opacity: 1; transform: translateX(0); }
-    }
-
-    /* ═══════════════════════════════════════════════
-       LOADING ANIMATION
-    ═══════════════════════════════════════════════ */
-    .loading-dots {
-      display: flex;
-      gap: 6px;
-      justify-content: center;
-      padding: var(--sp-xl) 0;
-    }
-    .loading-dots span {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      background: var(--c-teal);
-      animation: dotBounce 1.2s infinite;
-    }
-    .loading-dots span:nth-child(2) { animation-delay: .2s; }
-    .loading-dots span:nth-child(3) { animation-delay: .4s; }
-    @keyframes dotBounce {
-      0%, 80%, 100% { transform: translateY(0); opacity: .4; }
-      40% { transform: translateY(-12px); opacity: 1; }
-    }
-
-    /* ═══════════════════════════════════════════════
-       GROUNDING TECHNIQUES (quick calm tool)
-    ═══════════════════════════════════════════════ */
-    .grounding-widget {
-      background: linear-gradient(135deg, var(--c-navy), var(--c-mid));
-      border-radius: var(--radius-xl);
-      padding: var(--sp-xl);
-      text-align: center;
-      color: var(--c-white);
-      margin: var(--sp-xl) 0;
-    }
-    .grounding-widget h3 { font-size: 1.4rem; margin-bottom: var(--sp-sm); }
-    .grounding-widget p  { color: var(--c-mist); margin-bottom: var(--sp-lg); font-size: .9rem; }
-    .breathing-circle {
-      width: 140px; height: 140px;
-      border-radius: 50%;
-      background: rgba(91,163,192,.25);
-      border: 3px solid var(--c-teal);
-      margin: 0 auto var(--sp-lg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: .9rem;
-      color: var(--c-mist);
-      font-weight: 500;
-    }
-    .breathing-circle.inhale  { animation: breatheIn 4s ease-in-out forwards; }
-    .breathing-circle.hold    { animation: none; }
-    .breathing-circle.exhale  { animation: breatheOut 6s ease-in-out forwards; }
-    @keyframes breatheIn  { to { transform: scale(1.4); background: rgba(91,163,192,.45); } }
-    @keyframes breatheOut { to { transform: scale(1);   background: rgba(91,163,192,.25); } }
-
-    .grounding-steps {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 8px;
-      margin-top: var(--sp-lg);
-    }
-    @media (max-width: 600px) { .grounding-steps { grid-template-columns: repeat(3, 1fr); } }
-    .ground-step {
-      background: rgba(255,255,255,.08);
-      border-radius: var(--radius-md);
-      padding: var(--sp-sm);
-      text-align: center;
-    }
-    .ground-step .ground-num { font-size: 1.4rem; margin-bottom: 4px; }
-    .ground-step .ground-label { font-size: .72rem; color: var(--c-mist); }
-  </style>
+    <!-- External Stylesheet -->
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
@@ -1266,7 +56,7 @@
       <a class="nav-link" href="#" onclick="showSection('resources');return false;">Resources</a>
       <a class="nav-link" href="#" onclick="showSection('about');return false;">About</a>
       <div id="profileMenu" style="display:flex;align-items:center;gap:8px;margin-left:8px;">
-        <span id="welcomeUser" style="color:var(--c-mist);font-weight:600;display:none;"></span>
+        <span id="welcomeUser" style="color:rgba(255,255,255,0.65);font-weight:600;display:none;"></span>
         <button id="logoutBtn" class="btn btn-sm btn-outline" style="display:none;" onclick="logout()">Logout</button>
       </div>
     </div>
@@ -1284,71 +74,70 @@
 </header>
 
 <!-- ───────────── LOGIN PAGE ───────────── -->
-<div id="login-page" class="page-section active" style="display: flex; align-items: center; justify-content: center; min-height: 100vh; background: linear-gradient(160deg, #0d1f2d 0%, #1a2e3b 45%, #2e5068 100%); padding: 20px; position: fixed; top: 0; left: 0; width: 100%; z-index: 3000;">
-  <div style="background: white; border-radius: 24px; padding: 40px; max-width: 420px; width: 100%; box-shadow: 0 16px 64px rgba(13,31,45,.20);">
-    <div style="text-align: center; margin-bottom: 30px;">
-      <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #3a7d9c, #7bab8e); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 20px;">🌿</div>
-      <h1 style="font-size: 1.8rem; color: #1a2e3b; margin-bottom: 8px; font-family: 'DM Serif Display', Georgia, serif;">The Safe Space Hub</h1>
-      <p style="color: #3d5566; font-size: 0.95rem;">Mental Wellness Support</p>
+<div id="login-page" class="page-section active" style="display: flex;">
+  <div class="login-card">
+    <div class="login-card-header">
+      <div class="login-logo-icon" aria-hidden="true">🌿</div>
+      <h1><span class="hero-accent" style="background:var(--gradient-brand);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">The Safe Space</span> Hub</h1>
+      <p class="login-subtitle">Mental Wellness Support</p>
+      <p class="login-tagline">Adaptive digital mental wellness support platform</p>
     </div>
 
-    <div style="display:flex; justify-content:center; gap:10px; margin-bottom:20px;">
-      <button id="showLoginBtn" class="btn btn-primary btn-sm" style="flex:1;">Login</button>
-      <button id="showSignupBtn" class="btn btn-outline btn-sm btn-black" style="flex:1; background:#000; color:#fff; border:1px solid #000;">Sign Up</button>
+    <div class="login-tabs">
+      <button id="showLoginBtn" class="btn btn-primary btn-sm">Login</button>
+      <button id="showSignupBtn" class="btn btn-outline btn-sm btn-black">Sign Up</button>
     </div>
 
     <div id="loginPanel">
-      <form id="loginForm" style="display: flex; flex-direction: column; gap: 16px;">
-        <div>
-          <label for="uname-in" style="display: block; margin-bottom: 6px; color: #1a2e3b; font-weight: 500; font-size: 0.9rem;">Username or Email</label>
-          <input type="text" id="uname-in" placeholder="e.g., demo or demo@safehub.com" required style="width: 100%; padding: 12px; border: 1.5px solid #3a7d9c; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; transition: all 280ms;">
+      <form id="loginForm" class="login-form-stack">
+        <div class="login-field">
+          <label for="uname-in">Username or Email</label>
+          <input type="text" id="uname-in" placeholder="e.g., demo or demo@safehub.com" required>
         </div>
-        <div>
-          <label for="pw-in" style="display: block; margin-bottom: 6px; color: #1a2e3b; font-weight: 500; font-size: 0.9rem;">Password</label>
-          <input type="password" id="pw-in" placeholder="Enter your password" required style="width: 100%; padding: 12px; border: 1.5px solid #3a7d9c; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; transition: all 280ms;">
+        <div class="login-field">
+          <label for="pw-in">Password</label>
+          <input type="password" id="pw-in" placeholder="Enter your password" required>
         </div>
-        <button type="submit" style="padding: 12px; background: #3a7d9c; color: white; border: none; border-radius: 16px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 280ms; font-family: 'DM Sans', sans-serif;">Enter Safe Space →</button>
+        <button type="submit" class="login-submit">Enter Safe Space →</button>
       </form>
 
       <div style="margin-top: 18px; display:flex; gap:8px; justify-content:center; align-items:center; flex-wrap:wrap;">
-        <button onclick="showDemoLogin()" style="background: none; border: none; color: #3a7d9c; cursor: pointer; text-decoration: underline; font-weight: 500; font-family: 'DM Sans', sans-serif;">Demo Access (Auto-fill)</button>
+        <button type="button" onclick="showDemoLogin()" class="login-demo-link">Demo Access (Auto-fill)</button>
       </div>
     </div>
 
     <div id="signupPanel" style="display:none;">
-      <form id="signupForm" style="display: flex; flex-direction: column; gap: 16px;">
-        <div>
-          <label for="signup-username" style="display: block; margin-bottom: 6px; color: #1a2e3b; font-weight: 500; font-size: 0.9rem;">Username</label>
-          <input type="text" id="signup-username" placeholder="Choose a username" required style="width: 100%; padding: 12px; border: 1.5px solid #3a7d9c; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; transition: all 280ms;">
+      <form id="signupForm" class="login-form-stack">
+        <div class="login-field">
+          <label for="signup-username">Username</label>
+          <input type="text" id="signup-username" placeholder="Choose a username" required>
         </div>
-        <div>
-          <label for="signup-email" style="display: block; margin-bottom: 6px; color: #1a2e3b; font-weight: 500; font-size: 0.9rem;">Email</label>
-          <input type="email" id="signup-email" placeholder="you@example.com" required style="width: 100%; padding: 12px; border: 1.5px solid #3a7d9c; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; transition: all 280ms;">
+        <div class="login-field">
+          <label for="signup-email">Email</label>
+          <input type="email" id="signup-email" placeholder="you@example.com" required>
         </div>
-        <div>
-          <label for="signup-password" style="display: block; margin-bottom: 6px; color: #1a2e3b; font-weight: 500; font-size: 0.9rem;">Password</label>
-          <input type="password" id="signup-password" placeholder="Create a password" required style="width: 100%; padding: 12px; border: 1.5px solid #3a7d9c; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; transition: all 280ms;">
+        <div class="login-field">
+          <label for="signup-password">Password</label>
+          <input type="password" id="signup-password" placeholder="Create a password" required>
         </div>
-        <div>
-          <label for="signup-confirm" style="display: block; margin-bottom: 6px; color: #1a2e3b; font-weight: 500; font-size: 0.9rem;">Confirm Password</label>
-          <input type="password" id="signup-confirm" placeholder="Repeat your password" required style="width: 100%; padding: 12px; border: 1.5px solid #3a7d9c; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; transition: all 280ms;">
+        <div class="login-field">
+          <label for="signup-confirm">Confirm Password</label>
+          <input type="password" id="signup-confirm" placeholder="Repeat your password" required>
         </div>
-        <div>
-          <label for="signup-phone" style="display: block; margin-bottom: 6px; color: #1a2e3b; font-weight: 500; font-size: 0.9rem;">Phone Number</label>
-          <input type="tel" id="signup-phone" placeholder="e.g., +254712345678" required style="width: 100%; padding: 12px; border: 1.5px solid #3a7d9c; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; transition: all 280ms;">
+        <div class="login-field">
+          <label for="signup-phone">Phone Number</label>
+          <input type="tel" id="signup-phone" placeholder="e.g., +254712345678" required>
         </div>
-        <div>
-          <label for="signup-district" style="display: block; margin-bottom: 6px; color: #1a2e3b; font-weight: 500; font-size: 0.9rem;">District</label>
-          <input type="text" id="signup-district" placeholder="Your district" required style="width: 100%; padding: 12px; border: 1.5px solid #3a7d9c; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; transition: all 280ms;">
+        <div class="login-field">
+          <label for="signup-district">District</label>
+          <input type="text" id="signup-district" placeholder="Your district" required>
         </div>
-        <button type="submit" style="padding: 12px; background: #3a7d9c; color: white; border: none; border-radius: 16px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 280ms; font-family: 'DM Sans', sans-serif;">Create account</button>
+        <button type="submit" class="login-submit">Create account</button>
       </form>
-      <button id="signupCreateBottom" type="button" class="btn btn-primary" style="width:100%; margin-top: 14px; padding: 12px; border-radius: 16px; font-size: 0.95rem; font-weight: 600;">Create account</button>
+      <button id="signupCreateBottom" type="button" class="btn btn-primary" style="width:100%; margin-top: 14px;">Create account</button>
       <div style="margin-top: 18px; text-align: center;">
-        <button id="backToLoginBtn" type="button" style="background: none; border: none; color: #3a7d9c; cursor: pointer; text-decoration: underline; font-weight: 500; font-family: 'DM Sans', sans-serif;">Already have an account? Login</button>
+        <button id="backToLoginBtn" type="button" class="login-back-link">Already have an account? Login</button>
       </div>
-    </div>
-
     </div>
   </div>
 </div>
@@ -1369,14 +158,19 @@
         <div class="hero-grid">
           <div class="hero-content">
             <div class="hero-badge">Clinically informed · Privacy-aware · Supportive</div>
-            <h1>Your Safe Space<br/>for Mental Wellness</h1>
+            <h1><span class="hero-accent">Your Safe Space</span><br/><em> for Mental Wellness</em></h1>
+            <p class="btn-pill-dark" style="display:inline-flex; margin-bottom: 20px;">Adaptive digital mental wellness support platform</p>
             <p class="hero-desc">Simple support tools for Autism, PTSD, anxiety, and stress. Confidential, easy to use, and built for everyday comfort.</p>
             <div class="hero-ctas">
               <button class="btn btn-primary" onclick="showSection('screening')" aria-label="Start a mental health screening">Begin Screening</button>
               <button class="btn btn-outline" onclick="showSection('crisis')" aria-label="Access crisis support resources">Crisis Support 🆘</button>
             </div>
           </div>
-          <div class="hero-cards" aria-hidden="true">
+          <div class="hero-aside">
+            <div class="hero-visual" aria-hidden="true">
+              <img src="images/background ui 2.avif" alt="" loading="eager" />
+            </div>
+            <div class="hero-cards" aria-hidden="true">
             <div class="info-card">
               <div class="card-icon blue">🧠</div>
               <div>
@@ -1398,6 +192,7 @@
                 <div class="card-desc">Assessments run in your browser only. Your results stay on your device unless you choose to share them.</div>
               </div>
             </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1413,46 +208,54 @@
       <div class="tools-grid">
         <div class="tool-card" onclick="openAssessment('phq9')" role="button" tabindex="0" aria-label="Start depression screening using PHQ-9 methodology"
              onkeydown="if(event.key==='Enter'||event.key===' ')openAssessment('phq9')">
-          <div class="tool-card-icon tc-blue">😔</div>
-          <h3>Depression Screening</h3>
-          <p>PHQ-9 methodology — a 9-question validated tool to assess symptoms of depression over the past two weeks.</p>
-          <div class="tool-meta">
-            <span class="meta-badge">PHQ-9</span>
-            <span class="meta-badge">~3 min</span>
-            <span class="meta-badge">Validated</span>
+          <img class="tool-card-image" src="images/depression.avif" alt="" loading="lazy" />
+          <div class="tool-card-body">
+            <h3>Depression Screening</h3>
+            <p>PHQ-9 methodology — a 9-question validated tool to assess symptoms of depression over the past two weeks.</p>
+            <div class="tool-meta">
+              <span class="meta-badge">PHQ-9</span>
+              <span class="meta-badge">~3 min</span>
+              <span class="meta-badge">Validated</span>
+            </div>
           </div>
         </div>
         <div class="tool-card" onclick="openAssessment('gad7')" role="button" tabindex="0" aria-label="Start anxiety screening using GAD-7 protocol"
              onkeydown="if(event.key==='Enter'||event.key===' ')openAssessment('gad7')">
-          <div class="tool-card-icon tc-green">😰</div>
-          <h3>Anxiety Assessment</h3>
-          <p>GAD-7 protocol — 7 questions measuring the frequency and severity of generalized anxiety disorder symptoms.</p>
-          <div class="tool-meta">
-            <span class="meta-badge">GAD-7</span>
-            <span class="meta-badge">~2 min</span>
-            <span class="meta-badge">Validated</span>
+          <img class="tool-card-image" src="images/anxiety.jpg" alt="" loading="lazy" />
+          <div class="tool-card-body">
+            <h3>Anxiety Assessment</h3>
+            <p>GAD-7 protocol — 7 questions measuring the frequency and severity of generalized anxiety disorder symptoms.</p>
+            <div class="tool-meta">
+              <span class="meta-badge">GAD-7</span>
+              <span class="meta-badge">~2 min</span>
+              <span class="meta-badge">Validated</span>
+            </div>
           </div>
         </div>
         <div class="tool-card" onclick="openAssessment('pcl5')" role="button" tabindex="0" aria-label="Start PTSD evaluation using PCL-5 standards"
              onkeydown="if(event.key==='Enter'||event.key===' ')openAssessment('pcl5')">
-          <div class="tool-card-icon tc-amber">⚡</div>
-          <h3>PTSD Evaluation</h3>
-          <p>PCL-5 standards — 20-item checklist aligned with DSM-5 PTSD criteria, assessing trauma-related symptoms.</p>
-          <div class="tool-meta">
-            <span class="meta-badge">PCL-5</span>
-            <span class="meta-badge">~5 min</span>
-            <span class="meta-badge">DSM-5</span>
+          <img class="tool-card-image" src="images/ptsd.jpg" alt="" loading="lazy" />
+          <div class="tool-card-body">
+            <h3>PTSD Evaluation</h3>
+            <p>PCL-5 standards — 20-item checklist aligned with DSM-5 PTSD criteria, assessing trauma-related symptoms.</p>
+            <div class="tool-meta">
+              <span class="meta-badge">PCL-5</span>
+              <span class="meta-badge">~5 min</span>
+              <span class="meta-badge">DSM-5</span>
+            </div>
           </div>
         </div>
         <div class="tool-card" onclick="openAssessment('mdq')" role="button" tabindex="0" aria-label="Start bipolar disorder screening using MDQ framework"
              onkeydown="if(event.key==='Enter'||event.key===' ')openAssessment('mdq')">
-          <div class="tool-card-icon tc-rose">🌊</div>
-          <h3>Bipolar Disorder Screening</h3>
-          <p>MDQ framework — 13-question Mood Disorder Questionnaire to identify possible signs of bipolar disorder.</p>
-          <div class="tool-meta">
-            <span class="meta-badge">MDQ</span>
-            <span class="meta-badge">~3 min</span>
-            <span class="meta-badge">MDQ</span>
+          <img class="tool-card-image" src="images/bipolar.avif" alt="" loading="lazy" />
+          <div class="tool-card-body">
+            <h3>Bipolar Disorder Screening</h3>
+            <p>MDQ framework — 13-question Mood Disorder Questionnaire to identify possible signs of bipolar disorder.</p>
+            <div class="tool-meta">
+              <span class="meta-badge">MDQ</span>
+              <span class="meta-badge">~3 min</span>
+              <span class="meta-badge">MDQ</span>
+            </div>
           </div>
         </div>
       </div>
@@ -1478,41 +281,56 @@
        SCREENING SECTION
   ══════════════════════════════════════ -->
   <section class="page-section" id="section-screening" aria-label="Screening Tools">
-    <div class="section-wrap">
-      <div class="section-header">
-        <span class="section-label">Validated Screening</span>
-        <h2 class="section-title">Clinically Validated Assessment Tools</h2>
-        <p class="section-desc">All tools follow established clinical protocols. Results are for informational purposes only — not a diagnosis.</p>
+    <div class="section-screening-bg">
+    <div class="section-hero-banner" style="padding-top: clamp(24px,4vw,40px);">
+      <div class="section-hero-banner__inner">
+        <img class="section-hero-banner__img" src="images/background  ui 1.avif" alt="" loading="lazy" />
+        <div class="section-hero-banner__content">
+          <span class="section-hero-banner__label">Validated Screening</span>
+          <h2 class="section-hero-banner__title">Clinically Validated Assessment Tools</h2>
+        </div>
       </div>
+    </div>
+    <div class="section-wrap">
+      <p class="section-desc" style="text-align:center;max-width:640px;margin:0 auto clamp(32px,5vw,56px);">All tools follow established clinical protocols. Results are for informational purposes only — not a diagnosis.</p>
       <div class="tools-grid">
         <div class="tool-card" onclick="openAssessment('phq9')" role="button" tabindex="0" aria-label="PHQ-9 Depression Screening">
-          <div class="tool-card-icon tc-blue">😔</div>
-          <h3>PHQ-9 Depression</h3>
-          <p>Patient Health Questionnaire — 9 items assessing depression symptoms over the past 2 weeks. Widely used in clinical settings worldwide.</p>
-          <div class="tool-meta"><span class="meta-badge">PHQ-9</span><span class="meta-badge">9 Questions</span><span class="meta-badge">~3 min</span></div>
+          <img class="tool-card-image" src="images/depression.avif" alt="" loading="lazy" />
+          <div class="tool-card-body">
+            <h3>PHQ-9 Depression</h3>
+            <p>Patient Health Questionnaire — 9 items assessing depression symptoms over the past 2 weeks. Widely used in clinical settings worldwide.</p>
+            <div class="tool-meta"><span class="meta-badge">PHQ-9</span><span class="meta-badge">9 Questions</span><span class="meta-badge">~3 min</span></div>
+          </div>
         </div>
         <div class="tool-card" onclick="openAssessment('gad7')" role="button" tabindex="0" aria-label="GAD-7 Anxiety Assessment">
-          <div class="tool-card-icon tc-green">😰</div>
-          <h3>GAD-7 Anxiety</h3>
-          <p>Generalized Anxiety Disorder Scale — 7 questions measuring anxiety severity. Also effective for PTSD, panic disorder, and social anxiety.</p>
-          <div class="tool-meta"><span class="meta-badge">GAD-7</span><span class="meta-badge">7 Questions</span><span class="meta-badge">~2 min</span></div>
+          <img class="tool-card-image" src="images/anxiety.jpg" alt="" loading="lazy" />
+          <div class="tool-card-body">
+            <h3>GAD-7 Anxiety</h3>
+            <p>Generalized Anxiety Disorder Scale — 7 questions measuring anxiety severity. Also effective for PTSD, panic disorder, and social anxiety.</p>
+            <div class="tool-meta"><span class="meta-badge">GAD-7</span><span class="meta-badge">7 Questions</span><span class="meta-badge">~2 min</span></div>
+          </div>
         </div>
         <div class="tool-card" onclick="openAssessment('pcl5')" role="button" tabindex="0" aria-label="PCL-5 PTSD Evaluation">
-          <div class="tool-card-icon tc-amber">⚡</div>
-          <h3>PCL-5 PTSD</h3>
-          <p>PTSD Checklist for DSM-5 — 20 items assessing PTSD symptoms across intrusion, avoidance, cognition/mood, and arousal clusters.</p>
-          <div class="tool-meta"><span class="meta-badge">PCL-5</span><span class="meta-badge">20 Questions</span><span class="meta-badge">~5 min</span></div>
+          <img class="tool-card-image" src="images/ptsd.jpg" alt="" loading="lazy" />
+          <div class="tool-card-body">
+            <h3>PCL-5 PTSD</h3>
+            <p>PTSD Checklist for DSM-5 — 20 items assessing PTSD symptoms across intrusion, avoidance, cognition/mood, and arousal clusters.</p>
+            <div class="tool-meta"><span class="meta-badge">PCL-5</span><span class="meta-badge">20 Questions</span><span class="meta-badge">~5 min</span></div>
+          </div>
         </div>
         <div class="tool-card" onclick="openAssessment('mdq')" role="button" tabindex="0" aria-label="MDQ Bipolar Screening">
-          <div class="tool-card-icon tc-rose">🌊</div>
-          <h3>MDQ Bipolar Screening</h3>
-          <p>Mood Disorder Questionnaire — validates possible bipolar disorder by assessing past manic/hypomanic episodes and their functional impact.</p>
-          <div class="tool-meta"><span class="meta-badge">MDQ</span><span class="meta-badge">13 Questions</span><span class="meta-badge">~3 min</span></div>
+          <img class="tool-card-image" src="images/bipolar.avif" alt="" loading="lazy" />
+          <div class="tool-card-body">
+            <h3>MDQ Bipolar Screening</h3>
+            <p>Mood Disorder Questionnaire — validates possible bipolar disorder by assessing past manic/hypomanic episodes and their functional impact.</p>
+            <div class="tool-meta"><span class="meta-badge">MDQ</span><span class="meta-badge">13 Questions</span><span class="meta-badge">~3 min</span></div>
+          </div>
         </div>
       </div>
       <div class="disclaimer" role="note" aria-label="Important disclaimer">
         These screening tools are validated clinical instruments used for informational purposes only. They are not substitutes for professional medical advice, diagnosis, or treatment. Always consult a qualified mental health professional for diagnosis and treatment planning.
       </div>
+    </div>
     </div>
   </section>
 
@@ -1520,13 +338,18 @@
        CRISIS SECTION
   ══════════════════════════════════════ -->
   <section class="page-section" id="section-crisis" aria-label="Crisis Support">
-    <div id="crisis" style="background: var(--c-deep);">
-      <div class="section-wrap">
-        <div class="section-header">
-          <span class="section-label" style="background:var(--c-crisis);">Crisis Support</span>
-          <h2 class="section-title">You Are Not Alone</h2>
-          <p class="section-desc">Crisis support is available 24/7. Reaching out is an act of strength.</p>
+    <div id="crisis" style="">
+      <div class="section-hero-banner" aria-hidden="true">
+        <div class="section-hero-banner__inner">
+          <img class="section-hero-banner__img" src="images/crisis suppport page.avif" alt="" loading="lazy" />
+          <div class="section-hero-banner__content">
+            <span class="section-hero-banner__label">24/7 Support</span>
+            <h2 class="section-hero-banner__title">Crisis Support — You Are Not Alone</h2>
+          </div>
         </div>
+      </div>
+      <div class="section-wrap">
+        <p class="section-desc" style="text-align:center;max-width:560px;margin:0 auto clamp(32px,5vw,56px);">Crisis support is available 24/7. Reaching out is an act of strength.</p>
 
         <div class="crisis-grid">
           <div class="crisis-card">
@@ -1548,28 +371,28 @@
             <h3>International Association</h3>
             <p>International Association for Suicide Prevention maintains a directory of crisis centers worldwide.</p>
             <span class="hotline">iasp.info</span>
-            <a href="https://www.iasp.info/resources/Crisis_Centres/" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" style="color:var(--c-mist);border-color:rgba(168,206,221,.4);" aria-label="Find international crisis centers">Find Global Help ↗</a>
+            <a href="https://www.iasp.info/resources/Crisis_Centres/" target="_blank" rel="noopener noreferrer" class="btn btn-glass btn-sm" aria-label="Find international crisis centers">Find Global Help ↗</a>
           </div>
           <div class="crisis-card">
             <div class="crisis-card-icon">🤝</div>
             <h3>SAMHSA Helpline</h3>
             <p>Substance Abuse and Mental Health Services Administration — treatment referrals and information, 365 days a year.</p>
             <span class="hotline">0800203033</span>
-            <a href="tel:0800203033" class="btn btn-outline btn-sm" style="color:var(--c-mist);border-color:rgba(168,206,221,.4);" aria-label="Call SAMHSA helpline">Call SAMHSA</a>
+            <a href="tel:0800203033" class="btn btn-glass btn-sm" aria-label="Call SAMHSA helpline">Call SAMHSA</a>
           </div>
           <div class="crisis-card">
             <div class="crisis-card-icon">🧩</div>
             <h3>Autism Crisis Support</h3>
             <p>Autism Society of Uganda provides crisis resources and support specifically for autistic individuals and their families.</p>
             <span class="hotline">0800212121</span>
-            <a href="tel:0800212121" class="btn btn-outline btn-sm" style="color:var(--c-mist);border-color:rgba(168,206,221,.4);" aria-label="Call Autism Society of America">Call ASA</a>
+            <a href="tel:0800212121" class="btn btn-glass btn-sm" aria-label="Call Autism Society of America">Call ASA</a>
           </div>
           <div class="crisis-card">
             <div class="crisis-card-icon">⚡</div>
             <h3>PTSD Support Line</h3>
             <p>Veterans Crisis Line and PTSD resources — for veterans, military, and all trauma survivors needing immediate support.</p>
             <span class="hotline">999, Press 1</span>
-            <a href="https://www.ptsd.va.gov/" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" style="color:var(--c-mist);border-color:rgba(168,206,221,.4);" aria-label="Access PTSD resources">PTSD Resources ↗</a>
+            <a href="https://www.ptsd.va.gov/" target="_blank" rel="noopener noreferrer" class="btn btn-glass btn-sm" aria-label="Access PTSD resources">PTSD Resources ↗</a>
           </div>
         </div>
 
@@ -1578,7 +401,7 @@
           <p>If you or someone you know is in immediate danger, please contact emergency services right away.</p>
           <div class="sos-buttons">
             <a href="tel:999" class="btn btn-danger" aria-label="Call 999 emergency services">🚨 Call 999 (Emergency)</a>
-            <a href="tel:999" class="btn btn-outline" style="color:white;border-color:rgba(255,255,255,.4);" aria-label="Call 999 crisis line">📞 Call 999 (Crisis)</a>
+            <a href="tel:999" class="btn btn-glass" aria-label="Call 999 crisis line">📞 Call 999 (Crisis)</a>
           </div>
         </div>
 
@@ -1617,7 +440,7 @@
               <p>Remove or reduce access to means. Make your environment safer during difficult periods.</p>
             </div>
           </div>
-          <div style="margin-top:var(--sp-lg);text-align:center;">
+          <div style="margin-top:clamp(24px,4vw,40px);text-align:center;">
             <button class="btn btn-sage" onclick="showToast('Safety plan template downloaded to your device.')">📄 Download Safety Plan Template</button>
           </div>
         </div>
@@ -1631,12 +454,17 @@
   ══════════════════════════════════════ -->
   <section class="page-section" id="section-resources" aria-label="Educational Resources">
     <div id="resources">
-      <div class="section-wrap">
-        <div class="section-header">
-          <span class="section-label">Educational Resources</span>
-          <h2 class="section-title">Learn, Understand, Heal</h2>
-          <p class="section-desc">Evidence-based guides and plain-language resources to help you learn and cope.</p>
+      <div class="section-hero-banner">
+        <div class="section-hero-banner__inner">
+          <img class="section-hero-banner__img" src="images/books resources page.avif" alt="" loading="lazy" />
+          <div class="section-hero-banner__content">
+            <span class="section-hero-banner__label">Educational Resources</span>
+            <h2 class="section-hero-banner__title">Learn, Understand, Heal</h2>
+          </div>
         </div>
+      </div>
+      <div class="section-wrap">
+        <p class="section-desc" style="text-align:center;max-width:600px;margin:0 auto clamp(24px,4vw,40px);">Evidence-based guides and plain-language resources to help you learn and cope.</p>
 
         <div class="resources-tabs" role="tablist" aria-label="Resource categories">
           <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="tab-autism" onclick="switchTab('autism',this)">🧩 Autism</button>
@@ -1648,148 +476,148 @@
 
         <!-- Tab: Autism -->
         <div class="resources-content active" id="tab-autism" role="tabpanel" aria-label="Autism resources">
-          <div class="resource-card">
+          <a class="resource-link" href="https://www.autism.org.uk/advice-and-guidance/what-is-autism" target="_blank" rel="noopener noreferrer"><div class="resource-card">
             <span class="resource-tag">Understanding</span>
             <h3>What is Autism Spectrum Disorder (ASD)?</h3>
             <p>A comprehensive introduction to ASD — how it presents differently in different people, strengths, challenges, and the neurodiversity framework.</p>
             <div class="resource-time">15 min read</div>
-          </div>
-          <div class="resource-card">
+          </div></a>
+          <a class="resource-link" href="https://www.autism.org.uk/advice-and-guidance/topics/sensory-differences" target="_blank" rel="noopener noreferrer"><div class="resource-card">
             <span class="resource-tag">Sensory Processing</span>
             <h3>Managing Sensory Overwhelm</h3>
             <p>Practical strategies for sensory sensitivities: light, sound, touch, and texture. Includes techniques for creating sensory-safe environments.</p>
             <div class="resource-time">10 min read</div>
-          </div>
-          <div class="resource-card">
+          </div></a>
+          <a class="resource-link" href="https://www.asha.org/public/speech/disorders/aac/" target="_blank" rel="noopener noreferrer"><div class="resource-card">
             <span class="resource-tag">Communication</span>
             <h3>Augmentative & Alternative Communication</h3>
             <p>Tools and strategies for when verbal communication is difficult. AAC options, visual supports, and social scripts.</p>
             <div class="resource-time">12 min read</div>
-          </div>
-          <div class="resource-card">
+          </div></a>
+          <a class="resource-link" href="https://www.autism.org.uk/advice-and-guidance/topics/adulthood/independence/structure-routines" target="_blank" rel="noopener noreferrer"><div class="resource-card">
             <span class="resource-tag">Executive Function</span>
             <h3>Building Routines & Managing Change</h3>
             <p>How to structure daily routines, manage transitions, and prepare for unexpected change in autism-supportive ways.</p>
             <div class="resource-time">8 min read</div>
-          </div>
-          <div class="resource-card">
+          </div></a>
+          <a class="resource-link" href="https://www.autism.org.uk/advice-and-guidance/topics/mental-health" target="_blank" rel="noopener noreferrer"><div class="resource-card">
             <span class="resource-tag">Co-occurring Conditions</span>
             <h3>Autism, Anxiety & Depression</h3>
             <p>Understanding why anxiety and depression frequently co-occur with autism, and what helps — from autistic perspectives and clinical evidence.</p>
             <div class="resource-time">14 min read</div>
-          </div>
-          <div class="resource-card">
+          </div></a>
+          <a class="resource-link" href="https://www.autism.org.uk/advice-and-guidance/topics/adults/advocacy" target="_blank" rel="noopener noreferrer"><div class="resource-card">
             <span class="resource-tag">Self-Advocacy</span>
             <h3>Advocating for Yourself</h3>
             <p>Scripts and strategies for communicating your needs in medical settings, workplaces, and relationships.</p>
             <div class="resource-time">10 min read</div>
-          </div>
+          </div></a>
         </div>
 
         <!-- Tab: PTSD -->
         <div class="resources-content" id="tab-ptsd" role="tabpanel" aria-label="PTSD resources">
-          <div class="resource-card">
+          <a class="resource-link" href="https://www.ptsd.va.gov/understand/what/ptsd_basics.asp" target="_blank" rel="noopener noreferrer"><div class="resource-card">
             <span class="resource-tag">Understanding</span>
             <h3>Understanding PTSD: Beyond the Basics</h3>
             <p>How trauma affects the brain, nervous system, and body. Why PTSD is a normal response to abnormal events.</p>
             <div class="resource-time">15 min read</div>
-          </div>
-          <div class="resource-card">
+          </div></a>
+          <a class="resource-link" href="https://www.nctsn.org/what-is-child-trauma/trauma-types/trauma-focused-cognitive-behavioral-therapy" target="_blank" rel="noopener noreferrer"><div class="resource-card">
             <span class="resource-tag">Evidence-Based</span>
             <h3>Trauma-Focused CBT (TF-CBT)</h3>
             <p>How Cognitive Behavioral Therapy adapted for trauma works, and what to expect in treatment.</p>
             <div class="resource-time">12 min read</div>
-          </div>
-          <div class="resource-card">
+          </div></a>
+          <a class="resource-link" href="https://www.nimh.nih.gov/health/topics/post-traumatic-stress-disorder-ptsd" target="_blank" rel="noopener noreferrer"><div class="resource-card">
             <span class="resource-tag">Grounding</span>
             <h3>Grounding Techniques for Flashbacks</h3>
             <p>Practical, immediately usable techniques to ground yourself during flashbacks, dissociation, and hyperarousal episodes.</p>
             <div class="resource-time">8 min read</div>
-          </div>
-          <div class="resource-card">
+          </div></a>
+          <a class="resource-link" href="https://www.ptsd.va.gov/family/ptsd_and_relationships.asp" target="_blank" rel="noopener noreferrer"><div class="resource-card">
             <span class="resource-tag">Relationships</span>
             <h3>PTSD & Relationships</h3>
             <p>How trauma symptoms affect connection, intimacy, and trust — and how to communicate your needs to loved ones.</p>
             <div class="resource-time">11 min read</div>
-          </div>
+          </div></a>
         </div>
 
         <!-- Tab: Anxiety -->
         <div class="resources-content" id="tab-anxiety" role="tabpanel" aria-label="Anxiety resources">
-          <div class="resource-card">
+          <a class="resource-link" href="https://www.nimh.nih.gov/health/topics/anxiety-disorders" target="_blank" rel="noopener noreferrer"><div class="resource-card">
             <span class="resource-tag">Understanding</span>
             <h3>The Science of Anxiety</h3>
             <p>How the amygdala, nervous system, and stress hormones drive anxiety — and why understanding the mechanism helps you manage it.</p>
             <div class="resource-time">12 min read</div>
-          </div>
-          <div class="resource-card">
+          </div></a>
+          <a class="resource-link" href="https://www.healthline.com/health/box-breathing" target="_blank" rel="noopener noreferrer"><div class="resource-card">
             <span class="resource-tag">Techniques</span>
             <h3>Box Breathing & Nervous System Reset</h3>
             <p>How controlled breathing activates the parasympathetic nervous system. Step-by-step guide to box, 4-7-8, and diaphragmatic breathing.</p>
             <div class="resource-time">7 min read</div>
-          </div>
-          <div class="resource-card">
+          </div></a>
+          <a class="resource-link" href="https://www.apa.org/topics/psychotherapy/what-is-cognitive-behavioral-therapy" target="_blank" rel="noopener noreferrer"><div class="resource-card">
             <span class="resource-tag">CBT Tools</span>
             <h3>Cognitive Restructuring Workbook</h3>
             <p>Identify cognitive distortions (catastrophizing, mind-reading, all-or-nothing thinking) and reframe anxious thoughts.</p>
             <div class="resource-time">20 min exercise</div>
-          </div>
-          <div class="resource-card">
+          </div></a>
+          <a class="resource-link" href="https://www.sleepfoundation.org/mental-health/anxiety-and-sleep" target="_blank" rel="noopener noreferrer"><div class="resource-card">
             <span class="resource-tag">Lifestyle</span>
             <h3>Diet, Sleep & Anxiety: The Hidden Links</h3>
             <p>How caffeine, sleep deprivation, blood sugar, and exercise directly affect anxiety levels — with practical changes you can make today.</p>
             <div class="resource-time">10 min read</div>
-          </div>
+          </div></a>
         </div>
 
         <!-- Tab: Stress -->
         <div class="resources-content" id="tab-stress" role="tabpanel" aria-label="Stress resources">
-          <div class="resource-card">
+          <a class="resource-link" href="https://www.who.int/news-room/questions-and-answers/item/stress" target="_blank" rel="noopener noreferrer"><div class="resource-card">
             <span class="resource-tag">Understanding</span>
             <h3>Acute vs. Chronic Stress</h3>
             <p>The difference between short-term and long-term stress — and why chronic stress is a medical issue that requires attention.</p>
             <div class="resource-time">8 min read</div>
-          </div>
-          <div class="resource-card">
+          </div></a>
+          <a class="resource-link" href="https://www.webmd.com/balance/guide/progressive-muscle-relaxation" target="_blank" rel="noopener noreferrer"><div class="resource-card">
             <span class="resource-tag">Techniques</span>
             <h3>Progressive Muscle Relaxation</h3>
             <p>A step-by-step guide to PMR — systematically tensing and releasing muscle groups to reduce physical tension held in the body.</p>
             <div class="resource-time">15 min exercise</div>
-          </div>
-          <div class="resource-card">
+          </div></a>
+          <a class="resource-link" href="https://www.mindful.org/how-to-practice-mbsr/" target="_blank" rel="noopener noreferrer"><div class="resource-card">
             <span class="resource-tag">Mindfulness</span>
             <h3>Mindfulness-Based Stress Reduction (MBSR)</h3>
             <p>The evidence base for mindfulness in stress reduction, with beginner-friendly exercises you can start today.</p>
             <div class="resource-time">12 min read</div>
-          </div>
+          </div></a>
         </div>
 
         <!-- Tab: Self-Care -->
         <div class="resources-content" id="tab-selfcare" role="tabpanel" aria-label="Self-care resources">
-          <div class="resource-card">
+          <a class="resource-link" href="https://www.mentalhealth.org.uk/publications/how-to-mental-health" target="_blank" rel="noopener noreferrer"><div class="resource-card">
             <span class="resource-tag">Foundations</span>
             <h3>The 8 Pillars of Mental Wellness</h3>
             <p>Sleep, nutrition, movement, connection, meaning, mindfulness, boundaries, and rest — how each contributes to mental health.</p>
             <div class="resource-time">15 min read</div>
-          </div>
-          <div class="resource-card">
+          </div></a>
+          <a class="resource-link" href="https://positivepsychology.com/journal-prompts/" target="_blank" rel="noopener noreferrer"><div class="resource-card">
             <span class="resource-tag">Journaling</span>
             <h3>Therapeutic Journaling Prompts</h3>
             <p>Structured journaling prompts designed to process emotions, identify patterns, and cultivate self-compassion.</p>
             <div class="resource-time">Daily practice</div>
-          </div>
-          <div class="resource-card">
+          </div></a>
+          <a class="resource-link" href="https://www.psychologytools.com/resource/somatic-exercises/" target="_blank" rel="noopener noreferrer"><div class="resource-card">
             <span class="resource-tag">Body</span>
             <h3>Somatic Practices for Mental Health</h3>
             <p>How yoga, stretching, dance, and body-based practices release trauma and stress stored in the physical body.</p>
             <div class="resource-time">10 min read</div>
-          </div>
-          <div class="resource-card">
+          </div></a>
+          <a class="resource-link" href="https://www.mind.org.uk/information-support/types-of-mental-health-problems/boundaries/" target="_blank" rel="noopener noreferrer"><div class="resource-card">
             <span class="resource-tag">Boundaries</span>
             <h3>Setting Healthy Boundaries</h3>
             <p>Why boundaries are self-care, how to identify where yours need work, and scripts for communicating them effectively.</p>
             <div class="resource-time">12 min read</div>
-          </div>
+          </div></a>
         </div>
 
       </div>
@@ -1805,6 +633,9 @@
         <div class="section-header">
           <span class="section-label">About</span>
           <h2 class="section-title">Built with Care, Built for You</h2>
+        </div>
+        <div class="about-quote">
+          <blockquote>"Turning everyday struggles into <span>supportive insights</span> — one safe step at a time."</blockquote>
         </div>
         <div class="about-grid">
           <div class="about-text">
@@ -1910,7 +741,7 @@
       <!-- Questions injected here -->
     </div>
     <div class="modal-footer">
-      <button class="btn btn-outline" id="btn-prev" onclick="prevQuestion()" style="color:var(--c-textlt);border-color:rgba(58,125,156,.3);">← Previous</button>
+      <button class="btn btn-outline" id="btn-prev" onclick="prevQuestion()" style="color:rgba(255,255,255,0.65);border-color:rgba(58,125,156,.3);">← Previous</button>
       <button class="btn btn-primary" id="btn-next" onclick="nextQuestion()">Next →</button>
     </div>
   </div>

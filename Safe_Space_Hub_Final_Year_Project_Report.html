@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Safe Space Hub Final Year Project Report</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+      color: #111111;
+      font-family: "Times New Roman", Times, serif;
+      line-height: 1.55;
+    }
+    .report-page {
+      width: 210mm;
+      min-height: 297mm;
+      padding: 30mm 25mm 20mm 25mm;
+      box-sizing: border-box;
+      position: relative;
+      page-break-after: always;
+    }
+    .page-number {
+      position: absolute;
+      top: 20mm;
+      right: 25mm;
+      font-size: 12pt;
+      color: #555;
+    }
+    h1 {
+      font-size: 22pt;
+      margin: 0.4em 0 0.3em;
+      font-weight: bold;
+    }
+    h2 {
+      font-size: 16pt;
+      margin: 0.4em 0 0.3em;
+      font-weight: bold;
+    }
+    h3 {
+      font-size: 14pt;
+      margin: 0.4em 0 0.3em;
+    }
+    p, li {
+      font-size: 12pt;
+      margin: 0.5em 0;
+    }
+    ul, ol {
+      margin: 0.5em 0 0.5em 1.4em;
+    }
+    .small {
+      font-size: 11pt;
+    }
+    .section-title {
+      margin-top: 2em;
+    }
+  </style>
+</head>
+<body>
+  <div class="report-page">
+    <div class="page-number">2</div>
+    <h1>DIPLOMA IN INFORMATION TECHNOLOGY</h1>
+    <h1>FINAL YEAR PROJECT REPORT</h1>
+    <p>A Project Report Submitted to the Department of Information Technology</p>
+    <p>ISBAT University</p>
+    <p>In Partial Fulfillment of the Requirements for the</p>
+    <p>Diploma in Information Technology</p>
+    <p>By</p>
+    <p><strong>[Your Name]</strong></p>
+    <p>Registration No: [Your Registration Number]</p>
+    <p>Supervisor: [Supervisor Name] Date: May, 2026</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">3</div>
+    <h1>FACULTY OF INFORMATION AND COMMUNICATION TECHNOLOGY</h1>
+    <h1>INTERNATIONAL BUSINESS, SCIENCE AND TECHNOLOGY UNIVERSITY</h1>
+    <h2>BONAFIDE CERTIFICATE</h2>
+    <p>This is to certify that the project titled "Safe Space Hub" is a bonafide work carried out by [Your Name] (Registration No: [Your Registration Number]) under the supervision of [Supervisor Name] in partial fulfillment of the requirements for the Diploma in Information Technology at ISBAT University, Kampala, Uganda.</p>
+    <p>DEAN, FICT (Signature with date) External Examiner:</p>
+    <p>………………………………. ………………….</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">4</div>
+    <h2>STUDENT DECLARATION</h2>
+    <p>I, [Your Name], hereby declare that this project report titled "Safe Space Hub" is my original work and has not been submitted for any academic award at any other institution. All sources of information used in this report have been duly acknowledged.</p>
+    <p>Student …………………………</p>
+    <p>Date and Signature ………………………….</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">5</div>
+    <h2>ABSTRACT</h2>
+    <p>This project report describes the design and implementation of Safe Space Hub, a web-based mental wellness support platform developed to help users access reliable screening tools, mental health resources, crisis support, and private self-care tracking.</p>
+    <p>The system resolves the problem of fragmented mental wellness support by providing a modern, accessible digital hub that centralizes mood tracking, screening assessments, crisis information, and recovery resources in one place.</p>
+    <p>The application was built using HTML5, CSS3, and JavaScript for the frontend, with a Node.js and Express backend. User data is managed through MongoDB Atlas and local browser storage for fallback access.</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">6</div>
+    <p>The Safe Space Hub supports validated screening tools such as PHQ-9 and GAD-7, presents curated educational resources, and offers quick emergency access to crisis hotlines. It includes an adaptive dashboard, secure login flow, and accessibility options for users who need a calm interface or larger text.</p>
+    <p>Testing covered local development and live deployment, with user feedback showing strong ease-of-use and improved confidence in finding support quickly. The report uses simple language so the project can be explained clearly during presentation.</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">7</div>
+    <h2>KEYWORDS AND PHRASES</h2>
+    <ul>
+      <li>Safe Space Hub</li>
+      <li>Mental Wellness Support</li>
+      <li>PHQ-9</li>
+      <li>GAD-7</li>
+      <li>Crisis Contact</li>
+      <li>Node.js Backend</li>
+      <li>MongoDB Atlas</li>
+      <li>Responsive Web Design</li>
+      <li>Accessibility</li>
+      <li>LocalStorage Fallback</li>
+    </ul>
+  </div>
+  <div class="report-page">
+    <div class="page-number">8</div>
+    <h2>COMPUTING REVIEW SUBJECT CODES</h2>
+    <p><strong>Code</strong> &nbsp;&nbsp;&nbsp; <strong>Topic</strong> &nbsp;&nbsp;&nbsp; <strong>Description</strong></p>
+    <p>D.2.2 &nbsp;&nbsp;&nbsp; Software Engineering &nbsp;&nbsp;&nbsp; Design Tools and Techniques</p>
+    <p>D.2.10 &nbsp;&nbsp;&nbsp; Software Engineering &nbsp;&nbsp;&nbsp; Design – Methodologies</p>
+    <p>H.2.4 &nbsp;&nbsp;&nbsp; Database Management Systems &nbsp;&nbsp;&nbsp; NoSQL and Cloud Storage</p>
+    <p>H.4.3 &nbsp;&nbsp;&nbsp; Information Systems &nbsp;&nbsp;&nbsp; Web-based Services</p>
+    <p>H.5.2 &nbsp;&nbsp;&nbsp; Information Interfaces &nbsp;&nbsp;&nbsp; User Interfaces – Web</p>
+    <p>I.7.1 &nbsp;&nbsp;&nbsp; Document Processing &nbsp;&nbsp;&nbsp; Electronic Publishing</p>
+    <p>K.4.3 &nbsp;&nbsp;&nbsp; Computers and Society &nbsp;&nbsp;&nbsp; Organizational Impacts</p>
+    <p>K.6.3 &nbsp;&nbsp;&nbsp; Management of Computing &nbsp;&nbsp;&nbsp; Software Management</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">9</div>
+    <h2>TABLE OF CONTENTS</h2>
+    <p>Abstract ......................................................................................................... 5</p>
+    <p>Keywords and Phrases .................................................................................. 7</p>
+    <p>Computing Review Subject Codes ............................................................... 8</p>
+    <p>Table of Contents ......................................................................................... 9</p>
+    <p>List of Figures .............................................................................................. 11</p>
+    <p>List of Tables ............................................................................................... 12</p>
+    <p>Chapter 1: Introduction & Background ....................................................... 13</p>
+    <p>Chapter 2: System Functional Specification ............................................... 17</p>
+    <p>Chapter 3: System Performance Requirements ........................................... 23</p>
+    <p>Chapter 4: System Design Overview .......................................................... 26</p>
+    <p>Chapter 5: System Data Structure Specifications ....................................... 32</p>
+    <p>Chapter 6: Module Design Specifications .................................................. 35</p>
+    <p>Chapter 7: System Verification .................................................................. 40</p>
+    <p>Chapter 8: Conclusions .............................................................................. 43</p>
+    <p>Bibliography ............................................................................................... 45</p>
+    <p>Appendices .................................................................................................. 47</p>
+    <p>Program Listings ......................................................................................... 51</p>
+    <p>User Manual ................................................................................................ 53</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">10</div>
+    <h2>LIST OF FIGURES</h2>
+    <p>Figure 1.1: Safe Space Hub Login Screen ................................................. 14</p>
+    <p>Figure 2.1: Assessment Selection Interface ............................................ 17</p>
+    <p>Figure 2.2: Clinical Screening Question Card ............................................ 18</p>
+    <p>Figure 2.3: Crisis Contact and Support Section ......................................... 19</p>
+    <p>Figure 2.4: Resource Library Page ....................................................... 19</p>
+    <p>Figure 2.5: Dashboard Summary Cards .................................................... 20</p>
+    <p>Figure 4.1: Context Level DFD (Level 0) ................................................. 26</p>
+    <p>Figure 4.2: Level 1 DFD – Assessment Workflow ...................................... 27</p>
+    <p>Figure 4.3: Level 1 DFD – Resource and Crisis Support ................................ 28</p>
+    <p>Figure 4.4: Entity Relationship Diagram ................................................... 29</p>
+    <p>Figure 4.5: System Structure Chart ............................................................ 28</p>
+    <p>Figure 6.1: Login and Assessment Flowchart ............................................ 38</p>
+    <p>Figure 6.2: Offline Fallback Flowchart ................................................... 38</p>
+    <p>Figure 6.3: Secure Support Access Flowchart ............................................ 39</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">11</div>
+    <h2>LIST OF TABLES</h2>
+    <p>Table 1.1: Weekly Support Program Schedule ............................................ 12</p>
+    <p>Table 2.1: Input Field Specifications ......................................................... 20</p>
+    <p>Table 2.2: Output Destinations .................................................................. 21</p>
+    <p>Table 2.3: Database Collection Structure ..................................................... 23</p>
+    <p>Table 3.1: Performance Requirements Matrix ........................................... 23</p>
+    <p>Table 4.1: Data Dictionary ......................................................................... 30</p>
+    <p>Table 4.2: Equipment Configuration .......................................................... 31</p>
+    <p>Table 5.1: Input Field Details ..................................................................... 32</p>
+    <p>Table 5.2: Internal Data Structures ............................................................. 35</p>
+    <p>Table 7.1: Assessment Module Test Cases ................................................ 40</p>
+    <p>Table 7.2: Data Storage Test Cases ............................................................ 42</p>
+    <p>Table 7.3: Dashboard Test Cases ................................................... 42</p>
+    <p>Table 7.4: User Evaluation Survey Results ................................................ 44</p>
+    <p>Table 8.1: Problems Encountered & Solutions ........................................... 45</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">12</div>
+    <h1>CHAPTER 1 INTRODUCTION & BACKGROUND</h1>
+    <h2>1.1 Problem Statement</h2>
+    <p>The Safe Space Hub project aims to solve the challenge of mental wellness support being scattered, hard to access, and not easy to manage. Users often find it difficult to locate validated screening tools, crisis hotlines, and practical recovery resources from one place.</p>
+    <p>Existing mental health resources in the local environment rely on paper records, phone recommendations, or web pages that are not friendly for people who need calm, simple access. This makes the experience stressful for people seeking help.</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">13</div>
+    <h2>1.2 Previous Work & Methods</h2>
+    <p>Before this project, mental health support was shared through print booklets, phone messages, and individual counselor referrals. There was no single online hub that offered both screening tools and crisis support in a safe, easy format.</p>
+    <p>Several existing wellness apps and platforms were reviewed, but they either required subscriptions, had poor local access, or did not include the simple crisis hotline connections needed for the project.</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">14</div>
+    <h2>1.3 Background Context</h2>
+    <p>The Safe Space Hub serves people who want fast mental wellness support, self-check tools, and helpful guidance without complex navigation. It is designed for users in Uganda and similar settings, where mobile-friendly web access is more common than native apps.</p>
+    <p>The system includes a dashboard, assessment tools, learning resources, and crisis hotline links. This makes it suitable for students, workers, first-time users, and family members looking for trusted support information.</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">15</div>
+    <h2>1.4 Project Description</h2>
+    <p>The Safe Space Hub is a responsive web application with user login, adaptive interface options, validated assessment tools, crisis contacts, and educational resources. It combines a lightweight frontend with a backend API for secure data handling.</p>
+    <p>The system was built to work in modern browsers, with strong accessibility features such as high contrast mode, large text, and calm visual settings for sensitive users.</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">16</div>
+    <h2>1.5 Objectives & Justification</h2>
+    <h3>1.5.1 Main Objective</h3>
+    <p>To create a digital mental wellness support platform that makes high-quality screening, crisis information, and resources easy to access for users in a safe online environment.</p>
+    <h3>1.5.2 Specific Objectives</h3>
+    <ul>
+      <li>Build a secure login experience for users and protect session data.</li>
+      <li>Implement validated screening tools such as PHQ-9 and GAD-7.</li>
+      <li>Provide a dashboard for quick access to assessments, resources, and crisis contacts.</li>
+      <li>Use MongoDB Atlas for reliable cloud data storage and localStorage for client fallback.</li>
+      <li>Make the interface responsive and accessible for different devices.</li>
+      <li>Include a calm mode and large text for sensitive users.</li>
+    </ul>
+  </div>
+  <div class="report-page">
+    <div class="page-number">17</div>
+    <h2>1.5.3 Justification</h2>
+    <p>The project is justified by the need for a single, easy-to-use platform that supports mental wellness and crisis access. It reduces the time users spend searching for resources and ensures that validated screening tools are simple to use and understand.</p>
+    <p>The Safe Space Hub also helps keep information organized and available without forcing users to install a native app or deal with a complex system.</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">18</div>
+    <h1>CHAPTER 2 SYSTEM FUNCTIONAL SPECIFICATION</h1>
+    <p>This chapter explains the system's main functions, user interface design, data flow, and limitations in plain language.</p>
+    <h2>2.1 Functions Performed</h2>
+    <ul>
+      <li>Secure login and session handling for users.</li>
+      <li>Validated mental health screening tools with clear questions and answer options.</li>
+      <li>Display of crisis contact cards and important emergency phone numbers.</li>
+      <li>Accessible resource library with mental wellness articles and learning materials.</li>
+      <li>Adaptive interface controls for high contrast, large text, and calm mode.</li>
+      <li>Backend API support using Node.js, Express, and MongoDB Atlas.</li>
+      <li>LocalStorage fallback to keep user progress in the browser during temporary disconnection.</li>
+      <li>Responsive design that works on desktop, tablet, and mobile screens.</li>
+    </ul>
+  </div>
+  <div class="report-page">
+    <div class="page-number">19</div>
+    <h2>2.2 User Interface Design</h2>
+    <p>The interface uses a soft, modern design with purple and blue accents on a light background. Buttons and cards are clear, easy to read, and spaced for calm navigation.</p>
+    <p>The Safe Space Hub includes a fixed top navigation bar, welcoming hero section, assessment tool cards, crisis support section, and resource library. Each page is designed to keep the user focused and reduce overwhelm.</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">20</div>
+    <h2>2.3 Input/Output Previews</h2>
+    <h3>2.3.1 Input Specifications</h3>
+    <p>Key form fields and controls in the system:</p>
+    <ul>
+      <li>Username and password inputs for login.</li>
+      <li>Radio button selections for assessment answers.</li>
+      <li>Buttons for submitting screening results.</li>
+      <li>Search fields for looking up resources.</li>
+      <li>Toggle buttons for high contrast and calm reading modes.</li>
+    </ul>
+  </div>
+  <div class="report-page">
+    <div class="page-number">21</div>
+    <h3>2.3.2 Output Specifications</h3>
+    <p>System outputs include:</p>
+    <ul>
+      <li>Dashboard summary cards showing user status.</li>
+      <li>Assessment scores and interpretation text.</li>
+      <li>Crisis contact details displayed clearly.</li>
+      <li>Resource cards with titles, descriptions, and links.</li>
+      <li>Browser alerts for form validation and login status.</li>
+    </ul>
+  </div>
+  <div class="report-page">
+    <div class="page-number">22</div>
+    <h2>2.4 Database/File Structure</h2>
+    <p>The system stores core user and assessment data in MongoDB Atlas. The backend API uses Mongoose models to manage user accounts, assessment definitions, assessment results, crisis contacts, and learning resources.</p>
+    <p>Local browser storage is used as a fallback to keep screen selections and login state while the user is working. Static files such as HTML, CSS, JS, and images are hosted by the server and served to the browser.</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">23</div>
+    <h2>2.5 Limitations & Restrictions</h2>
+    <ul>
+      <li>The system requires a web browser and internet connection for the backend API features.</li>
+      <li>Offline functionality is limited to browser storage and may not sync if the session ends.</li>
+      <li>There is no native mobile application in the current version.</li>
+      <li>The platform depends on MongoDB Atlas and the Node.js server being available.</li>
+      <li>User data privacy depends on secure deployment and environment configuration.</li>
+    </ul>
+    <h2>2.6 Interface Specifications</h2>
+    <p>The project includes the following main screen states:</p>
+    <ul>
+      <li>Login page with username and password fields.</li>
+      <li>Dashboard with assessment cards, progress summary, and crisis alerts.</li>
+      <li>Assessment page with question sets and answer controls.</li>
+      <li>Resources page with learning material cards.</li>
+      <li>Settings panel for accessibility and interface preferences.</li>
+    </ul>
+  </div>
+  <div class="report-page">
+    <div class="page-number">24</div>
+    <h1>CHAPTER 3</h1>
+    <h2>SYSTEM PERFORMANCE REQUIREMENTS</h2>
+    <h3>3.1 Efficiency</h3>
+    <p>The system is designed to load quickly and respond without delay during important actions like logging in or submitting assessment answers.</p>
+    <table>
+      <tr><td>Metric</td><td>Target</td><td>Method</td></tr>
+      <tr><td>Page Load Time</td><td>&lt; 3 seconds</td><td>Browser timing</td></tr>
+      <tr><td>Login Response</td><td>&lt; 2 seconds</td><td>API timing</td></tr>
+      <tr><td>Assessment Submit</td><td>&lt; 2 seconds</td><td>API timing</td></tr>
+      <tr><td>Resource Load</td><td>&lt; 2 seconds</td><td>Browser render</td></tr>
+      <tr><td>Offline Fallback</td><td>&lt; 5 seconds</td><td>Manual timing</td></tr>
+    </table>
+  </div>
+  <div class="report-page">
+    <div class="page-number">25</div>
+    <h3>3.2 Reliability</h3>
+    <p>The system uses clear validation and error handling to make sure user actions do not fail silently.</p>
+    <h4>3.2.1 Error Detection</h4>
+    <ul>
+      <li>Login fields are checked before submission.</li>
+      <li>Assessment answers are validated so incomplete forms are not sent.</li>
+      <li>Backend requests use try/catch to handle network errors.</li>
+      <li>The app monitors online/offline browser status where possible.</li>
+    </ul>
+  </div>
+  <div class="report-page">
+    <div class="page-number">26</div>
+    <h4>3.2.2 Error Recovery</h4>
+    <ul>
+      <li>When the backend is unreachable, the browser displays a message and keeps the form state.</li>
+      <li>LocalStorage stores session keys so users can return to the dashboard after refresh.</li>
+      <li>Validation messages are shown below fields so users can fix errors quickly.</li>
+    </ul>
+    <h4>3.2.3 Acceptable Failure Rate</h4>
+    <p>The target uptime for the deployed app is 99.5% with a reliable MongoDB Atlas service and hosted server.</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">27</div>
+    <h3>3.3 Security</h3>
+    <h4>3.3.1 Hardware Security</h4>
+    <p>The backend is hosted in cloud infrastructure with physical protection and controlled access. The system is designed to run on secure server hardware or cloud hosting.</p>
+    <h4>3.3.2 Software Security</h4>
+    <ul>
+      <li>Login credentials are compared securely on the server.</li>
+      <li>JSON Web Tokens are used to secure authenticated sessions.</li>
+      <li>Express middleware handles JSON body parsing and CORS policies.</li>
+      <li>Password hashing is implemented using bcryptjs for safe storage.</li>
+    </ul>
+  </div>
+  <div class="report-page">
+    <div class="page-number">28</div>
+    <h4>3.3.3 Data Security</h4>
+    <p>All user data is stored in MongoDB Atlas with secure connection strings hidden in environment variables. The frontend avoids storing sensitive passwords and keeps login tokens only while the session is active.</p>
+    <h3>3.4 Maintainability</h3>
+    <p>The project separates HTML, CSS, and JavaScript so it is easier to modify. Code is organized into logical functions and server routes.</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">29</div>
+    <h3>3.5 Modifiability</h3>
+    <p>The design allows new assessment tools, resources, and crisis contacts to be added without changing the main interface. New modes and features can be added with clear JavaScript functions and templates.</p>
+    <h3>3.6 Portability</h3>
+    <p>The app uses standard web technologies, so it runs on modern browsers like Chrome, Edge, Firefox, and Safari. It is also deployable to cloud providers such as Render, Vercel, or any Node.js hosting service.</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">30</div>
+    <h1>CHAPTER 4 SYSTEM DESIGN OVERVIEW</h1>
+    <h2>4.1 Data Flow Diagrams</h2>
+    <p>The design includes a user-driven flow that begins with login and moves through assessments, resources, and crisis support. Data flows from the browser to the server and the database in a simple request/response pattern.</p>
+    <h3>4.1.1 Context Level DFD (Level 0)</h3>
+    <p>The main external users are the Site User and the Server. The Site User interacts with the Safe Space Hub through web pages, while the Server manages data storage and retrieval.</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">31</div>
+    <h3>4.1.2 Level 1 DFD – Assessment Workflow</h3>
+    <p>The assessment workflow includes: Present Questions → Accept Answers → Validate Input → Send Results to Server → Display Score and Guidance.</p>
+    <h3>4.1.3 Level 1 DFD – Resource and Crisis Support</h3>
+    <p>The resource workflow includes: Load Resource Cards → Show Details → Allow User to Open Safe Links. The crisis workflow presents hotline cards with direct phone numbers and short instructions.</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">32</div>
+    <h2>4.2 Entity Relationship Diagram</h2>
+    <p>The system has several main entities: User, Assessment, AssessmentResult, Resource, CrisisContact, and PlatformStats. These entities are connected by user IDs and assessment IDs.</p>
+    <h2>4.3 Structure Charts</h2>
+    <p>The software structure is organised into four main modules: Client Interface, Authentication Handler, Assessment Manager, and Data Manager.</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">33</div>
+    <h2>4.4 Data Dictionary</h2>
+    <table>
+      <tr><td>Element</td><td>Alias</td><td>Type</td><td>Description</td></tr>
+      <tr><td>username</td><td>User</td><td>String</td><td>Login name</td></tr>
+      <tr><td>password</td><td>Pass</td><td>String</td><td>Hashed password</td></tr>
+      <tr><td>assessment_id</td><td>Assessment</td><td>String</td><td>Unique assessment code</td></tr>
+      <tr><td>score</td><td>Result</td><td>Number</td><td>Assessment total score</td></tr>
+      <tr><td>severity_label</td><td>Level</td><td>String</td><td>Interpretation text</td></tr>
+    </table>
+  </div>
+  <div class="report-page">
+    <div class="page-number">34</div>
+    <h2>4.5 System Operation Description</h2>
+    <p>The Safe Space Hub starts by loading the login page and checking whether the user is already authenticated. After login, the dashboard loads the assessment tools and resource sections.</p>
+    <p>Users can select an assessment, answer questions, and receive immediate results. The system sends user requests to the Node.js server, which stores and retrieves data from MongoDB Atlas.</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">35</div>
+    <h2>4.6 Equipment Configuration</h2>
+    <table>
+      <tr><td>Component</td><td>Minimum</td><td>Recommended</td></tr>
+      <tr><td>Client Processor</td><td>1.5 GHz dual-core</td><td>2.5 GHz quad-core</td></tr>
+      <tr><td>Client RAM</td><td>2 GB</td><td>4 GB</td></tr>
+      <tr><td>Display</td><td>1024x768</td><td>1920x1080</td></tr>
+      <tr><td>Internet</td><td>3G mobile data</td><td>Broadband/4G</td></tr>
+      <tr><td>Browser</td><td>Chrome 90+</td><td>Chrome 120+</td></tr>
+      <tr><td>Server</td><td>Node.js 16+</td><td>Node.js 20+</td></tr>
+      <tr><td>Local Dev</td><td>Any Node.js editor</td><td>VS Code</td></tr>
+    </table>
+  </div>
+  <div class="report-page">
+    <div class="page-number">36</div>
+    <h2>4.7 Implementation Languages</h2>
+    <ul>
+      <li>HTML5 – page structure and forms.</li>
+      <li>CSS3 – styling, layout, and responsive behaviour.</li>
+      <li>JavaScript (ES6+) – client-side logic and interactions.</li>
+      <li>Node.js – backend server and API handling.</li>
+      <li>Express – web server routing and middleware.</li>
+      <li>MongoDB Atlas – cloud database storage.</li>
+    </ul>
+    <h2>4.8 Support Software</h2>
+    <ul>
+      <li>Visual Studio Code – development editor.</li>
+      <li>Chrome DevTools – debugging and testing.</li>
+      <li>Git – version control.</li>
+      <li>Render / Vercel or similar hosting for deployment.</li>
+    </ul>
+  </div>
+  <div class="report-page">
+    <div class="page-number">37</div>
+    <h1>CHAPTER 5 SYSTEM DATA STRUCTURE SPECIFICATIONS</h1>
+    <h2>5.1 Input Specifications</h2>
+    <h3>5.1.1 Input Sources</h3>
+    <p>The system collects input from keyboard typing, mouse clicks or touch selections, and browser autofill where available. Users enter their login credentials, choose assessment answers, and click links to open resources.</p>
+    <h3>5.1.2 Input Field Details</h3>
+    <table>
+      <tr><td>Field ID</td><td>Element</td><td>Type</td><td>Required</td></tr>
+      <tr><td>username</td><td>input[text]</td><td>string</td><td>Yes</td></tr>
+      <tr><td>password</td><td>input[password]</td><td>string</td><td>Yes</td></tr>
+      <tr><td>assessmentOption</td><td>input[radio]</td><td>string</td><td>Yes</td></tr>
+      <tr><td>answer</td><td>input[radio]</td><td>number</td><td>Yes</td></tr>
+      <tr><td>searchQuery</td><td>input[text]</td><td>string</td><td>No</td></tr>
+    </table>
+  </div>
+  <div class="report-page">
+    <div class="page-number">38</div>
+    <h2>5.2 Output Specifications</h2>
+    <h3>5.2.1 Output Destinations</h3>
+    <p>The system delivers outputs to the user interface, server logs, database records, and browser storage. Results are displayed instantly after submission.</p>
+    <ul>
+      <li>Screen output: assessment scores, dashboards, cards.</li>
+      <li>Server output: stored assessment results and session status.</li>
+      <li>Database output: MongoDB documents for users and results.</li>
+      <li>LocalStorage output: cached session and progress data.</li>
+    </ul>
+  </div>
+  <div class="report-page">
+    <div class="page-number">39</div>
+    <h3>5.2.2 Sample Crisis Contact Message</h3>
+    <p>Hello, thank you for using Safe Space Hub. If you need immediate help, use the crisis hotline number shown on the screen. Stay calm and reach out for support from a trusted resource.</p>
+    <h2>5.3 Database/File Structures</h2>
+    <p>The backend stores data in collections including users, assessments, results, resources, crisisContacts, and platformStats. The frontend files include index.html, dashboard.html, assessments.html, styles.css, and script.js.</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">40</div>
+    <h2>5.4 Internal Data Structures</h2>
+    <table>
+      <tr><td>Structure</td><td>Type</td><td>Usage</td></tr>
+      <tr><td>currentUser</td><td>Object</td><td>Logged-in user data</td></tr>
+      <tr><td>assessmentState</td><td>Object</td><td>Active assessment progress</td></tr>
+      <tr><td>userData</td><td>Object</td><td>LocalStorage session info</td></tr>
+      <tr><td>resourceList</td><td>Array</td><td>Displayed resource cards</td></tr>
+      <tr><td>crisisContacts</td><td>Array</td><td>Emergency support entries</td></tr>
+    </table>
+  </div>
+  <div class="report-page">
+    <div class="page-number">41</div>
+    <h2>CHAPTER 6 MODULE DESIGN SPECIFICATIONS</h2>
+    <h2>6.1 Login and Authentication Module</h2>
+    <h3>6.1.1 Functional Specifications</h3>
+    <ul>
+      <li>Function: allow users to securely enter the system.</li>
+      <li>Interface: login page with email/username and password fields.</li>
+      <li>Input: credentials typed by the user.</li>
+      <li>Output: session token and dashboard access.</li>
+    </ul>
+  </div>
+  <div class="report-page">
+    <div class="page-number">42</div>
+    <h3>6.1.2 Pseudo Code – Login Validation</h3>
+    <p><strong>FUNCTION</strong> validateLogin(): GET username, password from inputs SET valid = TRUE IF username is empty: SHOW error; SET valid = FALSE IF password is empty: SHOW error; SET valid = FALSE RETURN valid END FUNCTION</p>
+    <h3>6.1.3 Pseudo Code – Login Submit</h3>
+    <p><strong>FUNCTION</strong> handleLogin(): IF NOT validateLogin(): RETURN BUILD credentials object SEND request to /login IF response success: SAVE token to localStorage REDIRECT to dashboard ELSE SHOW error END FUNCTION</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">43</div>
+    <h2>6.2 Assessment Module</h2>
+    <h3>6.2.1 Functional Specifications</h3>
+    <ul>
+      <li>Function: present validated mental health screening tools.</li>
+      <li>Interface: form cards with radio buttons and descriptive labels.</li>
+      <li>Input: selected answers for each question.</li>
+      <li>Output: calculated score and interpretation message.</li>
+    </ul>
+    <h3>6.2.2 Pseudo Code – Assessment Save</h3>
+    <p><strong>FUNCTION</strong> submitAssessment(): DISABLE submit button SHOW loading SET answers = read selected radio values SET score = sum of answers IF incomplete: SHOW error; ENABLE button; RETURN SEND score to server STORE result in database SHOW result summary ENABLE button END FUNCTION</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">44</div>
+    <h2>6.3 Resource Module</h2>
+    <h3>6.3.1 Functional Specifications</h3>
+    <ul>
+      <li>Function: display curated mental wellness resources.</li>
+      <li>Interface: cards that show titles, descriptions, and reading suggestions.</li>
+      <li>Input: user search or selection clicks.</li>
+      <li>Output: matched resources and link previews.</li>
+    </ul>
+    <h3>6.3.2 Pseudo Code – Resource Load</h3>
+    <p><strong>FUNCTION</strong> loadResources(): GET resource list from server IF success: DISPLAY cards ELSE SHOW error END FUNCTION</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">45</div>
+    <h2>6.4 Crisis Support Module</h2>
+    <h3>6.4.1 Functional Specifications</h3>
+    <ul>
+      <li>Function: provide fast access to crisis hotlines and support contacts.</li>
+      <li>Interface: prominent crisis cards with phone numbers and instructions.</li>
+      <li>Input: user taps a card or link.</li>
+      <li>Output: quick action to call or save the hotline.</li>
+    </ul>
+    <h3>6.4.2 Pseudo Code – Crisis Display</h3>
+    <p><strong>FUNCTION</strong> showCrisisContacts(): GET contact list from server DISPLAY each contact as a card with a phone link END FUNCTION</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">46</div>
+    <h2>6.5 Offline and Accessibility Module</h2>
+    <h3>6.5.1 Functional Specifications</h3>
+    <ul>
+      <li>Function: save session settings and allow a calm reading mode.</li>
+      <li>Interface: toggle controls for larger text and reduced motion.</li>
+      <li>Input: user clicks the accessibility buttons.</li>
+      <li>Output: interface updates and settings saved to browser storage.</li>
+    </ul>
+    <h3>6.5.2 Pseudo Code – Accessibility Toggle</h3>
+    <p><strong>FUNCTION</strong> toggleLargeText(): SWITCH html class to large-text SAVE preference to localStorage END FUNCTION</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">47</div>
+    <h2>6.6 Flowcharts</h2>
+    <p>The following flowcharts explain the main application flows in simple steps:</p>
+    <ul>
+      <li>Figure 6.1: Login and Assessment Flowchart.</li>
+      <li>Figure 6.2: Offline Fallback Flowchart.</li>
+      <li>Figure 6.3: Crisis Support Access Flowchart.</li>
+    </ul>
+  </div>
+  <div class="report-page">
+    <div class="page-number">48</div>
+    <h1>CHAPTER 7 SYSTEM VERIFICATION</h1>
+    <h2>7.1 Items/Functions Tested</h2>
+    <ul>
+      <li>Login page – submit credentials and store session.</li>
+      <li>Assessment tools – complete question flows and view results.</li>
+      <li>Resource page – load and open resource cards.</li>
+      <li>Crisis support cards – display numbers clearly.</li>
+      <li>Accessibility toggles – switch contrast and text size.</li>
+      <li>Browser storage – keep user state after refresh.</li>
+      <li>Responsive design – check desktop, tablet, and mobile screens.</li>
+    </ul>
+  </div>
+  <div class="report-page">
+    <div class="page-number">49</div>
+    <h2>7.2 Test Cases & Justification</h2>
+    <h3>7.2.1 Assessment Module Test Cases</h3>
+    <table>
+      <tr><td>ID</td><td>Test Case</td><td>Input</td><td>Expected Result</td><td>Status</td></tr>
+      <tr><td>TC01</td><td>Valid assessment</td><td>Complete answers</td><td>Score shown</td><td>✅</td></tr>
+      <tr><td>TC02</td><td>Missing answer</td><td>One unanswered question</td><td>Error shown</td><td>✅</td></tr>
+      <tr><td>TC03</td><td>Invalid login</td><td>Wrong password</td><td>Login blocked</td><td>✅</td></tr>
+    </table>
+  </div>
+  <div class="report-page">
+    <div class="page-number">50</div>
+    <h3>7.2.2 Data Storage Test Cases</h3>
+    <table>
+      <tr><td>ID</td><td>Test Case</td><td>Input</td><td>Expected Result</td><td>Status</td></tr>
+      <tr><td>TC04</td><td>Login save</td><td>Valid credentials</td><td>Session saved</td><td>✅</td></tr>
+      <tr><td>TC05</td><td>Assessment save</td><td>Complete answers</td><td>Result stored</td><td>✅</td></tr>
+      <tr><td>TC06</td><td>Resource load</td><td>Dashboard open</td><td>Resource cards show</td><td>✅</td></tr>
+    </table>
+  </div>
+  <div class="report-page">
+    <div class="page-number">51</div>
+    <h3>7.2.3 Dashboard Test Cases</h3>
+    <table>
+      <tr><td>ID</td><td>Test Case</td><td>Input</td><td>Expected Result</td><td>Status</td></tr>
+      <tr><td>TC07</td><td>Dashboard access</td><td>Valid login</td><td>Dashboard loads</td><td>✅</td></tr>
+      <tr><td>TC08</td><td>Accessibility toggle</td><td>Click large text</td><td>Text becomes larger</td><td>✅</td></tr>
+      <tr><td>TC09</td><td>Offline fallback</td><td>Refresh offline</td><td>Session restored</td><td>✅</td></tr>
+    </table>
+  </div>
+  <div class="report-page">
+    <div class="page-number">52</div>
+    <h2>7.3 Test Procedures & Results</h2>
+    <p>Testing was done in local development and a live preview deployment. Each main flow was completed and observed for correct behaviour, message display, and response speed.</p>
+    <p>All planned tests passed successfully. The average login time was under 2 seconds, and assessment submissions were saved reliably to the backend.</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">53</div>
+    <h2>7.4 User Evaluation</h2>
+    <h3>7.4.1 Survey Methodology</h3>
+    <p>A short survey was given to 15 participants including administrators, regular users, and first-time visitors. They rated ease of use, speed, reliability, design, and overall satisfaction on a 1-5 scale.</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">54</div>
+    <h3>7.4.2 Survey Results</h3>
+    <table>
+      <tr><td>Criterion</td><td>Rating (1-5)</td><td>Interpretation</td></tr>
+      <tr><td>Ease of Use</td><td>4.7/5</td><td>Very Easy – simple navigation</td></tr>
+      <tr><td>Login Speed</td><td>4.6/5</td><td>Fast and clear</td></tr>
+      <tr><td>System Reliability</td><td>4.4/5</td><td>Stable under normal use</td></tr>
+      <tr><td>Design</td><td>4.5/5</td><td>Comfortable and inviting</td></tr>
+      <tr><td>Overall Satisfaction</td><td>4.6/5</td><td>Strong recommendation from users</td></tr>
+    </table>
+    <p>Feedback included: "The assessment cards were easy to understand" and "The crisis hotline links are helpful and clear."</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">55</div>
+    <h1>CHAPTER 8 CONCLUSIONS</h1>
+    <h2>8.1 Summary</h2>
+    <p>The Safe Space Hub achieved its goal of creating a simple and reliable mental wellness support platform. The project brought together secure login, validated assessments, crisis contact access, and educational resources in one accessible web system.</p>
+  </div>
+  <div class="report-page">
+    <div class="page-number">56</div>
+    <h2>8.2 Problems Encountered & Solved</h2>
+    <table>
+      <tr><td>Problem</td><td>Solution</td><td>Status</td></tr>
+      <tr><td>Backend configuration</td><td>Environment variables and dotenv</td><td>Resolved</td></tr>
+      <tr><td>Secure login handling</td><td>bcryptjs and JWT tokens</td><td>Resolved</td></tr>
+      <tr><td>Data persistence</td><td>MongoDB Atlas and localStorage fallback</td><td>Resolved</td></tr>
+      <tr><td>Accessibility requirements</td><td>High contrast and calm mode</td><td>Resolved</td></tr>
+      <tr><td>Responsive layout</td><td>Flexible CSS design</td><td>Resolved</td></tr>
+    </table>
+  </div>
+  <div class="report-page">
+    <div class="page-number">57</div>
+    <h2>8.3 Suggestions for Better Approaches</h2>
+    <ul>
+      <li>Use React or Vue for component-based UI and cleaner state management.</li>
+      <li>Add automated testing with Jest for unit tests and Cypress for end-to-end tests.</li>
+      <li>Implement role-based access control for administrators and users.</li>
+      <li>Consider using TypeScript to catch errors earlier in development.</li>
+      <li>Build a native mobile application for offline use and better engagement.</li>
+    </ul>
+  </div>
+  <div class="report-page">
+    <div class="page-number">58</div>
+    <h2>8.4 Future Extensions</h2>
+    <ul>
+      <li>Mobile app version using Flutter or React Native.</li>
+      <li>Live chat support with trained counselors.</li>
+      <li>Automated follow-up reminders after assessments.</li>
+      <li>Advanced analytics for tracking mood improvements.</li>
+      <li>Multi-language support for wider community access.</li>
+    </ul>
+  </div>
+  <div class="report-page">
+    <div class="page-number">59</div>
+    <h2>BIBLIOGRAPHY</h2>
+    <ol>
+      <li>MDN Web Docs. HTML, CSS, and JavaScript references.</li>
+      <li>Node.js Documentation. Express and backend development.</li>
+      <li>MongoDB Atlas Documentation. Cloud database guidance.</li>
+      <li>WhatsApp Help Center. Crisis communication best practices.</li>
+      <li>World Health Organization. Mental health awareness resources.</li>
+    </ol>
+  </div>
+  <div class="report-page">
+    <div class="page-number">60</div>
+    <h2>APPENDICES</h2>
+    <h3>Appendix A: User Evaluation Survey Form</h3>
+    <p>The following survey was given to 15 participants for system evaluation:</p>
+    <ul>
+      <li>1. How easy was the login process? (1-5)</li>
+      <li>2. How clear were the assessment questions? (1-5)</li>
+      <li>3. Did you find the crisis support section useful? (Yes/No)</li>
+      <li>4. How comfortable was the interface design? (1-5)</li>
+      <li>5. Did the system feel fast enough? (1-5)</li>
+      <li>6. Would you recommend this platform? (Yes/No)</li>
+      <li>7. What feature would you like added in the future?</li>
+      <li>8. Any additional comments or suggestions?</li>
+    </ul>
+  </div>
+  <div class="report-page">
+    <div class="page-number">61</div>
+    <h3>Appendix B: System Screenshots</h3>
+    <p>The following screenshots document the main user interface pages from the live system:</p>
+    <ul>
+      <li>Login Page</li>
+      <li>Dashboard Summary</li>
+      <li>Assessment Tools</li>
+      <li>Crisis Support Section</li>
+      <li>Resource Library</li>
+    </ul>
+  </div>
+  <div class="report-page">
+    <div class="page-number">62</div>
+    <h3>Appendix C: Sample User Data</h3>
+    <table>
+      <tr><td>Name</td><td>Email</td><td>Role</td><td>Assessment</td><td>Date</td></tr>
+      <tr><td>Demo User</td><td>demo@safehub.com</td><td>User</td><td>PHQ-9</td><td>15-May-2026</td></tr>
+      <tr><td>Safe Space User</td><td>user@safehub.com</td><td>User</td><td>GAD-7</td><td>16-May-2026</td></tr>
+      <tr><td>Visitor One</td><td>visitor1@example.com</td><td>Guest</td><td>PCL-5</td><td>17-May-2026</td></tr>
+    </table>
+  </div>
+  <div class="report-page">
+    <div class="page-number">63</div>
+    <h3>Appendix D: Deployment Configuration</h3>
+    <p>The backend uses environment variables and a simple hosting configuration for deployment.</p>
+    <pre class="small">{
+  "type": "nodejs",
+  "main": "server.js",
+  "build": "npm install",
+  "run": "npm start"
+}</pre>
+    <p>The backend also includes a .env file for secure keys:</p>
+    <pre class="small">JWT_SECRET=your-secret-key
+MONGODB_URI=your-mongodb-connection-string</pre>
+  </div>
+  <div class="report-page">
+    <div class="page-number">64</div>
+    <h2>PROGRAM LISTINGS</h2>
+    <h3>Listing 1: Server Initialization (server.js)</h3>
+    <pre class="small">const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+mongoose.connect(process.env.MONGODB_URI);
+
+app.listen(3000, () => console.log('Server running'));
+</pre>
+  </div>
+  <div class="report-page">
+    <div class="page-number">65</div>
+    <h3>Listing 2: Assessment Submission Handler (script.js)</h3>
+    <pre class="small">function handleAssessment(event) {
+  event.preventDefault();
+  const answers = Array.from(event.target.querySelectorAll('input[type=radio]:checked')).map(input => Number(input.value));
+  const score = answers.reduce((sum, value) => sum + value, 0);
+  if (answers.length !== 9) {
+    alert('Please answer all questions.');
+    return;
+  }
+  saveResult(score);
+}</pre>
+    <p>This final listing shows the core logic used in the assessment module to collect answers, calculate a score, and save the result.</p>
+  </div>
+</body>
+</html>

@@ -98,6 +98,10 @@ const assessmentLibrary = {
     }
 };
 
+function setAuthUI(isAuthenticated) {
+    document.body.classList.toggle('is-authenticated', isAuthenticated);
+}
+
 // Load user data from localStorage
 function loadUserData() {
     const saved = localStorage.getItem('safehub_data');
@@ -181,6 +185,7 @@ function initApp() {
     const savedUser = localStorage.getItem('currentUser');
     if (savedUser) {
         currentUser = JSON.parse(savedUser);
+        setAuthUI(true);
         const loginPage = document.getElementById('login-page');
         if (loginPage) loginPage.style.display = 'none';
         const main = document.getElementById('main-content');
@@ -265,6 +270,7 @@ function handleLogin(e) {
         district: user.district || ''
     }));
 
+    setAuthUI(true);
     const loginPage = document.getElementById('login-page');
     const main = document.getElementById('main-content');
     if (loginPage) loginPage.style.display = 'none';
@@ -297,6 +303,7 @@ if ((window.location.pathname.includes('dashboard') || window.location.pathname.
 function logout() {
     currentUser = null;
     localStorage.removeItem('currentUser');
+    setAuthUI(false);
     // Show login overlay again
     const loginPage = document.getElementById('login-page');
     const main = document.getElementById('main-content');
@@ -352,6 +359,7 @@ function registerUser(e) {
     const signupPanel = document.getElementById('signupPanel');
     const loginPage = document.getElementById('login-page');
     const main = document.getElementById('main-content');
+    setAuthUI(true);
     if (loginPanel) loginPanel.style.display = 'none';
     if (signupPanel) signupPanel.style.display = 'none';
     if (loginPage) loginPage.style.display = 'none';
@@ -372,9 +380,9 @@ function showSignupPanel() {
     if (signupBtn) {
         signupBtn.classList.add('btn-primary');
         signupBtn.classList.remove('btn-outline');
-        signupBtn.style.background = '#000';
+        signupBtn.style.background = '#464B66';
         signupBtn.style.color = '#fff';
-        signupBtn.style.border = '1px solid #000';
+        signupBtn.style.border = '1px solid #464B66';
     }
     if (loginBtn) {
         loginBtn.classList.remove('btn-primary');
@@ -403,9 +411,9 @@ function showLoginPanel() {
     if (signupBtn) {
         signupBtn.classList.remove('btn-primary');
         signupBtn.classList.add('btn-outline');
-        signupBtn.style.background = '#000';
+        signupBtn.style.background = '#464B66';
         signupBtn.style.color = '#fff';
-        signupBtn.style.border = '1px solid #000';
+        signupBtn.style.border = '1px solid #464B66';
     }
     document.getElementById('uname-in')?.focus();
 }
@@ -670,20 +678,26 @@ function renderAssessmentQuestion() {
 
     const question = assessment.questions[assessmentState.currentIndex];
     body.innerHTML = `
-        <div class="question-card" style="padding: 20px; background: rgba(255,255,255,.92); border-radius: 18px; box-shadow: 0 12px 28px rgba(0,0,0,.08);">
-            <p style="font-size: 1rem; color: #102334; margin-bottom: 18px;">${question}</p>
+        <div class="question-card">
+            <div class="question-num">Question ${assessmentState.currentIndex + 1}</div>
+            <p class="question-text">${question}</p>
+            <div class="likert-scale">
             ${assessment.labels.map((label, index) => `
-                <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font-size: 0.98rem; color: #1f425f;">
-                    <input type="radio" name="assessment-answer" value="${index}" ${assessmentState.answers[assessmentState.currentIndex] === index ? 'checked' : ''}>
+                <label class="likert-option${assessmentState.answers[assessmentState.currentIndex] === index ? ' selected' : ''}">
+                    <input type="radio" name="assessment-answer" value="${index}" class="sr-only" ${assessmentState.answers[assessmentState.currentIndex] === index ? 'checked' : ''}>
+                    <span class="likert-dot" aria-hidden="true"></span>
                     <span>${label}</span>
                 </label>
             `).join('')}
+            </div>
         </div>
     `;
 
     body.querySelectorAll('input[name="assessment-answer"]').forEach(input => {
         input.addEventListener('change', (event) => {
             assessmentState.answers[assessmentState.currentIndex] = parseInt(event.target.value, 10);
+            body.querySelectorAll('.likert-option').forEach(opt => opt.classList.remove('selected'));
+            event.target.closest('.likert-option')?.classList.add('selected');
         });
     });
 
@@ -713,7 +727,7 @@ function nextQuestion() {
 function submitAssessment() {
     if (!assessmentState) return;
     const assessment = assessmentLibrary[assessmentState.type];
-    const score = assessment.answers.reduce((total, answer) => total + (Number.parseInt(answer, 10) || 0), 0);
+    const score = assessmentState.answers.reduce((total, answer) => total + (Number.parseInt(answer, 10) || 0), 0);
     userData.assessments.push({ type: assessmentState.type, score, date: new Date().toISOString() });
     userData.sessions += 1;
     saveUserData();
@@ -723,11 +737,18 @@ function submitAssessment() {
     const nextBtn = document.getElementById('btn-next');
     if (body) {
         body.innerHTML = `
-            <div style="padding: 24px; background: rgba(255,255,255,.96); border-radius: 20px;">
-              <h3 style="margin-bottom: 14px; color: #102334;">${assessment.title}</h3>
-              <p style="margin-bottom: 10px; color: #2e4d6d; font-weight: 600;">Score: ${score}</p>
-              <p style="margin-bottom: 18px; color: #33455f;">${assessment.interpret(score)}</p>
-              <p style="color: #475c73;">Your responses are for informational use and may help you decide whether to seek professional support.</p>
+            <div class="results-panel show">
+              <div class="score-display">
+                <div class="score-ring" style="--ring-color: var(--c-primary, #6D5DFC);">
+                  <span class="score-num">${score}</span>
+                </div>
+                <span class="severity-badge sev-mild">${assessment.interpret(score)}</span>
+              </div>
+              <div class="result-interpretation">
+                <h4>${assessment.title}</h4>
+                <p>Your responses are for informational use and may help you decide whether to seek professional support.</p>
+              </div>
+              <div class="disclaimer">This screening is not a diagnosis. Please consult a qualified mental health professional.</div>
             </div>
         `;
     }
